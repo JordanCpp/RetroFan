@@ -24,20 +24,13 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include "Init.hpp"
+#ifndef libc_Portable_h
+#define libc_Portable_h
 
+#include <stddef.h>
 
-__attribute__((force_align_arg_pointer))
-void _start() 
-{
-	main();
-    /* main body of program: call main(), etc */
-    /* exit system call */
-    asm("movl $1,%eax;"
-        "xorl %ebx,%ebx;"
-        "int  $0x80"
-    );
-    __builtin_unreachable();  // tell the compiler to make sure side effects are done before the asm statement
-}
+int PortableWrite(const char* data, size_t count);
+void* PortableAllocate(size_t count);
+void PortableFree(void* ptr);
 
-
+#endif

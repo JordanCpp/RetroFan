@@ -6,20 +6,23 @@ if (MSVC)
 endif()
 
 include_directories("libc/include")
+include_directories("libcpp/include")
 
 if (WIN32)
     add_library(libc 
     "libc/Windows/Init.cpp" 
     "libc/Windows/Portable.cpp" 
     "libc/stdio.cpp" 
-    "libc/string.cpp")
+    "libc/string.cpp"
+    "libcpp/new.cpp")
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib -s -O2")
     add_library(libc 
     "libc/UNIX/Init.cpp" 
     "libc/UNIX/Portable.cpp" 
     "libc/stdio.cpp" 
-    "libc/string.cpp")
+    "libc/string.cpp"
+    "libcpp/new.cpp")
 endif()
 
 add_executable(main "main.cpp")

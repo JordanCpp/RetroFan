@@ -24,20 +24,20 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include "Init.hpp"
+#include "Portable.h"
 
+extern HANDLE _heap;
 
-__attribute__((force_align_arg_pointer))
-void _start() 
+void* PortableAllocate(size_t bytes)
 {
-	main();
-    /* main body of program: call main(), etc */
-    /* exit system call */
-    asm("movl $1,%eax;"
-        "xorl %ebx,%ebx;"
-        "int  $0x80"
-    );
-    __builtin_unreachable();  // tell the compiler to make sure side effects are done before the asm statement
+	return NULL;
 }
 
+void PortableFree(void* ptr)
+{
+}
 
+int PortableWrite(const char* data, size_t count)
+{
+	return 0;
+}

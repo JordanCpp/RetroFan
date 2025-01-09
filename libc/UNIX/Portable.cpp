@@ -27,6 +27,15 @@ DEALINGS IN THE SOFTWARE.
 #include <string.h>
 #include <stddef.h>
 
+void* PortableAllocate(size_t bytes)
+{
+	return NULL;
+}
+
+void PortableFree(void* ptr)
+{
+}
+
 int PortableWrite(const char* data, size_t count)
 {
 	return 0;

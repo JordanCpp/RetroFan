@@ -25,10 +25,13 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <stdio.h>
+#include <string>
 
 int main()
 {
-	printf("I am a litle program!");
+	std::string str = "I am a litle program!";
+
+	printf(str.c_str());
 
 	return 0;
 }

@@ -44,12 +44,55 @@ typedef ULONG_PTR      SIZE_T;
 typedef ULONG_PTR      DWORD_PTR;
 typedef int            BOOL;
 typedef unsigned int   UINT;
+typedef void*          PVOID;
+typedef char           CHAR;
+typedef const CHAR* LPCSTR, * PCSTR;
+
+typedef struct _SECURITY_ATTRIBUTES
+{
+    DWORD nLength;
+    LPVOID lpSecurityDescriptor;
+    BOOL bInheritHandle;
+} SECURITY_ATTRIBUTES, * PSECURITY_ATTRIBUTES, * LPSECURITY_ATTRIBUTES;
+
+typedef struct _OVERLAPPED 
+{
+    ULONG_PTR Internal;
+    ULONG_PTR InternalHigh;
+    union {
+        struct {
+            DWORD Offset;
+            DWORD OffsetHigh;
+        } DUMMYSTRUCTNAME;
+        PVOID Pointer;
+    } DUMMYUNIONNAME;
+
+    HANDLE  hEvent;
+} OVERLAPPED, * LPOVERLAPPED;
 /*********************************************************************************************
                                           Constants
 *********************************************************************************************/
 const DWORD STD_INPUT_HANDLE  = ((DWORD)-10);
 const DWORD STD_OUTPUT_HANDLE = ((DWORD)-11);
 const DWORD STD_ERROR_HANDLE  = ((DWORD)-12);
+
+const DWORD  CREATE_NEW        = 1;
+const DWORD  CREATE_ALWAYS     = 2;
+const DWORD  OPEN_EXISTING     = 3;
+const DWORD  OPEN_ALWAYS       = 4;
+const DWORD  TRUNCATE_EXISTING = 5;
+
+const DWORD GENERIC_READ    = (0x80000000L);
+const DWORD GENERIC_WRITE   = (0x40000000L);
+const DWORD GENERIC_EXECUTE = (0x20000000L);
+const DWORD GENERIC_ALL     = (0x10000000L);
+
+const DWORD FILE_ATTRIBUTE_NORMAL = 0x00000080;
+/*********************************************************************************************
+                                        Common functions
+*********************************************************************************************/
+extern "C" WINBASEAPI void   WINAPI ExitProcess(UINT uExitCode);
+extern "C" WINBASEAPI HANDLE WINAPI GetStdHandle(DWORD nStdHandle);
 /*********************************************************************************************
                                         Heap functions
 *********************************************************************************************/
@@ -57,8 +100,15 @@ extern "C" WINBASEAPI HANDLE WINAPI HeapCreate(DWORD flOptions, SIZE_T dwInitial
 extern "C" WINBASEAPI BOOL   WINAPI HeapDestroy(HANDLE hHeap);
 extern "C" WINBASEAPI LPVOID WINAPI HeapAlloc(HANDLE hHeap, DWORD dwFlags, SIZE_T dwBytes);
 extern "C" WINBASEAPI BOOL   WINAPI HeapFree(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem);
-extern "C" WINBASEAPI void   WINAPI ExitProcess(UINT uExitCode);
-extern "C" WINBASEAPI HANDLE WINAPI GetStdHandle(DWORD nStdHandle);
+/*********************************************************************************************
+                                        Console functions
+*********************************************************************************************/
 extern "C" WINBASEAPI BOOL   WINAPI WriteConsoleA(HANDLE hConsoleOutput, const void* lpBuffer, DWORD nNumberOfCharsToWrite, LPDWORD lpNumberOfCharsWritten, LPVOID lpReserved);
+/*********************************************************************************************
+                                        File functions
+*********************************************************************************************/
+extern "C" WINBASEAPI HANDLE WINAPI CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
+extern "C" WINBASEAPI BOOL   WINAPI CloseHandle(HANDLE hObject);
+extern "C" WINBASEAPI BOOL   WINAPI ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead, LPOVERLAPPED lpOverlapped);
 
 #endif

@@ -24,12 +24,19 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
+#include <stddef.h>
 #include "Init.hpp"
 #include "WinAPI.hpp"
 
+HANDLE _heap = NULL;
+
 int mainCRTStartup()
 {
+	_heap = HeapCreate(0, 0x01000, 0);
+
 	return main();
+
+	HeapDestroy(_heap);
 
 	ExitProcess(5);
 }

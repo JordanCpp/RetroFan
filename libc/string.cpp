@@ -26,6 +26,14 @@ DEALINGS IN THE SOFTWARE.
 
 #include <string.h>
 
+#if defined(_WIN32)
+    #include "../Windows/Portable.h"
+#elif defined(__unix__)
+    #include "../UNIX/Portable.h"
+#elif defined(__MSDOS__)
+    #include "../DOS/Portable.h"
+#endif
+
 size_t strlen(const char* data)
 {
 	size_t i = 0;
@@ -36,4 +44,14 @@ size_t strlen(const char* data)
 	}
 
 	return i;
+}
+
+void* malloc(size_t bytes)
+{
+	return PortableAllocate(bytes);
+}
+
+void free(void* ptr)
+{
+	PortableFree(ptr);
 }

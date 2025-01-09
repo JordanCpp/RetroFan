@@ -26,7 +26,20 @@ DEALINGS IN THE SOFTWARE.
 
 #include <string.h>
 #include <stddef.h>
-#include "WinAPI.hpp"
+#include <stdio.h>
+#include "Portable.h"
+
+extern HANDLE _heap;
+
+void* PortableAllocate(size_t bytes)
+{
+	return HeapAlloc(_heap, 0, (SIZE_T)bytes);
+}
+
+void PortableFree(void* ptr)
+{
+	HeapFree(_heap, 0, ptr);
+}
 
 int PortableWrite(const char* data, size_t count)
 {
