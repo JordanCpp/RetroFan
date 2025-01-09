@@ -29,6 +29,10 @@ DEALINGS IN THE SOFTWARE.
 
 #define NULL 0
 
-typedef int size_t;
+#if (_MSC_VER >= 1600)
+
+#else
+    typedef int size_t;
+#endif
 
 #endif

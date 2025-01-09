@@ -26,7 +26,14 @@ DEALINGS IN THE SOFTWARE.
 
 #include <stdio.h>
 #include <string.h>
-#include "../Windows/Portable.h"
+
+#if defined(_WIN32)
+    #include "../Windows/Portable.h"
+#elif defined(__unix__)
+    #include "../UNIX/Portable.h"
+#elif defined(__MSDOS__)
+    #include "../DOS/Portable.h"
+#endif
 
 int printf(const char* text)
 {
