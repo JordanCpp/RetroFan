@@ -24,11 +24,19 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef libc_stddef_h
-#define libc_stddef_h
+#include "Init.hpp"
 
-#define NULL 0
 
-typedef int size_t;
+__attribute__((force_align_arg_pointer))
+void _start() {
+	main();
+    /* main body of program: call main(), etc */
+    /* exit system call */
+    asm("movl $1,%eax;"
+        "xorl %ebx,%ebx;"
+        "int  $0x80"
+    );
+    __builtin_unreachable();  // tell the compiler to make sure side effects are done before the asm statement
+}
 
-#endif
+

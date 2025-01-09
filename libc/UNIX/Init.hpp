@@ -24,11 +24,10 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef libc_stddef_h
-#define libc_stddef_h
+#ifndef UNIX_Portable_hpp
+#define UNIX_Portable_hpp
 
-#define NULL 0
-
-typedef int size_t;
+extern "C" int main();
+extern "C" void _start();
 
 #endif

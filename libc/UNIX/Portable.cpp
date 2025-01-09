@@ -24,11 +24,10 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef libc_stddef_h
-#define libc_stddef_h
+#include <string.h>
+#include <stddef.h>
 
-#define NULL 0
-
-typedef int size_t;
-
-#endif
+int PortableWrite(const char* data, size_t count)
+{
+	return 0;
+}

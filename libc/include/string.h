@@ -27,6 +27,8 @@ DEALINGS IN THE SOFTWARE.
 #ifndef libc_string_h
 #define libc_string_h
 
+#include <stddef.h>
+
 size_t strlen(const char* data);
 
 #endif
