@@ -16,7 +16,7 @@ if (WIN32)
     "libc/string.cpp"
     "libcpp/new.cpp")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib -s -O2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib -nostartfiles -nodefaultlibs -nostdinc -s -O2 -fno-exceptions -fno-rtti -fno-builtin")
     add_library(libc 
     "libc/UNIX/Init.cpp" 
     "libc/UNIX/Portable.cpp" 

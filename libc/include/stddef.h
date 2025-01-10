@@ -31,8 +31,10 @@ DEALINGS IN THE SOFTWARE.
 
 #if (_MSC_VER >= 1600)
 
+#elif (__unix__)
+    typedef unsigned long int size_t;
 #else
-    typedef int size_t;
+    typedef unsigned int size_t;
 #endif
 
 #endif
