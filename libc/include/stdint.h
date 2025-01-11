@@ -27,13 +27,19 @@ DEALINGS IN THE SOFTWARE.
 #ifndef libc_stdint_h
 #define libc_stdint_h
 
-typedef unsigned char  uint8_t;
-typedef signed char    int8_t;
+typedef unsigned long long uintmax_t;
+typedef signed long long   intmax_t;
 
-typedef unsigned short uint16_t;
-typedef signed short   int16_t;
+typedef unsigned char      uint8_t;
+typedef signed char        int8_t;
 
-typedef unsigned int   uint32_t;
-typedef signed int     int32_t;
+typedef unsigned short     uint16_t;
+typedef signed short       int16_t;
+
+typedef unsigned int       uint32_t;
+typedef signed int         int32_t;
+
+typedef uintmax_t          uint64_t;
+typedef intmax_t           int64_t;
 
 #endif

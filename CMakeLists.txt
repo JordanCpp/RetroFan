@@ -28,6 +28,5 @@ else()
     "libcpp/new.cpp")
 endif()
 
-
 add_executable(main "main.cpp")
 target_link_libraries(main libc)

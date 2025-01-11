@@ -27,29 +27,91 @@ DEALINGS IN THE SOFTWARE.
 #ifndef Windows_WinAPI_hpp
 #define Windows_WinAPI_hpp
 
+#include <stdint.h>
+
 namespace WinAPI
 {
     /*********************************************************************************************
                                                 Macros
     *********************************************************************************************/
-    #define WINAPI          __stdcall
-    #define DECLSPEC_IMPORT __declspec(dllimport)
-    #define WINBASEAPI      DECLSPEC_IMPORT
+#define WINAPI          __stdcall
+#define DECLSPEC_IMPORT __declspec(dllimport)
+#define WINBASEAPI      DECLSPEC_IMPORT
+
+#if (_WIN16)
+#define FAR  far
+#define NEAR near
+#else
+#define FAR                 
+#define NEAR                
+#endif
     /*********************************************************************************************
                                                 Types
     *********************************************************************************************/
     typedef void* LPVOID;
-    typedef void* HANDLE;
-    typedef unsigned long  DWORD;
-    typedef DWORD* LPDWORD;
-    typedef unsigned long  ULONG_PTR;
-    typedef ULONG_PTR      SIZE_T;
-    typedef ULONG_PTR      DWORD_PTR;
-    typedef int            BOOL;
-    typedef unsigned int   UINT;
     typedef void* PVOID;
-    typedef char           CHAR;
+
+    typedef LPVOID     HANDLE;
+    typedef LPVOID     HWND;
+    typedef LPVOID     HINSTANCE;
+    typedef LPVOID     HICON;
+    typedef LPVOID     HCURSOR;
+    typedef LPVOID     HBRUSH;
+
+    typedef uint32_t   UINT_PTR;
+    typedef int32_t    LONG_PTR;
+    typedef int32_t    LONG_PTR;
+
+    typedef UINT_PTR   WPARAM;
+    typedef LONG_PTR   LPARAM;
+    typedef LONG_PTR   LRESULT;
+    typedef uint32_t   UINT;
+    typedef int32_t    LONG;
+
+    typedef LRESULT(WINAPI* WNDPROC)(HWND, UINT, WPARAM, LPARAM);
+
+
+    typedef uint32_t   DWORD;
+    typedef DWORD* LPDWORD;
+    typedef uint32_t   ULONG_PTR;
+    typedef ULONG_PTR  SIZE_T;
+    typedef ULONG_PTR  DWORD_PTR;
+    typedef uint32_t   BOOL;
+    typedef uint32_t   UINT;
+    typedef uint32_t   WORD;
+    typedef WORD       ATOM;
+
+    typedef char       CHAR;
     typedef const CHAR* LPCSTR, * PCSTR;
+
+
+    typedef struct tagPOINT
+    {
+        LONG  x;
+        LONG  y;
+    } POINT, * PPOINT, NEAR* NPPOINT, FAR* LPPOINT;
+
+    typedef struct tagMSG {
+        HWND        hwnd;
+        UINT        message;
+        WPARAM      wParam;
+        LPARAM      lParam;
+        DWORD       time;
+        POINT       pt;
+    } MSG, * PMSG, NEAR* NPMSG, FAR* LPMSG;
+
+    typedef struct tagWNDCLASSA {
+        UINT        style;
+        WNDPROC     lpfnWndProc;
+        int         cbClsExtra;
+        int         cbWndExtra;
+        HINSTANCE   hInstance;
+        HICON       hIcon;
+        HCURSOR     hCursor;
+        HBRUSH      hbrBackground;
+        LPCSTR      lpszMenuName;
+        LPCSTR      lpszClassName;
+    } WNDCLASSA, * PWNDCLASSA, NEAR* NPWNDCLASSA, FAR* LPWNDCLASSA;
 
     typedef struct _SECURITY_ATTRIBUTES
     {
@@ -113,6 +175,8 @@ namespace WinAPI
     extern "C" WINBASEAPI HANDLE WINAPI CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
     extern "C" WINBASEAPI BOOL   WINAPI CloseHandle(HANDLE hObject);
     extern "C" WINBASEAPI BOOL   WINAPI ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead, LPOVERLAPPED lpOverlapped);
+
+    extern "C" WINBASEAPI ATOM   WINAPI RegisterClassA(const WNDCLASSA* lpWndClass);
 }
 
 #endif
