@@ -1,3 +1,4 @@
+enable_language(ASM)
 
 if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -18,12 +19,15 @@ if (WIN32)
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib -nostartfiles -nodefaultlibs -nostdinc -s -O2 -fno-exceptions -fno-rtti -fno-builtin")
     add_library(libc 
+    "syscall.s"
+    "libc/UNIX/syscalls.cpp"
     "libc/UNIX/Init.cpp" 
     "libc/UNIX/Portable.cpp" 
     "libc/stdio.cpp" 
     "libc/string.cpp"
     "libcpp/new.cpp")
 endif()
+
 
 add_executable(main "main.cpp")
 target_link_libraries(main libc)

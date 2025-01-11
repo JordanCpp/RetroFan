@@ -24,11 +24,17 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef libc_Portable_h
-#define libc_Portable_h
+#ifndef UNIX_syscalls_hpp
+#define UNIX_syscalls_hpp
 
-int   PortableWrite(const char* data, size_t count);
-void* PortableAllocate(size_t count);
-void  PortableFree(void* ptr);
+typedef unsigned long int uintptr;
+typedef long int          intptr;
+
+const uintptr SYS_write = 1;
+const uintptr SYS_exit  = 60;
+
+extern "C" void* syscall3(uintptr number, void* arg1, void* arg2, void* arg3);
+
+intptr syscall_write(int fd, void const* data, uintptr nbytes);
 
 #endif

@@ -24,11 +24,9 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef libc_Portable_h
-#define libc_Portable_h
+#include "syscalls.hpp"
 
-int   PortableWrite(const char* data, size_t count);
-void* PortableAllocate(size_t count);
-void  PortableFree(void* ptr);
-
-#endif
+intptr syscall_write(int fd, void const* data, uintptr nbytes)
+{
+    return (uintptr)syscall3(SYS_write, (void*)(intptr)fd, (void*)data, (void*)nbytes);
+}

@@ -26,6 +26,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include <string.h>
 #include <stddef.h>
+#include "syscalls.hpp"
 
 void* PortableAllocate(size_t bytes)
 {
@@ -38,5 +39,5 @@ void PortableFree(void* ptr)
 
 int PortableWrite(const char* data, size_t count)
 {
-	return 0;
+	return syscall_write(1, data, count);
 }
