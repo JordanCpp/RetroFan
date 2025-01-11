@@ -29,9 +29,11 @@ DEALINGS IN THE SOFTWARE.
 
 int main()
 {
-	std::string str = "I am a litle program!";
+	std::string str1 = "I am ";
+	std::string str2 = "litle program!";
+	std::string str3 = str1 + str2;
 
-	printf(str.c_str());
+	printf(str3.c_str());
 
 	return 0;
 }
