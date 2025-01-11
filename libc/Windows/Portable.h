@@ -29,8 +29,8 @@ DEALINGS IN THE SOFTWARE.
 
 #include "WinAPI.hpp"
 
-int PortableWrite(const char* data, size_t count);
+int   PortableWrite(const char* data, size_t count);
 void* PortableAllocate(size_t count);
-void PortableFree(void* ptr);
+void  PortableFree(void* ptr);
 
 #endif

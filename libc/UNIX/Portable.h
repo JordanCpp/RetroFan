@@ -27,8 +27,8 @@ DEALINGS IN THE SOFTWARE.
 #ifndef libc_Portable_h
 #define libc_Portable_h
 
-int PortableWrite(const char* data, size_t count);
+int   PortableWrite(const char* data, size_t count);
 void* PortableAllocate(size_t count);
-void PortableFree(void* ptr);
+void  PortableFree(void* ptr);
 
 #endif

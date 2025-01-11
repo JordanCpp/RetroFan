@@ -27,8 +27,8 @@ DEALINGS IN THE SOFTWARE.
 #ifndef Windows_Portable_hpp
 #define Windows_Portable_hpp
 
-extern "C" int main();
-extern "C" int mainCRTStartup();
+extern "C" int  main();
+extern "C" int  mainCRTStartup();
 extern "C" void _RTC_InitBase();
 extern "C" void _RTC_Shutdown();
 extern "C" void _RTC_CheckEsp();
