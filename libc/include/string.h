@@ -29,8 +29,8 @@ DEALINGS IN THE SOFTWARE.
 
 #include <stddef.h>
 
-void* malloc(size_t bytes);
-void free(void* ptr);
+void*  malloc(size_t bytes);
+void   free(void* ptr);
 
 size_t strlen(const char* data);
 
