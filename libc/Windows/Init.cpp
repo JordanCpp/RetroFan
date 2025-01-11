@@ -28,6 +28,8 @@ DEALINGS IN THE SOFTWARE.
 #include "Init.hpp"
 #include "WinAPI.hpp"
 
+using namespace WinAPI;
+
 HANDLE _heap = NULL;
 
 int mainCRTStartup()
