@@ -42,6 +42,7 @@ namespace std
 				delete[] _content;
 			}
 		}
+
 		base_string() :
 			_capacity(0),
 			_position(0),
@@ -113,6 +114,11 @@ namespace std
 				for (size_t i = 0; i < _position; i++)
 				{
 					p[i] = _content[i];
+				}
+
+				if (_content != NULL)
+				{
+					delete[] _content;
 				}
 
 				_content = p;
