@@ -16,8 +16,6 @@ if (MSVC)
     string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
     string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
     string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")
-
-
 endif()
 
 if (WIN32)
@@ -39,7 +37,7 @@ if (WIN32)
     "libc/string.cpp"
     "libcpp/new.cpp")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib -nostartfiles -nodefaultlibs -nostdinc -s -O2 -fno-exceptions -fno-rtti -fno-builtin")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib -nostartfiles -nodefaultlibs -s -O2 -fno-exceptions -fno-rtti -fno-builtin")
     add_library(libc 
     "libc/UNIX/x86_64.s"
     "libc/UNIX/syscalls.cpp"

@@ -25,6 +25,7 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <string.h>
+#include <stdint.h>
 
 #if defined(_WIN32)
     #include "../Windows/Portable.h"
