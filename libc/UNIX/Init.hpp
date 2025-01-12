@@ -28,6 +28,5 @@ DEALINGS IN THE SOFTWARE.
 #define UNIX_Portable_hpp
 
 extern "C" int  main();
-extern "C" void _start();
 
 #endif
