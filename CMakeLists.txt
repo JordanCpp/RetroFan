@@ -1,9 +1,21 @@
 enable_language(ASM)
 
+if (UNIX AND NOT APPLE)
+    find_package(X11 REQUIRED)
+    link_libraries(${X11_LIBRARIES})
+    include_directories(${X11_INCLUDE_DIR})
+endif()
+
 if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)  
     set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB")
+endif()
+
+if (WIN32)
+    set(libs gdi32 user32 winmm)
+elseif (UNIX AND NOT APPLE)
+    set(libs X11 dl)
 endif()
 
 include_directories("libc/include")
@@ -29,4 +41,4 @@ else()
 endif()
 
 add_executable(main "main.cpp")
-target_link_libraries(main libc)
+target_link_libraries(main libc ${libs})
