@@ -27,7 +27,7 @@ DEALINGS IN THE SOFTWARE.
 #ifndef libc_Portable_h
 #define libc_Portable_h
 
-#include "WinAPI.hpp"
+#include <WinAPI.hpp>
 
 int   PortableWrite(const char* data, size_t count);
 void* PortableAllocate(size_t count);

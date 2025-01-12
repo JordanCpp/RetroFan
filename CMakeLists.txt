@@ -22,6 +22,7 @@ include_directories("libc/include")
 include_directories("libcpp/include")
 
 if (WIN32)
+    include_directories("WinAPI")
     add_library(libc 
     "libc/Windows/Init.cpp" 
     "libc/Windows/Portable.cpp" 
