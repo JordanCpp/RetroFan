@@ -19,7 +19,7 @@ if (WIN32)
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib -nostartfiles -nodefaultlibs -nostdinc -s -O2 -fno-exceptions -fno-rtti -fno-builtin")
     add_library(libc 
-    "syscall.s"
+    "libc/UNIX/x86_64.s"
     "libc/UNIX/syscalls.cpp"
     "libc/UNIX/Init.cpp" 
     "libc/UNIX/Portable.cpp" 

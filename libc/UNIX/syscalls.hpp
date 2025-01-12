@@ -39,6 +39,9 @@ extern "C" void* syscall3(uintptr number, void* arg1, void* arg2, void* arg3);
 extern "C" void* syscall4(uintptr number, void* arg1, void* arg2, void* arg3, void* arg4);
 extern "C" void* syscall5(uintptr number, void* arg1, void* arg2, void* arg3, void* arg4, void* arg5);
 
-intptr syscall_write(int fd, void const* data, uintptr nbytes);
+namespace LinuxApi
+{
+    intptr write(int fd, void const* data, uintptr nbytes);
+}
 
 #endif

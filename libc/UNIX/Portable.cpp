@@ -28,6 +28,8 @@ DEALINGS IN THE SOFTWARE.
 #include <stddef.h>
 #include "syscalls.hpp"
 
+using namespace LinuxApi;
+
 void* PortableAllocate(size_t bytes)
 {
 	return NULL;
@@ -39,5 +41,5 @@ void PortableFree(void* ptr)
 
 int PortableWrite(const char* data, size_t count)
 {
-	return syscall_write(1, data, count);
+	return write(1, data, count);
 }

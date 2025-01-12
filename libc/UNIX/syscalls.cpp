@@ -26,7 +26,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include "syscalls.hpp"
 
-intptr syscall_write(int fd, void const* data, uintptr nbytes)
+intptr LinuxApi::write(int fd, void const* data, uintptr nbytes)
 {
     return (uintptr)syscall3(SYS_write, (void*)(intptr)fd, (void*)data, (void*)nbytes);
 }
