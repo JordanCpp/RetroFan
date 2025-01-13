@@ -27,7 +27,9 @@ DEALINGS IN THE SOFTWARE.
 #ifndef libc_stddef_h
 #define libc_stddef_h
 
-#define NULL 0
+#if !defined(NULL)
+    #define NULL 0
+#endif
 
 #if (_MSC_VER >= 1600)
 

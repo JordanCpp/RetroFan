@@ -35,5 +35,7 @@ extern "C" void _RTC_CheckEsp();
 extern "C" void __CxxFrameHandler3();
 extern "C" void __CxxFrameHandler4();
 extern "C" void _RTC_CheckStackVars();
+extern "C" void __security_cookie();
+extern "C" void __security_check_cookie(int);
 
 #endif

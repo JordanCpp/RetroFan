@@ -28,8 +28,6 @@ DEALINGS IN THE SOFTWARE.
 #include "Init.hpp"
 #include "WinAPI.hpp"
 
-using namespace WinAPI;
-
 HANDLE _heap = NULL;
 
 int mainCRTStartup()
@@ -64,5 +62,13 @@ void __CxxFrameHandler4()
 }
 
 void _RTC_CheckStackVars()
+{
+}
+
+void __security_cookie()
+{
+}
+
+void __security_check_cookie(int)
 {
 }

@@ -34,4 +34,6 @@ void   free(void* ptr);
 
 size_t strlen(const char* data);
 
+void* memset(void* dst, int c, size_t n);
+
 #endif

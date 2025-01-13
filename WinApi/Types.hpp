@@ -24,30 +24,50 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef libc_stdint_h
-#define libc_stdint_h
+#ifndef WinAPI_Types_hpp
+#define WinAPI_Types_hpp
 
-#if defined(_WIN64)
-    typedef unsigned long long uintmax_t;
-    typedef signed long long   intmax_t;
-#elif defined(_WIN32)
-    typedef unsigned int uintmax_t;
-    typedef signed int   intmax_t;
-#else
-    typedef unsigned long long uintmax_t;
-    typedef signed long long   intmax_t;
-#endif
+#include <stddef.h>
+#include <stdint.h>
 
-typedef unsigned char      uint8_t;
-typedef signed char        int8_t;
+typedef void* LPVOID;
+typedef void* PVOID;
+typedef intmax_t   LONG_PTR;
+typedef uintmax_t  ULONG_PTR;
+typedef uint32_t   DWORD;
+typedef int32_t    LONG;
+typedef uint8_t    BYTE;
 
-typedef unsigned short     uint16_t;
-typedef signed short       int16_t;
+typedef DWORD      COLORREF;
+typedef DWORD* LPCOLORREF;
 
-typedef unsigned int       uint32_t;
-typedef signed int         int32_t;
+typedef LPVOID     HGDIOBJ;
+typedef LPVOID     HANDLE;
+typedef LPVOID     HWND;
+typedef LPVOID     HINSTANCE;
+typedef LPVOID     HICON;
+typedef LPVOID     HCURSOR;
+typedef LPVOID     HBRUSH;
+typedef LPVOID     HMENU;
+typedef LPVOID     HMODULE;
+typedef LPVOID     HDC;
 
-typedef uintmax_t          uint64_t;
-typedef intmax_t           int64_t;
+typedef DWORD      UINT_PTR;
+typedef UINT_PTR   WPARAM;
+typedef LONG_PTR   LPARAM;
+typedef LONG_PTR   LRESULT;
+typedef DWORD      UINT;
+typedef DWORD* LPDWORD;
+typedef ULONG_PTR  SIZE_T;
+typedef ULONG_PTR  DWORD_PTR;
+typedef DWORD      BOOL;
+typedef DWORD      UINT;
+typedef DWORD      WORD;
+typedef WORD       ATOM;
+
+typedef char CHAR;
+typedef const CHAR* LPCSTR, * PCSTR;
+
+typedef LRESULT(WINAPI* WNDPROC)(HWND, UINT, WPARAM, LPARAM);
 
 #endif

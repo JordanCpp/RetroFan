@@ -46,6 +46,16 @@ size_t strlen(const char* data)
 	return i;
 }
 
+void* memset(void* dst, int c, size_t n)
+{
+	for (size_t i = 0; i < n; i++)
+	{
+		((uint8_t*)dst)[i] = (uint8_t)c;
+	}
+
+	return dst;
+}
+
 void* malloc(size_t bytes)
 {
 	return PortableAllocate(bytes);
@@ -55,3 +65,4 @@ void free(void* ptr)
 {
 	PortableFree(ptr);
 }
+

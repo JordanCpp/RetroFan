@@ -42,4 +42,12 @@ else()
 endif()
 
 add_executable(main "main.cpp")
-target_link_libraries(main libc ${libs})
+target_link_libraries(main libc)
+
+if (WIN32)
+    add_executable(wWin "wWin.cpp")
+    target_link_libraries(wWin libc ${libs})
+else()
+    add_executable(xWin "xWin.cpp")
+    target_link_libraries(xWin libc ${libs})
+endif()

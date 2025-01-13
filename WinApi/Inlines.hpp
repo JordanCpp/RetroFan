@@ -24,30 +24,44 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef libc_stdint_h
-#define libc_stdint_h
+#ifndef Windows_Inlines_hpp
+#define Windows_Inlines_hpp
 
-#if defined(_WIN64)
-    typedef unsigned long long uintmax_t;
-    typedef signed long long   intmax_t;
-#elif defined(_WIN32)
-    typedef unsigned int uintmax_t;
-    typedef signed int   intmax_t;
-#else
-    typedef unsigned long long uintmax_t;
-    typedef signed long long   intmax_t;
-#endif
+#include "Funcs.hpp"
 
-typedef unsigned char      uint8_t;
-typedef signed char        int8_t;
+inline ATOM RegisterClass(const WNDCLASSA* lpWndClass)
+{
+    return RegisterClassA(lpWndClass);
+}
 
-typedef unsigned short     uint16_t;
-typedef signed short       int16_t;
+inline HWND CreateWindow(LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
+{
+    return  CreateWindowExA(0L, lpClassName, lpWindowName, dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+}
 
-typedef unsigned int       uint32_t;
-typedef signed int         int32_t;
+inline BOOL GetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
+{
+    return GetMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
+}
 
-typedef uintmax_t          uint64_t;
-typedef intmax_t           int64_t;
+inline LRESULT DispatchMessage(const MSG* lpMsg)
+{
+    return DispatchMessageA(lpMsg);
+}
+
+inline HMODULE GetModuleHandle(LPCSTR lpModuleName)
+{
+    return GetModuleHandleA(lpModuleName);
+}
+
+inline LRESULT DefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    return DefWindowProcA(hWnd, Msg, wParam, lParam);
+}
+
+COLORREF inline RGB(BYTE r, BYTE g, BYTE b)
+{
+    return ((COLORREF)(((BYTE)(r) | ((WORD)(g) << 8)) | (((DWORD)(BYTE)(b)) << 16)));
+}
 
 #endif

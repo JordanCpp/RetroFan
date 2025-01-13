@@ -29,8 +29,6 @@ DEALINGS IN THE SOFTWARE.
 #include <stdio.h>
 #include "Portable.h"
 
-using namespace WinAPI;
-
 extern HANDLE _heap;
 
 void* PortableAllocate(size_t bytes)
