@@ -26,6 +26,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include <Windows.h>
 #include <string.h>
+#include <string>
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -45,6 +46,29 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
+unsigned int random(unsigned int start_range, unsigned int end_range)
+{
+    static unsigned int rand = 0xACE1U; /* Any nonzero start state will work. */
+
+    /*check for valid range.*/
+    if (start_range == end_range) 
+    {
+        return start_range;
+    }
+
+    /*get the random in end-range.*/
+    rand += 0x3AD;
+    rand %= end_range;
+
+    /*get the random in start-range.*/
+    while (rand < start_range)
+    {
+        rand = rand + end_range - start_range;
+    }
+
+    return rand;
+}
+
 int main()
 {
     MSG         message;
@@ -52,6 +76,7 @@ int main()
     HDC         handleDeviceContext;
     WNDCLASSA   windowClass;
     PAINTSTRUCT paintStruct;
+    std::string title = "Hello Habr!";
 
     memset(&windowClass, 0, sizeof(WNDCLASSA));
 
@@ -65,26 +90,32 @@ int main()
     windowClass.lpfnWndProc   = WndProc;
 
     RegisterClass(&windowClass);
-    handleWindow = CreateWindow(windowClass.lpszClassName, "", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, 800, 600, NULL, NULL, windowClass.hInstance, NULL);
+    handleWindow = CreateWindow(windowClass.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, 800, 600, NULL, NULL, windowClass.hInstance, NULL);
 
     handleDeviceContext = BeginPaint(handleWindow, &paintStruct);
 
-    MoveToEx(handleDeviceContext, 0, 0, NULL);
-    LineTo(handleDeviceContext, 250, 250);
+    for (size_t i = 0; i < 100; i++)
+    {
+        MoveToEx(handleDeviceContext, 0, 0, NULL);
+        LineTo(handleDeviceContext, random(0, 600), random(0, 800));
+    }
 
-    RECT rect;
-    rect.left   = 100;
-    rect.top    = 100;
-    rect.right  = 200;
-    rect.bottom = 300;
+    for (size_t i = 0; i < 100; i++)
+    {
+        RECT rect;
+        rect.left   = random(0, 600);
+        rect.top    = random(0, 800);
+        rect.right  = random(0, 600);
+        rect.bottom = random(0, 300);
 
-    HBRUSH brush = CreateSolidBrush(RGB(255, 0, 55));
+        HBRUSH brush = CreateSolidBrush(RGB(random(0, 255), random(0, 255), random(0, 255)));
 
-    FillRect(handleDeviceContext, &rect, brush);
+        FillRect(handleDeviceContext, &rect, brush);
+
+        DeleteObject(brush);
+    }
 
     EndPaint(handleWindow, &paintStruct);
-
-    DeleteObject(brush);
 
     ShowWindow(handleWindow, SW_SHOW);
     UpdateWindow(handleWindow);
