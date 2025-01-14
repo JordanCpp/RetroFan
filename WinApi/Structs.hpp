@@ -35,7 +35,8 @@ typedef struct tagPOINT
     LONG  y;
 } POINT, * PPOINT, NEAR* NPPOINT, FAR* LPPOINT;
 
-typedef struct tagMSG {
+typedef struct tagMSG 
+{
     HWND        hwnd;
     UINT        message;
     WPARAM      wParam;
@@ -44,7 +45,8 @@ typedef struct tagMSG {
     POINT       pt;
 } MSG, * PMSG, NEAR* NPMSG, FAR* LPMSG;
 
-typedef struct tagWNDCLASSA {
+typedef struct tagWNDCLASSA 
+{
     UINT        style;
     WNDPROC     lpfnWndProc;
     int         cbClsExtra;
@@ -68,8 +70,10 @@ typedef struct _OVERLAPPED
 {
     ULONG_PTR Internal;
     ULONG_PTR InternalHigh;
-    union {
-        struct {
+    union 
+    {
+        struct 
+        {
             DWORD Offset;
             DWORD OffsetHigh;
         } DUMMYSTRUCTNAME;
@@ -79,14 +83,16 @@ typedef struct _OVERLAPPED
     HANDLE  hEvent;
 } OVERLAPPED, * LPOVERLAPPED;
 
-typedef struct _RECT {
+typedef struct _RECT 
+{
     LONG left;
     LONG top;
     LONG right;
     LONG bottom;
 } RECT, * PRECT;
 
-typedef struct tagPAINTSTRUCT {
+typedef struct tagPAINTSTRUCT 
+{
     HDC  hdc;
     BOOL fErase;
     RECT rcPaint;

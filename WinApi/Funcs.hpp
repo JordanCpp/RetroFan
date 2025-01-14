@@ -63,8 +63,9 @@ extern "C" WINBASEAPI LRESULT WINAPI DispatchMessageA(const MSG* lpMsg);
 extern "C" WINBASEAPI void    WINAPI PostQuitMessage(int nExitCode);
 extern "C" WINBASEAPI HMODULE WINAPI GetModuleHandleA(LPCSTR lpModuleName);
 extern "C" WINBASEAPI LRESULT WINAPI DefWindowProcA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
-
-
+/*********************************************************************************************
+                                        Draw functions
+*********************************************************************************************/
 extern "C" WINBASEAPI HDC     WINAPI BeginPaint(HWND hwnd, LPPAINTSTRUCT lpPaint);
 extern "C" WINBASEAPI BOOL    WINAPI EndPaint(HWND hWnd, const PAINTSTRUCT* lpPaint);
 extern "C" WINBASEAPI BOOL    WINAPI MoveToEx(HDC hdc, int x, int y, LPPOINT lppt);

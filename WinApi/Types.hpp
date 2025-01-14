@@ -30,8 +30,8 @@ DEALINGS IN THE SOFTWARE.
 #include <stddef.h>
 #include <stdint.h>
 
-typedef void* LPVOID;
-typedef void* PVOID;
+typedef void*      LPVOID;
+typedef void*      PVOID;
 typedef intmax_t   LONG_PTR;
 typedef uintmax_t  ULONG_PTR;
 typedef uint32_t   DWORD;
@@ -39,7 +39,7 @@ typedef int32_t    LONG;
 typedef uint8_t    BYTE;
 
 typedef DWORD      COLORREF;
-typedef DWORD* LPCOLORREF;
+typedef DWORD*     LPCOLORREF;
 
 typedef LPVOID     HGDIOBJ;
 typedef LPVOID     HANDLE;
@@ -57,7 +57,7 @@ typedef UINT_PTR   WPARAM;
 typedef LONG_PTR   LPARAM;
 typedef LONG_PTR   LRESULT;
 typedef DWORD      UINT;
-typedef DWORD* LPDWORD;
+typedef DWORD*     LPDWORD;
 typedef ULONG_PTR  SIZE_T;
 typedef ULONG_PTR  DWORD_PTR;
 typedef DWORD      BOOL;
