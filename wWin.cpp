@@ -27,6 +27,7 @@ DEALINGS IN THE SOFTWARE.
 #include <Windows.h>
 #include <string.h>
 #include <string>
+#include <stdlib.h>
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -46,27 +47,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-unsigned int random(unsigned int start_range, unsigned int end_range)
+int random(unsigned int min, unsigned int max)
 {
-    static unsigned int rand = 0xACE1U; /* Any nonzero start state will work. */
-
-    /*check for valid range.*/
-    if (start_range == end_range) 
-    {
-        return start_range;
-    }
-
-    /*get the random in end-range.*/
-    rand += 0x3AD;
-    rand %= end_range;
-
-    /*get the random in start-range.*/
-    while (rand < start_range)
-    {
-        rand = rand + end_range - start_range;
-    }
-
-    return rand;
+    return rand() % ((max + min) + min);
 }
 
 int main()
@@ -100,13 +83,13 @@ int main()
         LineTo(handleDeviceContext, random(0, 600), random(0, 800));
     }
 
-    for (size_t i = 0; i < 100; i++)
+    for (size_t i = 0; i < 500; i++)
     {
         RECT rect;
-        rect.left   = random(0, 600);
-        rect.top    = random(0, 800);
-        rect.right  = random(0, 600);
-        rect.bottom = random(0, 300);
+        rect.left   = random(0, 800);
+        rect.top    = random(0, 600);
+        rect.right  = random(25, 50);
+        rect.bottom = random(25, 50);
 
         HBRUSH brush = CreateSolidBrush(RGB(random(0, 255), random(0, 255), random(0, 255)));
 

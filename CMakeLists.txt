@@ -26,7 +26,8 @@ if (WIN32)
     add_library(libc 
     "libc/Windows/Init.cpp" 
     "libc/Windows/Portable.cpp" 
-    "libc/stdio.cpp" 
+    "libc/stdio.cpp"
+    "libc/stdlib.cpp"
     "libc/string.cpp"
     "libcpp/new.cpp")
 else()
@@ -37,6 +38,7 @@ else()
     "libc/UNIX/Init.cpp" 
     "libc/UNIX/Portable.cpp" 
     "libc/stdio.cpp" 
+    "libc/stdlib.cpp" 
     "libc/string.cpp"
     "libcpp/new.cpp")
 endif()
