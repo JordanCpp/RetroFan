@@ -24,22 +24,29 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef Windows_Portable_hpp
-#define Windows_Portable_hpp
+#include <LDL/Window.hpp>
 
-extern "C" int  main();
-extern "C" int  mainCRTStartup();
-extern "C" void _RTC_InitBase();
-extern "C" void _RTC_Shutdown();
-extern "C" void _RTC_CheckEsp();
-extern "C" void __CxxFrameHandler3();
-extern "C" void __CxxFrameHandler4();
-extern "C" void _RTC_CheckStackVars();
-extern "C" void __security_cookie();
-extern "C" void __security_check_cookie(int);
-extern "C" void _chkstk();
-extern "C" void __chkstk();
-extern "C" void __GSHandlerCheck();
-extern "C" void __GSHandlerCheck_EH4();
+using namespace LDL;
 
-#endif
+int main()
+{
+    Window window(Vec2i(0, 0), Vec2i(800, 600));
+
+    Event report;
+
+	while (window.Running())
+	{
+		while (window.GetEvent(report))
+		{
+			if (report.Type == Event::IsQuit)
+			{
+				window.StopEvent();
+			}
+		}
+
+		window.Update();
+		window.PollEvents();
+	}
+
+    return 0;
+}

@@ -105,6 +105,7 @@ const UINT WM_DESTROY  = 0x0002;
 const UINT WM_MOVE     = 0x0003;
 const UINT WM_SIZE     = 0x0005;
 const UINT WM_ACTIVATE = 0x0006;
+const UINT WM_CLOSE    = 0x0010;
 
 const ULONG_PTR COLOR_SCROLLBAR           = 0;
 const ULONG_PTR COLOR_BACKGROUND          = 1;
@@ -127,5 +128,10 @@ const ULONG_PTR COLOR_GRAYTEXT            = 17;
 const ULONG_PTR COLOR_BTNTEXT             = 18;
 const ULONG_PTR COLOR_INACTIVECAPTIONTEXT = 19;
 const ULONG_PTR COLOR_BTNHIGHLIGHT        = 20;
+
+const int GWLP_USERDATA = -21;
+const int GWL_USERDATA  = -21;
+
+const UINT PM_REMOVE = 0x0001;
 
 #endif

@@ -24,22 +24,35 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef Windows_Portable_hpp
-#define Windows_Portable_hpp
+#ifndef LDL_Windows_MainWin_hpp
+#define LDL_Windows_MainWin_hpp
 
-extern "C" int  main();
-extern "C" int  mainCRTStartup();
-extern "C" void _RTC_InitBase();
-extern "C" void _RTC_Shutdown();
-extern "C" void _RTC_CheckEsp();
-extern "C" void __CxxFrameHandler3();
-extern "C" void __CxxFrameHandler4();
-extern "C" void _RTC_CheckStackVars();
-extern "C" void __security_cookie();
-extern "C" void __security_check_cookie(int);
-extern "C" void _chkstk();
-extern "C" void __chkstk();
-extern "C" void __GSHandlerCheck();
-extern "C" void __GSHandlerCheck_EH4();
+#include <Windows.h>
+#include <LDL/Vec2.hpp>
+#include <LDL/Eventer.hpp>
+
+namespace LDL
+{
+	class MainWindow
+	{
+	public:
+		MainWindow(const Vec2i& pos, const Vec2i& size);
+		void Update();
+		void StopEvent();
+		bool Running();
+		void PollEvents();
+		bool GetEvent(Event& event);
+	private:
+		LRESULT CALLBACK Handler(UINT Message, WPARAM WParam, LPARAM LParam);
+		static LRESULT CALLBACK WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPARAM LParam);
+		Vec2i     _pos;
+		Vec2i     _size;
+		HWND      _handleWindow;
+		HDC       _handleDeviceContext;
+		MSG       _message;
+		WNDCLASSA _windowClass;
+		Eventer   _eventer;
+	};
+}
 
 #endif

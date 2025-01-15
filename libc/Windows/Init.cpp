@@ -72,3 +72,19 @@ void __security_cookie()
 void __security_check_cookie(int)
 {
 }
+
+void _chkstk()
+{
+}
+
+void __chkstk()
+{
+}
+
+void __GSHandlerCheck()
+{
+}
+
+void __GSHandlerCheck_EH4()
+{
+}

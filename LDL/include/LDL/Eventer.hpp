@@ -24,22 +24,32 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef Windows_Portable_hpp
-#define Windows_Portable_hpp
+#ifndef LDL_Eventer_hpp
+#define LDL_Eventer_hpp
 
-extern "C" int  main();
-extern "C" int  mainCRTStartup();
-extern "C" void _RTC_InitBase();
-extern "C" void _RTC_Shutdown();
-extern "C" void _RTC_CheckEsp();
-extern "C" void __CxxFrameHandler3();
-extern "C" void __CxxFrameHandler4();
-extern "C" void _RTC_CheckStackVars();
-extern "C" void __security_cookie();
-extern "C" void __security_check_cookie(int);
-extern "C" void _chkstk();
-extern "C" void __chkstk();
-extern "C" void __GSHandlerCheck();
-extern "C" void __GSHandlerCheck_EH4();
+#include <LDL/RngBuf.hpp>
+#include <LDL/Events.hpp>
+
+namespace LDL
+{
+	class Eventer
+	{
+	public:
+		enum
+		{
+			Max = 256
+		};
+
+		Eventer();
+		void Push(Event& event);
+		bool Pop(Event& event);
+		bool Running();
+		void Stop();
+		bool Empty();
+	private:
+		bool                   _running;
+		RingBuffer<Event, Max> _queue;
+	};
+}
 
 #endif

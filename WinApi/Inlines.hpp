@@ -64,4 +64,19 @@ COLORREF inline RGB(BYTE r, BYTE g, BYTE b)
     return ((COLORREF)(((BYTE)(r) | ((WORD)(g) << 8)) | (((DWORD)(BYTE)(b)) << 16)));
 }
 
+inline LONG GetWindowLong(HWND hWnd, int nIndex)
+{
+    return GetWindowLongA(hWnd, nIndex);
+}
+
+inline LONG_PTR GetWindowLongPtr(HWND hWnd, int nIndex)
+{
+    return GetWindowLongPtrA(hWnd, nIndex);
+}
+
+inline BOOL PeekMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg)
+{
+    return PeekMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
+}
+
 #endif

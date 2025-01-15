@@ -24,22 +24,43 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef Windows_Portable_hpp
-#define Windows_Portable_hpp
+#include <LDL/Eventer.hpp>
 
-extern "C" int  main();
-extern "C" int  mainCRTStartup();
-extern "C" void _RTC_InitBase();
-extern "C" void _RTC_Shutdown();
-extern "C" void _RTC_CheckEsp();
-extern "C" void __CxxFrameHandler3();
-extern "C" void __CxxFrameHandler4();
-extern "C" void _RTC_CheckStackVars();
-extern "C" void __security_cookie();
-extern "C" void __security_check_cookie(int);
-extern "C" void _chkstk();
-extern "C" void __chkstk();
-extern "C" void __GSHandlerCheck();
-extern "C" void __GSHandlerCheck_EH4();
+using namespace LDL;
 
-#endif
+Eventer::Eventer() :
+	_running(true)
+{
+}
+
+void Eventer::Push(Event& event)
+{
+	_queue.Enqueue(event);
+}
+
+bool Eventer::Pop(Event& event)
+{
+	if (!_queue.IsEmpty())
+	{
+		_queue.Dequeue(event);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool Eventer::Running()
+{
+	return _running;
+}
+
+void Eventer::Stop()
+{
+	_running = false;
+}
+
+bool Eventer::Empty()
+{
+	return _queue.IsEmpty();
+}

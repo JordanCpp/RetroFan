@@ -74,4 +74,8 @@ extern "C" WINBASEAPI int     WINAPI FillRect(HDC hDC, const RECT* lprc, HBRUSH 
 extern "C" WINBASEAPI HBRUSH  WINAPI CreateSolidBrush(COLORREF color);
 extern "C" WINBASEAPI BOOL    WINAPI DeleteObject(HGDIOBJ ho);
 
+extern "C" WINBASEAPI LONG     WINAPI GetWindowLongA(HWND hWnd, int  nIndex);
+extern "C" WINBASEAPI LONG_PTR WINAPI GetWindowLongPtrA(HWND hWnd,int  nIndex);
+extern "C" WINBASEAPI BOOL     WINAPI PeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg);
+
 #endif

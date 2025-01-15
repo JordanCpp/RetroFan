@@ -8,8 +8,16 @@ endif()
 
 if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-    add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)  
+    add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE) 
+
+    add_compile_options(/GS- /nologo /Gm- /GR- /EHa- /Oi)
     set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB")
+
+    string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+    string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")
+
+
 endif()
 
 if (WIN32)
@@ -45,6 +53,16 @@ endif()
 
 add_executable(main "main.cpp")
 target_link_libraries(main libc)
+
+if (WIN32)
+    include_directories("LDL/include")
+    add_library(LDL
+    "LDL/source/Windows/MainWin.cpp"
+    "LDL/source/Eventer.cpp")
+
+    add_executable(LDL_Win "LDL_Win.cpp")
+    target_link_libraries(LDL_Win LDL libc ${libs})
+endif()
 
 if (WIN32)
     add_executable(wWin "wWin.cpp")
