@@ -40,25 +40,25 @@ const size_t eventMask =
 MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
     _pos(pos),
     _size(size),
-	_EventMask(eventMask)
+	_eventMask(eventMask)
 {	
-	_Display = XOpenDisplay(NULL);
-	_Screen  = DefaultScreen(_Display);
-	_Root    = RootWindow(_Display, _Screen);
-    _Window  = XCreateSimpleWindow(_Display, RootWindow(_Display, _Screen), pos.x, pos.y, size.x, size.y, 1, BlackPixel(_Display, _Screen), WhitePixel(_Display, _Screen));
+	_display = XOpenDisplay(NULL);
+	_screen  = DefaultScreen(_display);
+	_root    = RootWindow(_display, _screen);
+    _window  = XCreateSimpleWindow(_display, RootWindow(_display, _screen), pos.x, pos.y, size.x, size.y, 1, BlackPixel(_display, _screen), WhitePixel(_display, _screen));
 
-    XMapWindow(_Display, _Window);
+    XMapWindow(_display, _window);
 }
 
 MainWindow::~MainWindow()
 {
-    XCloseDisplay(_Display);
+    XCloseDisplay(_display);
 }
 
 void MainWindow::Update()
 {
-	XClearWindow(_Display, _Window);
-	XMapRaised(_Display, _Window);
+	XClearWindow(_display, _window);
+	XMapRaised(_display, _window);
 }
 
 void MainWindow::StopEvent()
@@ -76,9 +76,9 @@ void MainWindow::PollEvents()
 	XEvent event;
 	size_t key = 0;
 
-	while (XPending(_Display))
+	while (XPending(_display))
 	{
-		XNextEvent(_Display, &event);
+		XNextEvent(_display, &event);
 	}
 }
 
