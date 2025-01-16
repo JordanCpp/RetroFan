@@ -27,7 +27,7 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Window_hpp
 #define LDL_Window_hpp
 
-#if defined(_Win32)
+#if defined(_WIN32)
     #include <LDL/Windows/MainWin.hpp>
 #elif defined (__unix__)
     #include <LDL/UNIX/MainWin.hpp>

@@ -57,10 +57,12 @@ include_directories("LDL/include")
 if (WIN32)
     add_library(LDL
     "LDL/source/Windows/MainWin.cpp"
+    "LDL/source/Windows/GdiRndr.cpp"
     "LDL/source/Eventer.cpp")
 else()
     add_library(LDL
     "LDL/source/UNIX/MainWin.cpp"
+    "LDL/source/UNIX/XLibRndr.cpp"
     "LDL/source/Eventer.cpp")
 endif()
 

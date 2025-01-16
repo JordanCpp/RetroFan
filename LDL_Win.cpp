@@ -24,13 +24,13 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/Window.hpp>
+#include <LDL/LDL.hpp>
 
 int main()
 {
     LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-
-    LDL::Event report;
+	LDL::Render render(window);
+    LDL::Event  report;
 
 	while (window.Running())
 	{
@@ -41,6 +41,12 @@ int main()
 				window.StopEvent();
 			}
 		}
+
+		render.Begin();
+
+		render.Line(LDL::Vec2i(0,0), LDL::Vec2i(100, 200));
+
+		render.End();
 
 		window.Update();
 		window.PollEvents();

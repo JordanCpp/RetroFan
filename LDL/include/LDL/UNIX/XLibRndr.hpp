@@ -24,35 +24,22 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_MainWin_hpp
-#define LDL_Windows_MainWin_hpp
+#ifndef LDL_UNIX_XLibRndr_hpp
+#define LDL_UNIX_XLibRndr_hpp
 
-#include <Windows.h>
-#include <LDL/Vec2.hpp>
-#include <LDL/Eventer.hpp>
+#include <LDL/UNIX/MainWin.hpp>
 
 namespace LDL
 {
-	class MainWindow
+	class XLibRender
 	{
 	public:
-		MainWindow(const Vec2i& pos, const Vec2i& size);
-		void Update();
-		void StopEvent();
-		bool Running();
-		void PollEvents();
-		bool GetEvent(Event& event);
+		GdiRender(MainWindow& window);
+		void Begin();
+		void End();
+		void Line(const Vec2i& first, const Vec2i& last);
 	private:
-		LRESULT CALLBACK Handler(UINT Message, WPARAM WParam, LPARAM LParam);
-		static LRESULT CALLBACK WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPARAM LParam);
-		Vec2i     _pos;
-		Vec2i     _size;
-	public:
-		HWND      _handleWindow;
-		HDC       _handleDeviceContext;
-		MSG       _message;
-		WNDCLASSA _windowClass;
-		Eventer   _eventer;
+		MainWindow& _window;
 	};
 }
 
