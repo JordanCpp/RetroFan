@@ -24,18 +24,37 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#ifndef LDL_UNIX_MainWin_hpp
+#define LDL_UNIX_MainWin_hpp
 
-#if defined(_Win32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined (__unix__)
-    #include <LDL/UNIX/MainWin.hpp>
-#endif
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/keysym.h>
+#include <LDL/Vec2.hpp>
+#include <LDL/Eventer.hpp>
 
 namespace LDL
 {
-	typedef MainWindow Window;
+	class MainWindow
+	{
+	public:
+		MainWindow(const Vec2i& pos, const Vec2i& size);
+		~MainWindow();
+		void Update();
+		void StopEvent();
+		bool Running();
+		void PollEvents();
+		bool GetEvent(Event& event);
+	private:
+		Vec2i    _pos;
+		Vec2i    _size;
+		Eventer  _eventer;
+		Display* _Display;
+	    int      _Screen;
+ 	    Window   _Root;
+	    Window   _Window;
+	    size_t   _EventMask;
+	};
 }
 
 #endif

@@ -30,5 +30,10 @@ DEALINGS IN THE SOFTWARE.
 
 int main()
 {
+    Display *display = XOpenDisplay(NULL);
+	int screen_num = DefaultScreen(display);
+	Window root = RootWindow(display,screen_num);
+	Visual *visual = DefaultVisual(display,screen_num);
+    
     return 0;
 }

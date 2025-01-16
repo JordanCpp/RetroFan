@@ -1,11 +1,5 @@
 enable_language(ASM)
 
-if (UNIX AND NOT APPLE)
-    find_package(X11 REQUIRED)
-    link_libraries(${X11_LIBRARIES})
-    include_directories(${X11_INCLUDE_DIR})
-endif()
-
 if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE) 
@@ -16,12 +10,6 @@ if (MSVC)
     string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
     string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
     string(REPLACE "/O2" "/Oi" CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")
-endif()
-
-if (WIN32)
-    set(libs gdi32 user32 winmm)
-elseif (UNIX AND NOT APPLE)
-    set(libs X11 dl)
 endif()
 
 include_directories("libc/include")
@@ -52,15 +40,32 @@ endif()
 add_executable(main "main.cpp")
 target_link_libraries(main libc)
 
+if (UNIX AND NOT APPLE)
+    find_package(X11 REQUIRED)
+    link_libraries(${X11_LIBRARIES})
+    include_directories(${X11_INCLUDE_DIR})
+endif()
+
 if (WIN32)
-    include_directories("LDL/include")
+    set(libs gdi32 user32 winmm)
+elseif (UNIX AND NOT APPLE)
+    set(libs X11 dl)
+endif()
+
+include_directories("LDL/include")
+
+if (WIN32)
     add_library(LDL
     "LDL/source/Windows/MainWin.cpp"
     "LDL/source/Eventer.cpp")
-
-    add_executable(LDL_Win "LDL_Win.cpp")
-    target_link_libraries(LDL_Win LDL libc ${libs})
+else()
+    add_library(LDL
+    "LDL/source/UNIX/MainWin.cpp"
+    "LDL/source/Eventer.cpp")
 endif()
+
+add_executable(LDL_Win "LDL_Win.cpp")
+target_link_libraries(LDL_Win LDL libc ${libs})
 
 if (WIN32)
     add_executable(wWin "wWin.cpp")

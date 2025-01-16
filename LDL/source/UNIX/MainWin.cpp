@@ -24,18 +24,72 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#include <LDL/UNIX/MainWin.hpp>
+#include <string.h>
 
-#if defined(_Win32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined (__unix__)
-    #include <LDL/UNIX/MainWin.hpp>
-#endif
+using namespace LDL;
 
-namespace LDL
-{
-	typedef MainWindow Window;
+const size_t eventMask =
+    PointerMotionMask
+  | ButtonMotionMask
+  | ButtonPressMask
+  | ButtonReleaseMask
+  | KeyPressMask
+  | KeyReleaseMask;
+
+MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
+    _pos(pos),
+    _size(size),
+	_EventMask(eventMask)
+{	
+	_Display = XOpenDisplay(NULL);
+	_Screen  = DefaultScreen(_Display);
+	_Root    = RootWindow(_Display, _Screen);
+    _Window  = XCreateSimpleWindow(_Display, RootWindow(_Display, _Screen), pos.x, pos.y, size.x, size.y, 1, BlackPixel(_Display, _Screen), WhitePixel(_Display, _Screen));
+
+    XMapWindow(_Display, _Window);
 }
 
-#endif
+MainWindow::~MainWindow()
+{
+    XCloseDisplay(_Display);
+}
+
+void MainWindow::Update()
+{
+	XClearWindow(_Display, _Window);
+	XMapRaised(_Display, _Window);
+}
+
+void MainWindow::StopEvent()
+{
+	_eventer.Stop();
+}
+
+bool MainWindow::Running()
+{
+	return _eventer.Running();
+}
+
+void MainWindow::PollEvents()
+{
+	XEvent event;
+	size_t key = 0;
+
+	while (XPending(_Display))
+	{
+		XNextEvent(_Display, &event);
+	}
+}
+
+bool MainWindow::GetEvent(Event& event)
+{
+	if (!_eventer.Empty())
+	{
+		_eventer.Pop(event);
+
+		return true;
+	}
+
+	return false;
+}

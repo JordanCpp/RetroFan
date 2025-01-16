@@ -26,19 +26,17 @@ DEALINGS IN THE SOFTWARE.
 
 #include <LDL/Window.hpp>
 
-using namespace LDL;
-
 int main()
 {
-    Window window(Vec2i(0, 0), Vec2i(800, 600));
+    LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
 
-    Event report;
+    LDL::Event report;
 
 	while (window.Running())
 	{
 		while (window.GetEvent(report))
 		{
-			if (report.Type == Event::IsQuit)
+			if (report.Type == LDL::Event::IsQuit)
 			{
 				window.StopEvent();
 			}
