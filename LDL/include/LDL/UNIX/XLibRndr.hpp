@@ -34,12 +34,13 @@ namespace LDL
 	class XLibRender
 	{
 	public:
-		GdiRender(MainWindow& window);
+		XLibRender(MainWindow& window);
 		void Begin();
 		void End();
 		void Line(const Vec2i& first, const Vec2i& last);
 	private:
 		MainWindow& _window;
+		GC          _graphics;
 	};
 }
 

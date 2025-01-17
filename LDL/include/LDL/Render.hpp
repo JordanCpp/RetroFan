@@ -35,7 +35,13 @@ DEALINGS IN THE SOFTWARE.
 
 namespace LDL
 {
+
+#if defined(_WIN32)
 	typedef GdiRender Render;
+#elif defined (__unix__)
+	typedef XLibRender Render;
+#endif
+
 }
 
 #endif

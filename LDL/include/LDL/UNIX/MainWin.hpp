@@ -49,6 +49,7 @@ namespace LDL
 		Vec2i    _pos;
 		Vec2i    _size;
 		Eventer  _eventer;
+	public:
 		Display* _display;
 	    int      _screen;
  	    Window   _root;

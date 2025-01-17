@@ -57,8 +57,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::Update()
 {
-	XClearWindow(_display, _window);
-	XMapRaised(_display, _window);
+	//XClearWindow(_display, _window);
+	//XMapRaised(_display, _window);
 }
 
 void MainWindow::StopEvent()

@@ -28,20 +28,24 @@ DEALINGS IN THE SOFTWARE.
 
 using namespace LDL;
 
-GdiRender::GdiRender(MainWindow& window) :
+XLibRender::XLibRender(MainWindow& window) :
 	_window(window)
 {
+	_graphics = XCreateGC(_window._display, _window._window, 0, NULL);
 
 }
 
-void GdiRender::Begin()
+void XLibRender::Begin()
 {
 }
 
-void GdiRender::End()
+void XLibRender::End()
 {
+	XSync(_window._display, True);
+	XFlush(_window._display);
 }
 
-void GdiRender::Line(const Vec2i& first, const Vec2i& last)
+void XLibRender::Line(const Vec2i& first, const Vec2i& last)
 {
+	XDrawLine(_window._display, _window._window, _graphics, first.x, first.y, last.x, last.y);
 }
