@@ -31,6 +31,7 @@ typedef unsigned long int uintptr;
 typedef long int          intptr;
 
 const uintptr SYS_write = 1;
+const uintptr SYS_brk   = 12;
 const uintptr SYS_exit  = 60;
 
 extern "C" void* syscall1(uintptr number, void* arg1);
@@ -42,6 +43,7 @@ extern "C" void* syscall5(uintptr number, void* arg1, void* arg2, void* arg3, vo
 namespace LinuxApi
 {
     intptr write(int fd, void const* data, uintptr nbytes);
+    void* brk(uintptr nbytes);
 }
 
 #endif

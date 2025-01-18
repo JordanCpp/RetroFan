@@ -30,3 +30,8 @@ intptr LinuxApi::write(int fd, void const* data, uintptr nbytes)
 {
     return (uintptr)syscall3(SYS_write, (void*)(intptr)fd, (void*)data, (void*)nbytes);
 }
+
+void* LinuxApi::brk(uintptr nbytes)
+{
+    return syscall1(SYS_brk, (void*)nbytes);
+}
