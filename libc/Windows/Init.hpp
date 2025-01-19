@@ -41,5 +41,6 @@ extern "C" void _chkstk();
 extern "C" void __chkstk();
 extern "C" void __GSHandlerCheck();
 extern "C" void __GSHandlerCheck_EH4();
+extern "C" void _RTC_UninitUse();
 
 #endif

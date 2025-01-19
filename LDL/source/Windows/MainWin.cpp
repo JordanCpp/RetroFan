@@ -55,6 +55,7 @@ MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
 void MainWindow::Update()
 {
 	ShowWindow(_handleWindow, SW_SHOW);
+	UpdateWindow(_handleWindow);
 }
 
 void MainWindow::StopEvent()

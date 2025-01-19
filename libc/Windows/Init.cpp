@@ -88,3 +88,7 @@ void __GSHandlerCheck()
 void __GSHandlerCheck_EH4()
 {
 }
+
+void _RTC_UninitUse()
+{
+}

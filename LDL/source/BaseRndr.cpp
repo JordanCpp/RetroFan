@@ -24,48 +24,16 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/LDL.hpp>
-#include <stdlib.h>
+#include <LDL/BaseRndr.hpp>
 
-int random(unsigned int min, unsigned int max)
+using namespace LDL;
+
+const Color& BaseRender::GetColor()
 {
-	return rand() % ((max + min) + min);
+	return _color;
 }
 
-int main()
+void BaseRender::SetColor(const Color& color)
 {
-	size_t rnd;
-
-	srand(rnd);
-    
-	LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(window);
-    LDL::Event  report;
-
-	while (window.Running())
-	{
-		while (window.GetEvent(report))
-		{
-			if (report.Type == LDL::Event::IsQuit)
-			{
-				window.StopEvent();
-			}
-		}
-
-		render.Begin();
-
-		render.SetColor(LDL::Color(random(0, 255), random(0, 255), random(0, 255)));
-
-		LDL::Vec2i pos  = LDL::Vec2i(random(0, 800), random(0, 600));
-		LDL::Vec2i size = LDL::Vec2i(random(25, 50), random(25, 50));
-
-		render.Fill(pos, size);
-		
-		render.End();
-
-		window.Update();
-		window.PollEvents();
-	}
-
-    return 0;
+	_color = color;
 }

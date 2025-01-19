@@ -58,12 +58,14 @@ if (WIN32)
     add_library(LDL
     "LDL/source/Windows/MainWin.cpp"
     "LDL/source/Windows/GdiRndr.cpp"
-    "LDL/source/Eventer.cpp")
+    "LDL/source/Eventer.cpp"
+    "LDL/source/BaseRndr.cpp")
 else()
     add_library(LDL
     "LDL/source/UNIX/MainWin.cpp"
     "LDL/source/UNIX/XLibRndr.cpp"
-    "LDL/source/Eventer.cpp")
+    "LDL/source/Eventer.cpp"
+    "LDL/source/BaseRndr.cpp")
 endif()
 
 add_executable(LDL_Win "LDL_Win.cpp")

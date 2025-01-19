@@ -28,6 +28,7 @@ DEALINGS IN THE SOFTWARE.
 #define LDL_Windows_GdiRndr_hpp
 
 #include <LDL/Windows/MainWin.hpp>
+#include <LDL/BaseRndr.hpp>
 
 namespace LDL
 {
@@ -35,12 +36,17 @@ namespace LDL
 	{
 	public:
 		GdiRender(MainWindow& window);
+		const Color& GetColor();
+		void SetColor(const Color& color);
 		void Begin();
 		void End();
+		void Clear();
 		void Line(const Vec2i& first, const Vec2i& last);
+		void Fill(const Vec2i& pos, const Vec2i& size);
 	private:
 		MainWindow& _window;
 		PAINTSTRUCT _paint;
+		BaseRender  _baseRender;
 	};
 }
 

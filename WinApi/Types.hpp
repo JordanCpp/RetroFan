@@ -65,6 +65,9 @@ typedef DWORD      UINT;
 typedef DWORD      WORD;
 typedef WORD       ATOM;
 
+const BOOL TRUE  = 1;
+const BOOL FALSE = 0;
+
 typedef char CHAR;
 typedef const CHAR* LPCSTR, * PCSTR;
 

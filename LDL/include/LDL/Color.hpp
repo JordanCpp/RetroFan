@@ -24,48 +24,37 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/LDL.hpp>
-#include <stdlib.h>
+#ifndef LDL_Color_hpp
+#define LDL_Color_hpp
 
-int random(unsigned int min, unsigned int max)
+#include <stdint.h>
+
+namespace LDL
 {
-	return rand() % ((max + min) + min);
-}
-
-int main()
-{
-	size_t rnd;
-
-	srand(rnd);
-    
-	LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(window);
-    LDL::Event  report;
-
-	while (window.Running())
+	class Color
 	{
-		while (window.GetEvent(report))
+	public:
+		Color() :
+			r(0),
+			g(0),
+			b(0),
+			a(255)
 		{
-			if (report.Type == LDL::Event::IsQuit)
-			{
-				window.StopEvent();
-			}
 		}
 
-		render.Begin();
+		Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) :
+			r(r),
+			g(g),
+			b(b),
+			a(a)
+		{
+		}
 
-		render.SetColor(LDL::Color(random(0, 255), random(0, 255), random(0, 255)));
-
-		LDL::Vec2i pos  = LDL::Vec2i(random(0, 800), random(0, 600));
-		LDL::Vec2i size = LDL::Vec2i(random(25, 50), random(25, 50));
-
-		render.Fill(pos, size);
-		
-		render.End();
-
-		window.Update();
-		window.PollEvents();
-	}
-
-    return 0;
+		uint8_t r;
+		uint8_t g;
+		uint8_t b;
+		uint8_t a;
+	};
 }
+
+#endif

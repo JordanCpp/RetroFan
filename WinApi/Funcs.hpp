@@ -78,4 +78,6 @@ extern "C" WINBASEAPI LONG     WINAPI GetWindowLongA(HWND hWnd, int  nIndex);
 extern "C" WINBASEAPI LONG_PTR WINAPI GetWindowLongPtrA(HWND hWnd,int  nIndex);
 extern "C" WINBASEAPI BOOL     WINAPI PeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg);
 
+extern "C" WINBASEAPI BOOL     WINAPI InvalidateRect(HWND hWnd, const RECT* lpRect, BOOL bErase);
+
 #endif

@@ -25,16 +25,29 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <LDL/Windows/GdiRndr.hpp>
+#include <string.h>
 
 using namespace LDL;
 
 GdiRender::GdiRender(MainWindow& window) :
 	_window(window)
 {
+	memset(&_paint, 0, sizeof(PAINTSTRUCT));
+}
+
+const Color& GdiRender::GetColor()
+{
+	return _baseRender.GetColor();
+}
+
+void GdiRender::SetColor(const Color& color)
+{
+	_baseRender.SetColor(color);
 }
 
 void GdiRender::Begin()
 {
+	InvalidateRect(_window._handleWindow, NULL, TRUE);
 	_window._handleDeviceContext = BeginPaint(_window._handleWindow, &_paint);
 }
 
@@ -43,8 +56,28 @@ void GdiRender::End()
 	EndPaint(_window._handleWindow, &_paint);
 }
 
+void GdiRender::Clear()
+{
+}
+
 void GdiRender::Line(const Vec2i& first, const Vec2i& last)
 {
 	MoveToEx(_window._handleDeviceContext, first.x, first.y, NULL);
 	LineTo(_window._handleDeviceContext, last.x, last.y);
+}
+
+void GdiRender::Fill(const Vec2i& pos, const Vec2i& size)
+{
+	RECT rect;
+
+	rect.left   = pos.x;
+	rect.top    = pos.y;
+	rect.right  = size.x;
+	rect.bottom = size.y;
+
+	HBRUSH brush = CreateSolidBrush(RGB(_baseRender.GetColor().r, _baseRender.GetColor().g, _baseRender.GetColor().b));
+
+	FillRect(_window._handleDeviceContext, &rect, brush);
+
+	DeleteObject(brush);
 }
