@@ -24,51 +24,36 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/LDL.hpp>
-#include <stdlib.h>
+#include <LDL/BaseWin.hpp>
 
-int random(unsigned int min, unsigned int max)
+using namespace LDL;
+
+const Vec2i& BaseWindow::Pos()
 {
-	return rand() % ((max + min) + min);
+	return _pos;
 }
 
-int main()
+void BaseWindow::Pos(const Vec2i& pos)
 {
-	size_t rnd;
+	_pos = pos;
+}
 
-	srand(rnd);
-    
-	LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(window);
-    LDL::Event  report;
+const Vec2i& BaseWindow::Size()
+{
+	return _size;
+}
 
-	while (window.Running())
-	{
-		while (window.GetEvent(report))
-		{
-			if (report.Type == LDL::Event::IsQuit)
-			{
-				window.StopEvent();
-			}
-		}
+void BaseWindow::Size(const Vec2i& size)
+{
+	_size = size;
+}
 
-		render.Begin();
+const std::string& BaseWindow::Title()
+{
+	return _title;
+}
 
-		for (size_t i = 0; i < 50; i++)
-		{
-			render.SetColor(LDL::Color(random(0, 255), random(0, 255), random(0, 255)));
-
-			LDL::Vec2i pos  = LDL::Vec2i(random(0, 800), random(0, 600));
-			LDL::Vec2i size = LDL::Vec2i(random(25, 50), random(25, 50));
-
-			render.Fill(pos, size);
-		}
-
-		render.End();
-
-		window.Update();
-		window.PollEvents();
-	}
-
-    return 0;
+void BaseWindow::Title(const std::string& title)
+{
+	_title = title;
 }

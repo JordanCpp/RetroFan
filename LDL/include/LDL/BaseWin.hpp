@@ -24,51 +24,28 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/LDL.hpp>
-#include <stdlib.h>
+#ifndef LDL_BaseWin_hpp
+#define LDL_BaseWin_hpp
 
-int random(unsigned int min, unsigned int max)
+#include <LDL/Vec2.hpp>
+#include <string>
+
+namespace LDL
 {
-	return rand() % ((max + min) + min);
-}
-
-int main()
-{
-	size_t rnd;
-
-	srand(rnd);
-    
-	LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(window);
-    LDL::Event  report;
-
-	while (window.Running())
+	class BaseWindow
 	{
-		while (window.GetEvent(report))
-		{
-			if (report.Type == LDL::Event::IsQuit)
-			{
-				window.StopEvent();
-			}
-		}
-
-		render.Begin();
-
-		for (size_t i = 0; i < 50; i++)
-		{
-			render.SetColor(LDL::Color(random(0, 255), random(0, 255), random(0, 255)));
-
-			LDL::Vec2i pos  = LDL::Vec2i(random(0, 800), random(0, 600));
-			LDL::Vec2i size = LDL::Vec2i(random(25, 50), random(25, 50));
-
-			render.Fill(pos, size);
-		}
-
-		render.End();
-
-		window.Update();
-		window.PollEvents();
-	}
-
-    return 0;
+	public:
+		const Vec2i& Pos();
+		void Pos(const Vec2i& pos);
+		const Vec2i& Size();
+		void Size(const Vec2i& size);
+		const std::string& Title();
+		void Title(const std::string& title);
+	private:
+		Vec2i       _pos;
+		Vec2i       _size;
+		std::string _title;
+	};
 }
+
+#endif
