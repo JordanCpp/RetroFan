@@ -129,8 +129,11 @@ const ULONG_PTR COLOR_BTNTEXT             = 18;
 const ULONG_PTR COLOR_INACTIVECAPTIONTEXT = 19;
 const ULONG_PTR COLOR_BTNHIGHLIGHT        = 20;
 
-const int GWLP_USERDATA = -21;
 const int GWL_USERDATA  = -21;
+const int GWL_WNDPROC   = -4;
+
+const int GWLP_USERDATA = -21;
+const int GWLP_WNDPROC  = -4;
 
 const UINT PM_REMOVE = 0x0001;
 

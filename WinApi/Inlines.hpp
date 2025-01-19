@@ -79,4 +79,14 @@ inline BOOL PeekMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFil
     return PeekMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
 }
 
+inline LONG SetWindowLong(HWND hWnd, int nIndex, LONG dwNewLong)
+{
+    return SetWindowLongA(hWnd, nIndex, dwNewLong);
+}
+
+inline LONG_PTR SetWindowLongPtr(HWND hWnd, int nIndex, LONG_PTR dwNewLong)
+{
+    return SetWindowLongPtrA(hWnd, nIndex, dwNewLong);
+}
+
 #endif

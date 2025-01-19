@@ -35,7 +35,7 @@ MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
     _handleWindow(NULL),
     _handleDeviceContext(NULL)
 {
-    memset(&_message, 0, sizeof(MSG));
+    memset(&_message,     0, sizeof(MSG));
     memset(&_windowClass, 0, sizeof(WNDCLASSA));
 
 	_windowClass.style         = CS_HREDRAW | CS_VREDRAW;
@@ -50,6 +50,14 @@ MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
 	RegisterClass(&_windowClass);
 
 	_handleWindow = CreateWindow(_windowClass.lpszClassName, "", WS_OVERLAPPEDWINDOW | WS_VISIBLE, _pos.x, _pos.y, _size.x, _size.y, NULL, NULL, _windowClass.hInstance, NULL);
+
+#ifdef _WIN64
+	SetWindowLongPtr(_handleWindow, GWLP_WNDPROC, (LONG_PTR)WndProc);
+	SetWindowLongPtr(_handleWindow, GWLP_USERDATA, (LONG_PTR)this);
+#elif _WIN32
+	SetWindowLong(_handleWindow, GWL_WNDPROC, (LONG)WndProc);
+	SetWindowLong(_handleWindow, GWL_USERDATA, (LONG)this);
+#endif  
 }
 
 void MainWindow::Update()
