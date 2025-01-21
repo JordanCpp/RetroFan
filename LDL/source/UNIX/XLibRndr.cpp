@@ -28,11 +28,26 @@ DEALINGS IN THE SOFTWARE.
 
 using namespace LDL;
 
+inline uint32_t MakeRgb(uint8_t r, uint8_t g, uint8_t b)
+{
+    return b + (g <<8 ) + (r << 16);
+}
+
 XLibRender::XLibRender(MainWindow& window) :
 	_window(window)
 {
 	_graphics = XCreateGC(_window._display, _window._window, 0, NULL);
 
+}
+
+const Color& XLibRender::GetColor()
+{
+	return _baseRender.GetColor();
+}
+
+void XLibRender::SetColor(const Color& color)
+{
+	_baseRender.SetColor(color);
 }
 
 void XLibRender::Begin()
@@ -45,7 +60,22 @@ void XLibRender::End()
 	XFlush(_window._display);
 }
 
+void XLibRender::Clear()
+{
+}
+
 void XLibRender::Line(const Vec2i& first, const Vec2i& last)
 {
+	uint32_t rgb = MakeRgb(_baseRender.GetColor().r, _baseRender.GetColor().g, _baseRender.GetColor().b);
+
+	XSetForeground(_window._display, _graphics, rgb);
 	XDrawLine(_window._display, _window._window, _graphics, first.x, first.y, last.x, last.y);
+}
+
+void XLibRender::Fill(const Vec2i& pos, const Vec2i& size)
+{
+	uint32_t rgb = MakeRgb(_baseRender.GetColor().r, _baseRender.GetColor().g, _baseRender.GetColor().b);
+
+	XSetForeground(_window._display, _graphics, rgb);
+	XFillRectangle(_window._display, _window._window, _graphics, pos.x, pos.y, size.x, size.y);
 }

@@ -28,6 +28,7 @@ DEALINGS IN THE SOFTWARE.
 #define LDL_UNIX_XLibRndr_hpp
 
 #include <LDL/UNIX/MainWin.hpp>
+#include <LDL/BaseRndr.hpp>
 
 namespace LDL
 {
@@ -35,12 +36,17 @@ namespace LDL
 	{
 	public:
 		XLibRender(MainWindow& window);
+		const Color& GetColor();
+		void SetColor(const Color& color);
 		void Begin();
 		void End();
+		void Clear();
 		void Line(const Vec2i& first, const Vec2i& last);
+		void Fill(const Vec2i& pos, const Vec2i& size);
 	private:
 		MainWindow& _window;
 		GC          _graphics;
+		BaseRender  _baseRender;
 	};
 }
 
