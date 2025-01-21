@@ -29,7 +29,7 @@ DEALINGS IN THE SOFTWARE.
 
 int random(unsigned int min, unsigned int max)
 {
-	return rand() % ((max + min) + min);
+	return min + rand() % (max - min);
 }
 
 int main()
