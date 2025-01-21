@@ -35,6 +35,7 @@ namespace LDL
 	class BaseWindow
 	{
 	public:
+		BaseWindow(const Vec2i& pos, const Vec2i& size, const std::string& title);
 		const Vec2i& Pos();
 		void Pos(const Vec2i& pos);
 		const Vec2i& Size();

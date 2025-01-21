@@ -84,4 +84,8 @@ extern "C" WINBASEAPI BOOL     WINAPI PeekMessageA(LPMSG lpMsg, HWND hWnd, UINT 
 
 extern "C" WINBASEAPI BOOL     WINAPI InvalidateRect(HWND hWnd, const RECT* lpRect, BOOL bErase);
 
+extern "C" WINBASEAPI int      WINAPI ReleaseDC(HWND hWnd, HDC hDC);
+extern "C" WINBASEAPI BOOL     WINAPI UnregisterClassA(LPCTSTR lpClassName, HINSTANCE hInstance);
+
+
 #endif

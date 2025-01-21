@@ -59,7 +59,7 @@ inline LRESULT DefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProcA(hWnd, Msg, wParam, lParam);
 }
 
-COLORREF inline RGB(BYTE r, BYTE g, BYTE b)
+inline COLORREF RGB(BYTE r, BYTE g, BYTE b)
 {
     return ((COLORREF)(((BYTE)(r) | ((WORD)(g) << 8)) | (((DWORD)(BYTE)(b)) << 16)));
 }
@@ -87,6 +87,11 @@ inline LONG SetWindowLong(HWND hWnd, int nIndex, LONG dwNewLong)
 inline LONG_PTR SetWindowLongPtr(HWND hWnd, int nIndex, LONG_PTR dwNewLong)
 {
     return SetWindowLongPtrA(hWnd, nIndex, dwNewLong);
+}
+
+inline BOOL UnregisterClass(LPCTSTR lpClassName, HINSTANCE hInstance)
+{
+    return UnregisterClassA(lpClassName, hInstance);
 }
 
 #endif

@@ -28,6 +28,13 @@ DEALINGS IN THE SOFTWARE.
 
 using namespace LDL;
 
+BaseWindow::BaseWindow(const Vec2i& pos, const Vec2i& size, const std::string& title) :
+	_pos(pos),
+	_size(size),
+	_title(title)
+{
+}
+
 const Vec2i& BaseWindow::Pos()
 {
 	return _pos;

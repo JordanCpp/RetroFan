@@ -48,6 +48,7 @@ void GdiRender::SetColor(const Color& color)
 void GdiRender::Begin()
 {
 	InvalidateRect(_window._handleWindow, NULL, TRUE);
+
 	_window._handleDeviceContext = BeginPaint(_window._handleWindow, &_paint);
 }
 

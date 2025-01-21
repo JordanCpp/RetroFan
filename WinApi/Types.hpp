@@ -70,6 +70,7 @@ const BOOL FALSE = 0;
 
 typedef char CHAR;
 typedef const CHAR* LPCSTR, * PCSTR;
+typedef LPCSTR LPCTSTR;
 
 typedef LRESULT(WINAPI* WNDPROC)(HWND, UINT, WPARAM, LPARAM);
 

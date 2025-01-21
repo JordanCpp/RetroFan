@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.
 #define LDL_Windows_MainWin_hpp
 
 #include <Windows.h>
-#include <LDL/Vec2.hpp>
+#include <LDL/BaseWin.hpp>
 #include <LDL/Eventer.hpp>
 
 namespace LDL
@@ -37,6 +37,7 @@ namespace LDL
 	{
 	public:
 		MainWindow(const Vec2i& pos, const Vec2i& size);
+		~MainWindow();
 		void Update();
 		void StopEvent();
 		bool Running();
@@ -45,14 +46,13 @@ namespace LDL
 	private:
 		LRESULT CALLBACK Handler(UINT Message, WPARAM WParam, LPARAM LParam);
 		static LRESULT CALLBACK WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPARAM LParam);
-		Vec2i     _pos;
-		Vec2i     _size;
+		BaseWindow _baseWindow;
 	public:
-		HWND      _handleWindow;
-		HDC       _handleDeviceContext;
-		MSG       _message;
-		WNDCLASSA _windowClass;
-		Eventer   _eventer;
+		HWND       _handleWindow;
+		HDC        _handleDeviceContext;
+		MSG        _message;
+		WNDCLASSA  _windowClass;
+		Eventer    _eventer;
 	};
 }
 

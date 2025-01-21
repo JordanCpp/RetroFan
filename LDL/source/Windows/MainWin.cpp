@@ -30,8 +30,7 @@ DEALINGS IN THE SOFTWARE.
 using namespace LDL;
 
 MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
-    _pos(pos),
-    _size(size),
+    _baseWindow(pos, size, ""),
     _handleWindow(NULL),
     _handleDeviceContext(NULL)
 {
@@ -49,15 +48,26 @@ MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
 
 	RegisterClass(&_windowClass);
 
-	_handleWindow = CreateWindow(_windowClass.lpszClassName, "", WS_OVERLAPPEDWINDOW | WS_VISIBLE, _pos.x, _pos.y, _size.x, _size.y, NULL, NULL, _windowClass.hInstance, NULL);
+	int x = _baseWindow.Pos().x;
+	int y = _baseWindow.Pos().y;
+	int w = _baseWindow.Size().x;
+	int h = _baseWindow.Size().y;
 
-#ifdef _WIN64
+	_handleWindow = CreateWindow(_windowClass.lpszClassName, "", WS_OVERLAPPEDWINDOW | WS_VISIBLE, x, y, w, h, NULL, NULL, _windowClass.hInstance, NULL);
+
+#if defined(_WIN64)
 	SetWindowLongPtr(_handleWindow, GWLP_WNDPROC, (LONG_PTR)WndProc);
 	SetWindowLongPtr(_handleWindow, GWLP_USERDATA, (LONG_PTR)this);
-#elif _WIN32
+#elif defined(_WIN32)
 	SetWindowLong(_handleWindow, GWL_WNDPROC, (LONG)WndProc);
 	SetWindowLong(_handleWindow, GWL_USERDATA, (LONG)this);
 #endif  
+}
+
+MainWindow::~MainWindow()
+{
+	UnregisterClass(_windowClass.lpszClassName, _windowClass.hInstance);
+	ReleaseDC(_handleWindow, _handleDeviceContext);
 }
 
 void MainWindow::Update()
@@ -121,9 +131,9 @@ LRESULT CALLBACK MainWindow::WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPA
 {
 	LRESULT result;
 
-#ifdef _WIN64
+#if defined(_WIN64)
 	MainWindow* This = (MainWindow*)GetWindowLongPtr(Hwnd, GWLP_USERDATA);
-#elif _WIN32
+#elif defined(_WIN32)
 	MainWindow* This = (MainWindow*)GetWindowLong(Hwnd, GWL_USERDATA);
 #endif  
 
