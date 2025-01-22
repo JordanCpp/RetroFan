@@ -24,39 +24,45 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_MainWin_hpp
-#define LDL_Windows_MainWin_hpp
+#include <LDL/LDL.hpp>
 
-#include <Windows.h>
-#include <LDL/BaseWin.hpp>
-#include <LDL/Eventer.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
-namespace LDL
+int main()
 {
-	class MainWindow
-	{
-	public:
-		MainWindow(const Vec2i& pos, const Vec2i& size);
-		~MainWindow();
-		void Update();
-		void StopEvent();
-		bool Running();
-		void PollEvents();
-		bool GetEvent(Event& event);
-	private:
-		LRESULT CALLBACK Handler(UINT Message, WPARAM WParam, LPARAM LParam);
-		static LRESULT CALLBACK WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPARAM LParam);
-		BaseWindow _baseWindow;
-		HWND       _handleWindow;
-		HDC        _handleDeviceContext;
-		MSG        _message;
-		WNDCLASSA  _windowClass;
-		Eventer    _eventer;
-	public:
-		const HWND HandleWindow();
-		const HDC  HandleDeviceContext();
-		void HandleDeviceContext(const HDC handleDeviceContext);
-	};
-}
+	LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
+	LDL::Render render(window);
+    LDL::Event  report;
 
-#endif
+	int width, height, channels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* pixels = stbi_load("img24.bmp", &width, &height, &channels, STBI_default);
+
+	LDL::Texture texture(&render, LDL::Vec2i(width, height), channels, pixels);
+
+	stbi_image_free(pixels);
+
+	while (window.Running())
+	{
+		while (window.GetEvent(report))
+		{
+			if (report.Type == LDL::Event::IsQuit)
+			{
+				window.StopEvent();
+			}
+		}
+
+		render.Begin();
+		render.Clear();
+
+		render.Draw(&texture, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
+
+		render.End();
+
+		window.Update();
+		window.PollEvents();
+	}
+
+    return 0;
+}

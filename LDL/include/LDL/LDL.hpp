@@ -29,5 +29,6 @@ DEALINGS IN THE SOFTWARE.
 
 #include <LDL/Window.hpp>
 #include <LDL/Render.hpp>
+#include <LDL/Texture.hpp>
 
 #endif

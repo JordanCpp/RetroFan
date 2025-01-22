@@ -53,7 +53,7 @@ MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
 	int w = _baseWindow.Size().x;
 	int h = _baseWindow.Size().y;
 
-	_handleWindow = CreateWindow(_windowClass.lpszClassName, "", WS_OVERLAPPEDWINDOW | WS_VISIBLE, x, y, w, h, NULL, NULL, _windowClass.hInstance, NULL);
+	_handleWindow = CreateWindow(_windowClass.lpszClassName, "", WS_OVERLAPPEDWINDOW | WS_VISIBLE , x, y, w, h, NULL, NULL, _windowClass.hInstance, NULL);
 
 #if defined(_WIN64)
 	SetWindowLongPtr(_handleWindow, GWLP_WNDPROC, (LONG_PTR)WndProc);
@@ -122,6 +122,9 @@ LRESULT CALLBACK MainWindow::Handler(UINT Message, WPARAM WParam, LPARAM LParam)
 		event.Type = Event::IsQuit;
 		_eventer.Push(event);
 		break;
+
+	case WM_ERASEBKGND:
+		break;
 	}
 
 	return DefWindowProc(_handleWindow, Message, WParam, LParam);
@@ -147,4 +150,19 @@ LRESULT CALLBACK MainWindow::WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPA
 	}
 
 	return result;
+}
+
+const HWND MainWindow::HandleWindow()
+{
+	return _handleWindow;
+}
+
+const HDC MainWindow::HandleDeviceContext()
+{
+	return _handleDeviceContext;
+}
+
+void MainWindow::HandleDeviceContext(const HDC handleDeviceContext)
+{
+	_handleDeviceContext = handleDeviceContext;
 }

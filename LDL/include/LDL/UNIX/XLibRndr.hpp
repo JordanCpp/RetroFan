@@ -28,10 +28,14 @@ DEALINGS IN THE SOFTWARE.
 #define LDL_UNIX_XLibRndr_hpp
 
 #include <LDL/UNIX/MainWin.hpp>
+#include <LDL/UNIX/XLibTex.hpp>
 #include <LDL/BaseRndr.hpp>
+#include <LDL/Pal256.hpp>
 
 namespace LDL
 {
+	class XLibTexture;
+
 	class XLibRender
 	{
 	public:
@@ -43,6 +47,9 @@ namespace LDL
 		void Clear();
 		void Line(const Vec2i& first, const Vec2i& last);
 		void Fill(const Vec2i& pos, const Vec2i& size);
+		void Draw(XLibTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
+		void Draw(XLibTexture* texture, const Vec2i& pos);
+		void Draw(XLibTexture* texture, const Vec2i& pos, const Vec2i& size);
 	private:
 		MainWindow& _window;
 		GC          _graphics;

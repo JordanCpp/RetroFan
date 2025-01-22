@@ -28,10 +28,13 @@ DEALINGS IN THE SOFTWARE.
 #define LDL_Windows_GdiRndr_hpp
 
 #include <LDL/Windows/MainWin.hpp>
+#include <LDL/Windows/GdiTex.hpp>
 #include <LDL/BaseRndr.hpp>
 
 namespace LDL
 {
+	class GdiTexture;
+
 	class GdiRender
 	{
 	public:
@@ -43,6 +46,10 @@ namespace LDL
 		void Clear();
 		void Line(const Vec2i& first, const Vec2i& last);
 		void Fill(const Vec2i& pos, const Vec2i& size);
+		void Draw(GdiTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
+		void Draw(GdiTexture* texture, const Vec2i& pos);
+		void Draw(GdiTexture* texture, const Vec2i& pos, const Vec2i& size);
+		const HDC HandleDeviceContext();
 	private:
 		MainWindow& _window;
 		PAINTSTRUCT _paint;

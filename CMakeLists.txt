@@ -1,3 +1,4 @@
+if(FALSE)
 enable_language(ASM)
 
 if (MSVC)
@@ -39,6 +40,9 @@ endif()
 
 add_executable(main "main.cpp")
 target_link_libraries(main libc)
+endif()
+
+# LDL - Little DirectMedia Layer
 
 if (UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
@@ -58,6 +62,7 @@ if (WIN32)
     add_library(LDL
     "LDL/source/Windows/MainWin.cpp"
     "LDL/source/Windows/GdiRndr.cpp"
+    "LDL/source/Windows/GdiTex.cpp"
     "LDL/source/Eventer.cpp"
     "LDL/source/BaseRndr.cpp"
     "LDL/source/BaseWin.cpp")
@@ -71,12 +76,15 @@ else()
 endif()
 
 add_executable(LDL_Win "LDL_Win.cpp")
-target_link_libraries(LDL_Win LDL libc ${libs})
+target_link_libraries(LDL_Win LDL ${libs})
+
+add_executable(LDL_Img "LDL_Img.cpp")
+target_link_libraries(LDL_Img LDL ${libs})
 
 if (WIN32)
     add_executable(wWin "wWin.cpp")
-    target_link_libraries(wWin libc ${libs})
+    target_link_libraries(wWin ${libs})
 else()
     add_executable(xWin "xWin.cpp")
-    target_link_libraries(xWin libc ${libs})
+    target_link_libraries(xWin ${libs})
 endif()

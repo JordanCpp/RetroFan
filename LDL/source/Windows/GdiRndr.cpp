@@ -47,14 +47,14 @@ void GdiRender::SetColor(const Color& color)
 
 void GdiRender::Begin()
 {
-	InvalidateRect(_window._handleWindow, NULL, TRUE);
+	InvalidateRect(_window.HandleWindow(), NULL, FALSE);
 
-	_window._handleDeviceContext = BeginPaint(_window._handleWindow, &_paint);
+	_window.HandleDeviceContext(BeginPaint(_window.HandleWindow(), &_paint));
 }
 
 void GdiRender::End()
 {
-	EndPaint(_window._handleWindow, &_paint);
+	EndPaint(_window.HandleWindow(), &_paint);
 }
 
 void GdiRender::Clear()
@@ -63,8 +63,8 @@ void GdiRender::Clear()
 
 void GdiRender::Line(const Vec2i& first, const Vec2i& last)
 {
-	MoveToEx(_window._handleDeviceContext, first.x, first.y, NULL);
-	LineTo(_window._handleDeviceContext, last.x, last.y);
+	MoveToEx(_window.HandleDeviceContext(), first.x, first.y, NULL);
+	LineTo(_window.HandleDeviceContext(), last.x, last.y);
 }
 
 void GdiRender::Fill(const Vec2i& pos, const Vec2i& size)
@@ -76,9 +76,37 @@ void GdiRender::Fill(const Vec2i& pos, const Vec2i& size)
 	rect.right  = size.x;
 	rect.bottom = size.y;
 
-	HBRUSH brush = CreateSolidBrush(RGB(_baseRender.GetColor().r, _baseRender.GetColor().g, _baseRender.GetColor().b));
+	Color color = _baseRender.GetColor();
 
-	FillRect(_window._handleDeviceContext, &rect, brush);
+	HBRUSH brush = CreateSolidBrush(RGB(color.r, color.g, color.b));
+
+	FillRect(_window.HandleDeviceContext(), &rect, brush);
 
 	DeleteObject(brush);
+}
+
+void GdiRender::Draw(GdiTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize)
+{
+	HDC handleDeviceContextMemory = CreateCompatibleDC(_window.HandleDeviceContext());
+
+	SelectObject(handleDeviceContextMemory, texture->Bitmap());
+
+	StretchBlt(_window.HandleDeviceContext(), dstPos.x, dstPos.y, dstSize.x, dstSize.y, handleDeviceContextMemory, srcPos.x, srcPos.y, srcSize.x, srcSize.y, SRCCOPY);
+
+	DeleteDC(handleDeviceContextMemory);
+}
+
+void GdiRender::Draw(GdiTexture* texture, const Vec2i& pos)
+{
+	Draw(texture, pos, texture->Size(), Vec2i(0, 0), texture->Size());
+}
+
+void GdiRender::Draw(GdiTexture* texture, const Vec2i& pos, const Vec2i& size)
+{
+	Draw(texture, pos, size, Vec2i(0, 0), texture->Size());
+}
+
+const HDC GdiRender::HandleDeviceContext()
+{
+	return _window.HandleDeviceContext();
 }

@@ -24,38 +24,24 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_MainWin_hpp
-#define LDL_Windows_MainWin_hpp
+#ifndef LDL_UNIX_XLibTex_hpp
+#define LDL_UNIX_XLibTex_hpp
 
-#include <Windows.h>
-#include <LDL/BaseWin.hpp>
-#include <LDL/Eventer.hpp>
+#include <LDL/UNIX/XLibRndr.hpp>
 
 namespace LDL
 {
-	class MainWindow
+	class XLibRender;
+
+	class XLibTexture
 	{
 	public:
-		MainWindow(const Vec2i& pos, const Vec2i& size);
-		~MainWindow();
-		void Update();
-		void StopEvent();
-		bool Running();
-		void PollEvents();
-		bool GetEvent(Event& event);
+		XLibTexture(XLibRender* render, const Vec2i& size, uint8_t bpp, uint8_t * pixels);
+		~XLibTexture();
+		const Vec2i& Size();
 	private:
-		LRESULT CALLBACK Handler(UINT Message, WPARAM WParam, LPARAM LParam);
-		static LRESULT CALLBACK WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPARAM LParam);
-		BaseWindow _baseWindow;
-		HWND       _handleWindow;
-		HDC        _handleDeviceContext;
-		MSG        _message;
-		WNDCLASSA  _windowClass;
-		Eventer    _eventer;
-	public:
-		const HWND HandleWindow();
-		const HDC  HandleDeviceContext();
-		void HandleDeviceContext(const HDC handleDeviceContext);
+		Vec2i        _size;
+		XLibTexture* _render;
 	};
 }
 

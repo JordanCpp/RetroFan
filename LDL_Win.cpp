@@ -25,6 +25,7 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <LDL/LDL.hpp>
+#include <time.h>
 #include <stdlib.h>
 
 int random(unsigned int min, unsigned int max)
@@ -34,9 +35,7 @@ int random(unsigned int min, unsigned int max)
 
 int main()
 {
-	size_t rnd;
-
-	srand(rnd);
+	srand(clock() / CLOCKS_PER_SEC);
     
 	LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
 	LDL::Render render(window);
