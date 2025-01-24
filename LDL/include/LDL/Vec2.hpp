@@ -29,7 +29,7 @@ DEALINGS IN THE SOFTWARE.
 
 namespace LDL
 {
-	template<typename T>
+	template<class T>
 	class Vec2
 	{
 	public:
