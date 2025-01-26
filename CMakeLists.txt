@@ -65,14 +65,18 @@ if (WIN32)
     "LDL/source/Windows/GdiTex.cpp"
     "LDL/source/Eventer.cpp"
     "LDL/source/BaseRndr.cpp"
-    "LDL/source/BaseWin.cpp")
+    "LDL/source/BaseWin.cpp"
+    "LDL/source/Result.cpp"
+    "LDL/source/PixConv.cpp")
 else()
     add_library(LDL
     "LDL/source/UNIX/MainWin.cpp"
     "LDL/source/UNIX/XLibRndr.cpp"
     "LDL/source/Eventer.cpp"
     "LDL/source/BaseRndr.cpp"
-    "LDL/source/BaseWin.cpp")
+    "LDL/source/BaseWin.cpp"
+    "LDL/source/Result.cpp"
+    "LDL/source/PixConv.cpp")
 endif()
 
 add_executable(LDL_Win "LDL_Win.cpp")

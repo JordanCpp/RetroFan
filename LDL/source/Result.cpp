@@ -24,54 +24,38 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/Windows/GdiTex.hpp>
-#include <LDL/PixConv.hpp>
+#include <LDL/Result.hpp>
 
 using namespace LDL;
 
-GdiTexture::GdiTexture(GdiRender* render, const Vec2i& size, uint8_t bpp, uint8_t* pixels) :
-    _size(size),
-	_render(render),
-	_bitmap(NULL)
+Result::Result() :
+	_ok(true)
 {
-    size_t bytes = _size.x * _size.y * bpp;
 
-    BITMAPINFO bitmapInfo;
-    memset(&bitmapInfo, 0, sizeof(BITMAPINFO));
-
-    bitmapInfo.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-    bitmapInfo.bmiHeader.biWidth       = _size.x;
-    bitmapInfo.bmiHeader.biHeight      = _size.y;
-    bitmapInfo.bmiHeader.biPlanes      = 1;
-    bitmapInfo.bmiHeader.biBitCount    = bpp * 8;
-    bitmapInfo.bmiHeader.biCompression = BI_RGB;
-
-    uint8_t* dstPixels = NULL;
-
-    _bitmap = CreateDIBSection(_render->HandleDeviceContext(), (BITMAPINFO*)&bitmapInfo, DIB_RGB_COLORS, (void**)&dstPixels, NULL, 0);
-
-    PixelConverter conv;
-    conv.RgbToBgr(_size, bpp, pixels);
-
-    memcpy(dstPixels, pixels, bytes);
-
-    conv.BgrToRgb(_size, bpp, pixels);
 }
 
-GdiTexture::~GdiTexture()
+const std::string& Result::Message()
 {
-    if (_bitmap)
-    {
-        DeleteObject(_bitmap);
-    }
+	return _message;
 }
 
-const Vec2i& GdiTexture::Size()
+void Result::Message(const std::string& message)
 {
-    return _size;
+	_ok = false;
+
+	_message = message;
 }
 
-const HBITMAP GdiTexture::Bitmap()
+void Result::Message(const std::string& message, const std::string& detail)
 {
-    return _bitmap;
+	_ok = false;
+
+	_message = message;
+	_message += detail;
+}
+
+void Result::Clear()
+{
+	_ok = true;
+	_message.clear();
 }

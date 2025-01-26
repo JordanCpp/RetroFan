@@ -24,54 +24,34 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/Windows/GdiTex.hpp>
 #include <LDL/PixConv.hpp>
 
 using namespace LDL;
 
-GdiTexture::GdiTexture(GdiRender* render, const Vec2i& size, uint8_t bpp, uint8_t* pixels) :
-    _size(size),
-	_render(render),
-	_bitmap(NULL)
+void PixelConverter::BgrToRgb(const Vec2i& size, uint8_t bpp, uint8_t* pixels)
 {
-    size_t bytes = _size.x * _size.y * bpp;
+    size_t bytes = size.x * size.y * bpp;
 
-    BITMAPINFO bitmapInfo;
-    memset(&bitmapInfo, 0, sizeof(BITMAPINFO));
-
-    bitmapInfo.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-    bitmapInfo.bmiHeader.biWidth       = _size.x;
-    bitmapInfo.bmiHeader.biHeight      = _size.y;
-    bitmapInfo.bmiHeader.biPlanes      = 1;
-    bitmapInfo.bmiHeader.biBitCount    = bpp * 8;
-    bitmapInfo.bmiHeader.biCompression = BI_RGB;
-
-    uint8_t* dstPixels = NULL;
-
-    _bitmap = CreateDIBSection(_render->HandleDeviceContext(), (BITMAPINFO*)&bitmapInfo, DIB_RGB_COLORS, (void**)&dstPixels, NULL, 0);
-
-    PixelConverter conv;
-    conv.RgbToBgr(_size, bpp, pixels);
-
-    memcpy(dstPixels, pixels, bytes);
-
-    conv.BgrToRgb(_size, bpp, pixels);
-}
-
-GdiTexture::~GdiTexture()
-{
-    if (_bitmap)
+    for (size_t i = 0; i < bytes; i += bpp)
     {
-        DeleteObject(_bitmap);
+        uint8_t b = pixels[i + 0];
+        uint8_t r = pixels[i + 2];
+
+        pixels[i + 0] = r;
+        pixels[i + 2] = b;
     }
 }
 
-const Vec2i& GdiTexture::Size()
+void PixelConverter::RgbToBgr(const Vec2i& size, uint8_t bpp, uint8_t* pixels)
 {
-    return _size;
-}
+    size_t bytes = size.x * size.y * bpp;
 
-const HBITMAP GdiTexture::Bitmap()
-{
-    return _bitmap;
+    for (size_t i = 0; i < bytes; i += bpp)
+    {
+        uint8_t r = pixels[i + 0];
+        uint8_t b = pixels[i + 2];
+
+        pixels[i + 0] = b;
+        pixels[i + 2] = r;
+    }
 }
