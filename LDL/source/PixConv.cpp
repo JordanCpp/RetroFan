@@ -25,11 +25,17 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <LDL/PixConv.hpp>
+#include <assert.h>
 
 using namespace LDL;
 
 void PixelConverter::BgrToRgb(const Vec2i& size, uint8_t bpp, uint8_t* pixels)
 {
+    assert(size.x > 0);
+    assert(size.y > 0);
+    assert(bpp == 3 || bpp == 4);
+    assert(pixels != NULL);
+
     size_t bytes = size.x * size.y * bpp;
 
     for (size_t i = 0; i < bytes; i += bpp)
@@ -44,6 +50,11 @@ void PixelConverter::BgrToRgb(const Vec2i& size, uint8_t bpp, uint8_t* pixels)
 
 void PixelConverter::RgbToBgr(const Vec2i& size, uint8_t bpp, uint8_t* pixels)
 {
+    assert(size.x > 0);
+    assert(size.y > 0);
+    assert(bpp == 3 || bpp == 4);
+    assert(pixels != NULL);
+
     size_t bytes = size.x * size.y * bpp;
 
     for (size_t i = 0; i < bytes; i += bpp)

@@ -26,6 +26,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include <LDL/Windows/GdiTex.hpp>
 #include <LDL/PixConv.hpp>
+#include <assert.h>
 
 using namespace LDL;
 
@@ -34,6 +35,12 @@ GdiTexture::GdiTexture(GdiRender* render, const Vec2i& size, uint8_t bpp, uint8_
 	_render(render),
 	_bitmap(NULL)
 {
+    assert(render != NULL);
+    assert(size.x > 0);
+    assert(size.y > 0);
+    assert(bpp == 3 || bpp == 4);
+    assert(pixels != NULL);
+
     size_t bytes = _size.x * _size.y * bpp;
 
     BITMAPINFO bitmapInfo;
