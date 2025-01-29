@@ -98,14 +98,6 @@ void GdiRender::Fill(const Vec2i& pos, const Vec2i& size)
 void GdiRender::Draw(GdiTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize)
 {
 	assert(texture != NULL);
-	assert(dstPos.x >= 0);
-	assert(dstPos.y >= 0);
-	assert(dstSize.x > 0);
-	assert(dstSize.y > 0);
-	assert(srcPos.x >= 0);
-	assert(srcPos.y >= 0);
-	assert(srcSize.x > 0);
-	assert(srcSize.y > 0);
 
 	HDC hdcm = CreateCompatibleDC(_window.Hdc());
 

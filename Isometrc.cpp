@@ -24,59 +24,30 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#define LDL_RENDER_NATIVE_PALETTE
-#include <LDL/LDL.hpp>
-#include <vector>
+#include "Isometrc.hpp"
 
-int main()
+using namespace LDL;
+
+Isometric::Isometric()
 {
-	LDL::Palette palette;
+}
 
-	palette.Set(0, LDL::Color(0, 0, 0));
-	palette.Set(1, LDL::Color(255, 255, 255));
-	palette.Set(2, LDL::Color(255, 0, 0));
-	palette.Set(3, LDL::Color(0, 255, 0));
-	palette.Set(4, LDL::Color(0, 0, 255));
-	palette.Set(5, LDL::Color(255, 255, 0));
-	palette.Set(6, LDL::Color(0, 255, 255));
+const Vec2i& Isometric::CartesianToIsometric(const Vec2i& pt)
+{
+	int x = pt.x - pt.y;
+	int y = (pt.x + pt.y) / 2;
 
-	LDL::Result result;
-	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(result, window, palette);
+	_result = Vec2i(x, y);
 
-	LDL::Event report;
+	return _result;
+}
 
-	const size_t imgSize = 100 * 100;
+const Vec2i& Isometric::IsometricToCartesian(const Vec2i& pt)
+{
+	int x = (2 * pt.y + pt.x) / 2;
+	int y = (2 * pt.y - pt.x) / 2;
 
-	std::vector<uint8_t> buffer1(imgSize, 5);
-	std::vector<uint8_t> buffer2(imgSize, 3);
+	_result = Vec2i(x, y);
 
-	LDL::Texture img1(result, &render, LDL::Vec2i(100, 100), &buffer1[0]);
-	LDL::Texture img2(result, &render, LDL::Vec2i(100, 100), &buffer2[0]);
-
-	while (window.Running())
-	{
-		while (window.GetEvent(report))
-		{
-			if (report.Type == LDL::Event::IsQuit)
-			{
-				window.StopEvent();
-			}
-		}
-
-		render.Begin();
-
-		render.SetColor(4);
-		render.Fill(LDL::Vec2i(25, 25), LDL::Vec2i(100, 100));
-
-		render.Draw(&img1, LDL::Vec2i(0, 0));
-		render.Draw(&img2, LDL::Vec2i(150, 150));
-
-		render.End();
-
-		window.Update();
-		window.PollEvents();
-	}
-
-	return 0;
+	return _result;
 }

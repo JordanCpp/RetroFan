@@ -25,6 +25,9 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <LDL/LDL.hpp>
+#include <vector>
+#include <time.h>
+#include "Isometrc.hpp"
 
 #if (_MSC_VER <= 1200)
     #define STBI_NO_THREAD_LOCALS
@@ -35,9 +38,18 @@ DEALINGS IN THE SOFTWARE.
 #include "stb_image.h"
 
 const LDL::Vec2i tileSize = LDL::Vec2i(128, 64);
+const LDL::Vec2i mapSize  = LDL::Vec2i(7, 7);
+const LDL::Vec2i startPos = LDL::Vec2i(400, 50);
+
+int Random(int min, int max)
+{
+	return min + (rand() % (max - min + 1));
+}
 
 int main()
 {
+	srand((uint32_t)time(NULL));
+
 	LDL::Result result;
 	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
 	LDL::Render render(result, window);
@@ -46,9 +58,23 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	int width, height, channels;
-	unsigned char* pixels = stbi_load("aopengameart.org_sites_default_files_seasons_tiles.png", &width, &height, &channels, STBI_default);
+	unsigned char* pixels = stbi_load("SeasonsTiles.png", &width, &height, &channels, STBI_default);
 	LDL::Texture tiles(result, &render, LDL::Vec2i(width, height), channels, pixels, LDL::Color(0, 0, 0));
 	stbi_image_free(pixels);
+
+	Isometric isometric;
+
+	std::vector<int> tilesX;
+	std::vector<int> tilesY;
+
+	tilesX.resize(mapSize.x * mapSize.y);
+	tilesY.resize(mapSize.x * mapSize.y);
+
+	for (size_t i = 0; i < mapSize.x * mapSize.y; i++)
+	{
+		tilesX[i] = Random(0, 7);
+		tilesY[i] = Random(0, 5);
+	}
 	
 	while (window.Running())
 	{
@@ -62,7 +88,24 @@ int main()
 
 		render.Begin();
 
-		render.Draw(&tiles, LDL::Vec2i(0, 0), tileSize, LDL::Vec2i(0, 0), tileSize);
+		size_t j = 0;
+
+		for (size_t rows = 0; rows < mapSize.x; rows++)
+		{
+			for (size_t cols = 0; cols < mapSize.y; cols++)
+			{
+				int x = (int)cols * tileSize.x / 2;
+				int y = (int)rows * tileSize.y;
+
+				LDL::Vec2i pt = isometric.CartesianToIsometric(LDL::Vec2i(x, y));
+
+				int tx = tileSize.x * tilesX[j];
+				int ty = tileSize.y * tilesY[j];
+				j++;
+
+				render.Draw(&tiles, LDL::Vec2i(startPos.x + pt.x, startPos.y + pt.y), tileSize, LDL::Vec2i(tx, ty), tileSize);
+			}
+		}
 
 		render.End();
 

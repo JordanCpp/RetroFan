@@ -24,6 +24,9 @@ endif()
 
 add_library(LDL ${SHARED_SOURCES} ${PLATFORM_SOURCES})
 
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/make/img24.bmp        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/make/SeasonsTiles.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
+
 add_executable(LDL_Pal "LDL_Pal.cpp")
 target_link_libraries(LDL_Pal LDL ${libs})
 
@@ -33,7 +36,7 @@ target_link_libraries(LDL_Img LDL ${libs})
 add_executable(LDL_Win "LDL_Win.cpp")
 target_link_libraries(LDL_Win LDL ${libs})
 
-add_executable(LDL_Iso "LDL_Iso.cpp")
+add_executable(LDL_Iso "LDL_Iso.cpp" "Isometrc.cpp")
 target_link_libraries(LDL_Iso LDL ${libs})
 
 if (WIN32)
