@@ -28,6 +28,16 @@ DEALINGS IN THE SOFTWARE.
 
 using namespace LDL;
 
+BaseRender::BaseRender() :
+	_index(0)
+{
+}
+
+uint8_t BaseRender::GetIndex()
+{
+	return _index;
+}
+
 const Color& BaseRender::GetColor()
 {
 	return _color;
@@ -36,4 +46,9 @@ const Color& BaseRender::GetColor()
 void BaseRender::SetColor(const Color& color)
 {
 	_color = color;
+}
+
+void BaseRender::SetColor(uint8_t index)
+{
+	_index = index;
 }

@@ -31,7 +31,11 @@ using namespace LDL;
 Result::Result() :
 	_ok(true)
 {
+}
 
+bool Result::Ok()
+{
+	return _ok;
 }
 
 const std::string& Result::Message()
@@ -44,6 +48,8 @@ void Result::Message(const std::string& message)
 	_ok = false;
 
 	_message = message;
+
+	Assert(_message);
 }
 
 void Result::Message(const std::string& message, const std::string& detail)
@@ -52,10 +58,18 @@ void Result::Message(const std::string& message, const std::string& detail)
 
 	_message = message;
 	_message += detail;
+
+	Assert(_message);
 }
 
 void Result::Clear()
 {
 	_ok = true;
 	_message.clear();
+}
+
+void Result::Assert(const std::string& message)
+{
+	puts(message.c_str());
+	abort();
 }

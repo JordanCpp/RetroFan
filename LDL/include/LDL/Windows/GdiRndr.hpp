@@ -30,6 +30,7 @@ DEALINGS IN THE SOFTWARE.
 #include <LDL/Windows/MainWin.hpp>
 #include <LDL/Windows/GdiTex.hpp>
 #include <LDL/BaseRndr.hpp>
+#include <LDL/Palette.hpp>
 
 namespace LDL
 {
@@ -38,9 +39,13 @@ namespace LDL
 	class GdiRender
 	{
 	public:
-		GdiRender(MainWindow& window);
+		GdiRender(Result& result, MainWindow& window);
+		GdiRender(Result& result, MainWindow& window, const Palette& palette);
+		~GdiRender();
+		const Palette& GetPalette();
 		const Color& GetColor();
 		void SetColor(const Color& color);
+		void SetColor(uint8_t index);
 		void Begin();
 		void End();
 		void Clear();
@@ -49,11 +54,13 @@ namespace LDL
 		void Draw(GdiTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
 		void Draw(GdiTexture* texture, const Vec2i& pos);
 		void Draw(GdiTexture* texture, const Vec2i& pos, const Vec2i& size);
-		const HDC HandleDeviceContext();
+		const HDC Hdc();
 	private:
 		MainWindow& _window;
-		PAINTSTRUCT _paint;
 		BaseRender  _baseRender;
+		Result&     _result;
+		WindowError _windowError;
+		Palette     _palette;
 	};
 }
 

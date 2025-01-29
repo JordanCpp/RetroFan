@@ -24,32 +24,26 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Render_hpp
-#define LDL_Render_hpp
+#ifndef LDL_Palette_hpp
+#define LDL_Palette_hpp
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        #include <LDL/Windows/GdiPRndr.hpp>
-    #else
-        #include <LDL/Windows/GdiRndr.hpp>
-    #endif
-#elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
-#endif
+#include <LDL/Color.hpp>
 
 namespace LDL
 {
+	class Palette
+	{
+	public:
+		enum
+		{
+			Max = 256
+		};
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        typedef GdiPaletteRender Render;
-    #else
-        typedef GdiRender Render;
-    #endif
-#elif defined (__unix__)
-	typedef XLibRender Render;
-#endif
-
+		const Color& Get(size_t index) const;
+		void Set(size_t index, const Color& color);
+	private:
+		Color _colors[Max];
+	};
 }
 
 #endif

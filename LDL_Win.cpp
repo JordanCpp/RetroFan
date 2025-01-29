@@ -37,8 +37,9 @@ int main()
 {
 	srand(clock() / CLOCKS_PER_SEC);
     
-	LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(window);
+	LDL::Result result;
+	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
+	LDL::Render render(result, window);
     LDL::Event  report;
 
 	while (window.Running())

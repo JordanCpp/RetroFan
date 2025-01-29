@@ -24,32 +24,24 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Render_hpp
-#define LDL_Render_hpp
+#include <LDL/Windows/WinError.hpp>
+#include <Windows.h>
+#include <assert.h>
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        #include <LDL/Windows/GdiPRndr.hpp>
-    #else
-        #include <LDL/Windows/GdiRndr.hpp>
-    #endif
-#elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
-#endif
+using namespace LDL;
 
-namespace LDL
+const std::string& WindowError::GetErrorMessage()
 {
+    DWORD ident = GetLastError();
+    assert(ident != 0);
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        typedef GdiPaletteRender Render;
-    #else
-        typedef GdiRender Render;
-    #endif
-#elif defined (__unix__)
-	typedef XLibRender Render;
-#endif
+    LPSTR buffer = NULL;
 
+    size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, ident, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&buffer, 0, NULL);
+
+    _message.append(buffer, size);
+
+    LocalFree(buffer);
+
+    return _message;
 }
-
-#endif

@@ -34,10 +34,14 @@ namespace LDL
 	class BaseRender
 	{
 	public:
+		BaseRender();
 		const Color& GetColor();
+		uint8_t GetIndex();
 		void SetColor(const Color& color);
+		void SetColor(uint8_t index);
 	private:
-		Color _color;
+		uint8_t _index;
+		Color   _color;
 	};
 }
 

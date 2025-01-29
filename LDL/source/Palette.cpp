@@ -24,32 +24,16 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Render_hpp
-#define LDL_Render_hpp
+#include <LDL/Palette.hpp>
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        #include <LDL/Windows/GdiPRndr.hpp>
-    #else
-        #include <LDL/Windows/GdiRndr.hpp>
-    #endif
-#elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
-#endif
+using namespace LDL;
 
-namespace LDL
+const Color& Palette::Get(size_t index) const
 {
-
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        typedef GdiPaletteRender Render;
-    #else
-        typedef GdiRender Render;
-    #endif
-#elif defined (__unix__)
-	typedef XLibRender Render;
-#endif
-
+	return _colors[index];
 }
 
-#endif
+void Palette::Set(size_t index, const Color& color)
+{
+	_colors[index] = color;
+}

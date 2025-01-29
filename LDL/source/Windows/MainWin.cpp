@@ -29,10 +29,11 @@ DEALINGS IN THE SOFTWARE.
 
 using namespace LDL;
 
-MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
+MainWindow::MainWindow(Result& result, const Vec2i& pos, const Vec2i& size) :
     _baseWindow(pos, size, ""),
-    _handleWindow(NULL),
-    _handleDeviceContext(NULL)
+	_hwnd(NULL),
+	_hdc(NULL),
+	_result(result)
 {
     memset(&_message,     0, sizeof(MSG));
     memset(&_windowClass, 0, sizeof(WNDCLASSA));
@@ -46,34 +47,103 @@ MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
 	_windowClass.lpszMenuName  = NULL;
 	_windowClass.lpfnWndProc   = WndProc;
 
-	RegisterClass(&_windowClass);
+	if (RegisterClass(&_windowClass) == NULL)
+	{
+		_result.Message(_windowError.GetErrorMessage());
+	}
+	else
+	{
+		int x = _baseWindow.Pos().x;
+		int y = _baseWindow.Pos().y;
+		int w = _baseWindow.Size().x;
+		int h = _baseWindow.Size().y;
 
-	int x = _baseWindow.Pos().x;
-	int y = _baseWindow.Pos().y;
-	int w = _baseWindow.Size().x;
-	int h = _baseWindow.Size().y;
+		_hwnd = CreateWindow(_windowClass.lpszClassName, "", WS_OVERLAPPEDWINDOW | WS_VISIBLE, x, y, w, h, NULL, NULL, _windowClass.hInstance, NULL);
 
-	_handleWindow = CreateWindow(_windowClass.lpszClassName, "", WS_OVERLAPPEDWINDOW | WS_VISIBLE , x, y, w, h, NULL, NULL, _windowClass.hInstance, NULL);
+		if (_hwnd == NULL)
+		{
+			_result.Message(_windowError.GetErrorMessage());
+		}
+		else
+		{
+			_hdc = GetDC(_hwnd);
 
+			if (_hdc == NULL)
+			{
+				_result.Message(_windowError.GetErrorMessage());
+			}
+			else
+			{
 #if defined(_WIN64)
-	SetWindowLongPtr(_handleWindow, GWLP_WNDPROC, (LONG_PTR)WndProc);
-	SetWindowLongPtr(_handleWindow, GWLP_USERDATA, (LONG_PTR)this);
+				SetWindowLongPtr(_hwnd, GWLP_WNDPROC, (LONG_PTR)WndProc);
+				SetWindowLongPtr(_hwnd, GWLP_USERDATA, (LONG_PTR)this);
 #elif defined(_WIN32)
-	SetWindowLong(_handleWindow, GWL_WNDPROC, (LONG)WndProc);
-	SetWindowLong(_handleWindow, GWL_USERDATA, (LONG)this);
+				SetWindowLong(_hwnd, GWL_WNDPROC, (LONG)WndProc);
+				SetWindowLong(_hwnd, GWL_USERDATA, (LONG)this);
 #endif  
+			}
+		}
+	}
 }
 
 MainWindow::~MainWindow()
 {
-	UnregisterClass(_windowClass.lpszClassName, _windowClass.hInstance);
-	ReleaseDC(_handleWindow, _handleDeviceContext);
+	if (UnregisterClass(_windowClass.lpszClassName, _windowClass.hInstance) == FALSE)
+	{
+		_result.Message(_windowError.GetErrorMessage());
+	}
+	else
+	{
+		if (ReleaseDC(_hwnd, _hdc) == 0)
+		{
+			_result.Message(_windowError.GetErrorMessage());
+		}
+	}
+}
+
+const Vec2i& MainWindow::Pos()
+{
+	return _baseWindow.Pos();
+}
+
+void MainWindow::Pos(const Vec2i& pos)
+{
+	_baseWindow.Pos(pos);
+}
+
+const Vec2i& MainWindow::Size()
+{
+	return _baseWindow.Size();
+}
+
+void MainWindow::Size(const Vec2i& size)
+{
+	_baseWindow.Size(size);
+}
+
+const std::string& MainWindow::Title()
+{
+	return _baseWindow.Title();
+}
+
+void MainWindow::Title(const std::string& title)
+{
+	_baseWindow.Title(title);
 }
 
 void MainWindow::Update()
 {
-	ShowWindow(_handleWindow, SW_SHOW);
-	UpdateWindow(_handleWindow);
+	if (ShowWindow(_hwnd, SW_SHOW) == FALSE)
+	{
+		_result.Message(_windowError.GetErrorMessage());
+	}
+	else
+	{
+		if (UpdateWindow(_hwnd) == FALSE)
+		{
+			_result.Message(_windowError.GetErrorMessage());
+		}
+	}
 }
 
 void MainWindow::StopEvent()
@@ -88,7 +158,7 @@ bool MainWindow::Running()
 
 void MainWindow::PollEvents()
 {
-	while (PeekMessage(&_message, _handleWindow, 0, 0, PM_REMOVE))
+	while (PeekMessage(&_message, _hwnd, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&_message);
 		DispatchMessage(&_message);
@@ -125,9 +195,12 @@ LRESULT CALLBACK MainWindow::Handler(UINT Message, WPARAM WParam, LPARAM LParam)
 
 	case WM_ERASEBKGND:
 		break;
+
+	case WM_PALETTECHANGED:
+		break;
 	}
 
-	return DefWindowProc(_handleWindow, Message, WParam, LParam);
+	return DefWindowProc(_hwnd, Message, WParam, LParam);
 }
 
 LRESULT CALLBACK MainWindow::WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPARAM LParam)
@@ -152,17 +225,12 @@ LRESULT CALLBACK MainWindow::WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPA
 	return result;
 }
 
-const HWND MainWindow::HandleWindow()
+const HWND MainWindow::Hwnd()
 {
-	return _handleWindow;
+	return _hwnd;
 }
 
-const HDC MainWindow::HandleDeviceContext()
+const HDC MainWindow::Hdc()
 {
-	return _handleDeviceContext;
-}
-
-void MainWindow::HandleDeviceContext(const HDC handleDeviceContext)
-{
-	_handleDeviceContext = handleDeviceContext;
+	return _hdc;
 }

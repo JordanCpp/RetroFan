@@ -35,11 +35,13 @@ namespace LDL
 	{
 	public:
 		Result();
+		bool Ok();
 		const std::string& Message();
 		void Message(const std::string& message);
 		void Message(const std::string& message, const std::string& detail);
 		void Clear();
 	private:
+		void Assert(const std::string& message);
 		bool        _ok;
 		std::string _message;
 	};

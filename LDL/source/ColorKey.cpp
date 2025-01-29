@@ -24,32 +24,27 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Render_hpp
-#define LDL_Render_hpp
+#include <LDL/ColorKey.hpp>
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        #include <LDL/Windows/GdiPRndr.hpp>
-    #else
-        #include <LDL/Windows/GdiRndr.hpp>
-    #endif
-#elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
-#endif
+using namespace LDL;
 
-namespace LDL
+ColorKey::ColorKey() :
+	_used(false)
 {
-
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        typedef GdiPaletteRender Render;
-    #else
-        typedef GdiRender Render;
-    #endif
-#elif defined (__unix__)
-	typedef XLibRender Render;
-#endif
-
 }
 
-#endif
+ColorKey::ColorKey(const Color& color) :
+	_used(true),
+	_color(color)
+{
+}
+
+bool ColorKey::Used() const
+{
+	return _used;
+}
+
+const Color& ColorKey::GetColor() const
+{
+	return _color;
+}

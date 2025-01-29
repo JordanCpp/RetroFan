@@ -36,16 +36,19 @@ DEALINGS IN THE SOFTWARE.
 
 int main()
 {
-	LDL::Window window(LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(window);
+	LDL::Result result;
+	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
+	LDL::Render render(result, window);
     LDL::Event  report;
 
-	int width, height, channels;
+	int width       = 0;
+	int height      = 0;
+	int channels    = 0;
+	uint8_t* pixels = NULL;
+
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* pixels = stbi_load("img24.bmp", &width, &height, &channels, STBI_default);
-
-	LDL::Texture texture(&render, LDL::Vec2i(width, height), channels, pixels);
-
+	pixels = stbi_load("img24.bmp", &width, &height, &channels, STBI_default);
+	LDL::Texture texture(result, &render, LDL::Vec2i(width, height), channels, pixels);
 	stbi_image_free(pixels);
 
 	while (window.Running())
@@ -59,9 +62,8 @@ int main()
 		}
 
 		render.Begin();
-		render.Clear();
 
-		render.Draw(&texture, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
+		render.Draw(&texture, LDL::Vec2i(0, 0), window.Size());
 
 		render.End();
 

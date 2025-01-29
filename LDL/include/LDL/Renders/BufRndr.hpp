@@ -24,32 +24,16 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Render_hpp
-#define LDL_Render_hpp
-
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        #include <LDL/Windows/GdiPRndr.hpp>
-    #else
-        #include <LDL/Windows/GdiRndr.hpp>
-    #endif
-#elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
-#endif
+#ifndef LDL_Renders_BufRndr_hpp
+#define LDL_Renders_BufRndr_hpp
 
 namespace LDL
 {
-
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        typedef GdiPaletteRender Render;
-    #else
-        typedef GdiRender Render;
-    #endif
-#elif defined (__unix__)
-	typedef XLibRender Render;
-#endif
-
+	class BufferRender
+	{
+	public:
+	private:
+	};
 }
 
 #endif

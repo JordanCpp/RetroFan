@@ -24,32 +24,58 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Render_hpp
-#define LDL_Render_hpp
+#define LDL_RENDER_NATIVE_PALETTE
+#include <LDL/LDL.hpp>
+#include <stdio.h>
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        #include <LDL/Windows/GdiPRndr.hpp>
-    #else
-        #include <LDL/Windows/GdiRndr.hpp>
-    #endif
-#elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
-#endif
-
-namespace LDL
+int main()
 {
+	LDL::Palette palette;
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        typedef GdiPaletteRender Render;
-    #else
-        typedef GdiRender Render;
-    #endif
-#elif defined (__unix__)
-	typedef XLibRender Render;
-#endif
+	palette.Set(0, LDL::Color(0, 0, 0));
+	palette.Set(1, LDL::Color(255, 255, 255));
+	palette.Set(2, LDL::Color(255, 0, 0));
+	palette.Set(3, LDL::Color(0, 255, 0));
+	palette.Set(4, LDL::Color(0, 0, 255));
+	palette.Set(5, LDL::Color(255, 255, 0));
+	palette.Set(6, LDL::Color(0, 255, 255));
 
+	LDL::Result result;
+	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
+	LDL::Render render(result, window, palette);
+
+	LDL::Event report;
+
+	const size_t imgSize = 100 * 100;
+
+	uint8_t* img8 = new uint8_t[imgSize];
+	memset(img8, 5, imgSize);
+
+	LDL::Texture img(result, &render, LDL::Vec2i(100, 100), img8);
+
+	while (window.Running())
+	{
+		while (window.GetEvent(report))
+		{
+			if (report.Type == LDL::Event::IsQuit)
+			{
+				window.StopEvent();
+			}
+		}
+
+		render.Begin();
+
+		render.SetColor(4);
+		render.Fill(LDL::Vec2i(25, 25), LDL::Vec2i(100, 100));
+
+		render.Draw(&img, LDL::Vec2i(0, 0));
+		render.Draw(&img, LDL::Vec2i(150, 150));
+
+		render.End();
+
+		window.Update();
+		window.PollEvents();
+	}
+
+	return 0;
 }
-
-#endif

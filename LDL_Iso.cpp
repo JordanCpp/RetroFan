@@ -24,32 +24,51 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Render_hpp
-#define LDL_Render_hpp
+#include <LDL/LDL.hpp>
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        #include <LDL/Windows/GdiPRndr.hpp>
-    #else
-        #include <LDL/Windows/GdiRndr.hpp>
-    #endif
-#elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
+#if (_MSC_VER <= 1200)
+    #define STBI_NO_THREAD_LOCALS
+    #define STBI_NO_SIMD
 #endif
 
-namespace LDL
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+const LDL::Vec2i tileSize = LDL::Vec2i(128, 64);
+
+int main()
 {
+	LDL::Result result;
+	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
+	LDL::Render render(result, window);
+    LDL::Event  report;
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        typedef GdiPaletteRender Render;
-    #else
-        typedef GdiRender Render;
-    #endif
-#elif defined (__unix__)
-	typedef XLibRender Render;
-#endif
+	stbi_set_flip_vertically_on_load(true);
 
+	int width, height, channels;
+	unsigned char* pixels = stbi_load("aopengameart.org_sites_default_files_seasons_tiles.png", &width, &height, &channels, STBI_default);
+	LDL::Texture tiles(result, &render, LDL::Vec2i(width, height), channels, pixels, LDL::Color(0, 0, 0));
+	stbi_image_free(pixels);
+	
+	while (window.Running())
+	{
+		while (window.GetEvent(report))
+		{
+			if (report.Type == LDL::Event::IsQuit)
+			{
+				window.StopEvent();
+			}
+		}
+
+		render.Begin();
+
+		render.Draw(&tiles, LDL::Vec2i(0, 0), tileSize, LDL::Vec2i(0, 0), tileSize);
+
+		render.End();
+
+		window.Update();
+		window.PollEvents();
+	}
+
+    return 0;
 }
-
-#endif

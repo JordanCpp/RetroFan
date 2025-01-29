@@ -24,79 +24,14 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/Windows/GdiTex.hpp>
+#include <LDL/Windows/GdiPTex.hpp>
 #include <LDL/Windows/GdiUtils.hpp>
 #include <LDL/PixConv.hpp>
 #include <assert.h>
 
 using namespace LDL;
 
-GdiTexture::GdiTexture(Result& result, GdiRender* render, const Vec2i& size, uint8_t bpp, uint8_t* pixels) :
-    _size(size),
-    _render(render),
-    _bitmap(NULL),
-    _result(result)
-{
-    assert(render != NULL);
-    assert(size.x > 0);
-    assert(size.y > 0);
-    assert(bpp == 3 || bpp == 4);
-    assert(pixels != NULL);
-
-    uint8_t* dstPixels = NULL;
-
-    _bitmap = CreateDib(_render->Hdc(), _size, bpp, (void**)&dstPixels);
-
-    if (_bitmap == NULL)
-    {
-        _result.Message(_windowError.GetErrorMessage());
-    }
-    else
-    {
-        PixelConverter conv;
-        conv.RgbToBgr(_size, bpp, pixels);
-
-        size_t bytes = _size.x * _size.y * bpp;
-        memcpy(dstPixels, pixels, bytes);
-
-        conv.BgrToRgb(_size, bpp, pixels);
-    }
-}
-
-GdiTexture::GdiTexture(Result& result, GdiRender* render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& color) :
-    _size(size),
-    _render(render),
-    _bitmap(NULL),
-    _colorKey(color),
-    _result(result)
-{
-    assert(render != NULL);
-    assert(size.x > 0);
-    assert(size.y > 0);
-    assert(bpp == 3 || bpp == 4);
-    assert(pixels != NULL);
-
-    uint8_t* dstPixels = NULL;
-
-    _bitmap = CreateDib(_render->Hdc(), _size, bpp, (void**)&dstPixels);
- 
-    if (_bitmap == NULL)
-    {
-        _result.Message(_windowError.GetErrorMessage());
-    }
-    else
-    {
-        PixelConverter conv;
-        conv.RgbToBgr(_size, bpp, pixels);
-
-        size_t bytes = _size.x * _size.y * bpp;
-        memcpy(dstPixels, pixels, bytes);
-
-        conv.BgrToRgb(_size, bpp, pixels);
-    }
-}
-
-GdiTexture::GdiTexture(Result& result, GdiRender* render, const Vec2i& size, uint8_t* pixels) :
+GdiPaletteTexture::GdiPaletteTexture(Result& result, GdiPaletteRender* render, const Vec2i& size, uint8_t* pixels) :
     _size(size),
     _render(render),
     _bitmap(NULL),
@@ -110,7 +45,7 @@ GdiTexture::GdiTexture(Result& result, GdiRender* render, const Vec2i& size, uin
     uint8_t* dstPixels = NULL;
 
     _bitmap = CreateDib(_render->Hdc(), _size, _render->GetPalette(), (void**)&dstPixels);
- 
+
     if (_bitmap == NULL)
     {
         _result.Message(_windowError.GetErrorMessage());
@@ -122,7 +57,7 @@ GdiTexture::GdiTexture(Result& result, GdiRender* render, const Vec2i& size, uin
     }
 }
 
-GdiTexture::~GdiTexture()
+GdiPaletteTexture::~GdiPaletteTexture()
 {
     if (_bitmap != NULL)
     {
@@ -130,17 +65,17 @@ GdiTexture::~GdiTexture()
     }
 }
 
-const ColorKey& GdiTexture::GetColorKey() const
+const ColorKey& GdiPaletteTexture::GetColorKey() const
 {
     return _colorKey;
 }
 
-const Vec2i& GdiTexture::Size()
+const Vec2i& GdiPaletteTexture::Size()
 {
     return _size;
 }
 
-const HBITMAP GdiTexture::Bitmap()
+const HBITMAP GdiPaletteTexture::Bitmap()
 {
     return _bitmap;
 }

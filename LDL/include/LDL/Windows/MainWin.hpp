@@ -28,16 +28,24 @@ DEALINGS IN THE SOFTWARE.
 #define LDL_Windows_MainWin_hpp
 
 #include <Windows.h>
+#include <LDL/Windows/WinError.hpp>
 #include <LDL/BaseWin.hpp>
 #include <LDL/Eventer.hpp>
+#include <LDL/Result.hpp>
 
 namespace LDL
 {
 	class MainWindow
 	{
 	public:
-		MainWindow(const Vec2i& pos, const Vec2i& size);
+		MainWindow(Result& result, const Vec2i& pos, const Vec2i& size);
 		~MainWindow();
+		const Vec2i& Pos();
+		void Pos(const Vec2i& pos);
+		const Vec2i& Size();
+		void Size(const Vec2i& size);
+		const std::string& Title();
+		void Title(const std::string& title);
 		void Update();
 		void StopEvent();
 		bool Running();
@@ -46,16 +54,17 @@ namespace LDL
 	private:
 		LRESULT CALLBACK Handler(UINT Message, WPARAM WParam, LPARAM LParam);
 		static LRESULT CALLBACK WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPARAM LParam);
-		BaseWindow _baseWindow;
-		HWND       _handleWindow;
-		HDC        _handleDeviceContext;
-		MSG        _message;
-		WNDCLASSA  _windowClass;
-		Eventer    _eventer;
+		BaseWindow    _baseWindow;
+		HWND          _hwnd;
+		HDC           _hdc;
+		MSG           _message;
+		WNDCLASSA     _windowClass;
+		Eventer       _eventer;
+		Result&       _result;
+		WindowError   _windowError;
 	public:
-		const HWND HandleWindow();
-		const HDC  HandleDeviceContext();
-		void HandleDeviceContext(const HDC handleDeviceContext);
+		const HWND Hwnd();
+		const HDC  Hdc();
 	};
 }
 

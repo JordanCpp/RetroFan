@@ -24,32 +24,46 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Render_hpp
-#define LDL_Render_hpp
+#ifndef LDL_Windows_GdiPRndr_hpp
+#define LDL_Windows_GdiPRndr_hpp
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        #include <LDL/Windows/GdiPRndr.hpp>
-    #else
-        #include <LDL/Windows/GdiRndr.hpp>
-    #endif
-#elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
-#endif
+#include <LDL/Windows/MainWin.hpp>
+#include <LDL/Windows/GdiPTex.hpp>
+#include <LDL/Palette.hpp>
+#include <LDL/BaseRndr.hpp>
 
 namespace LDL
 {
+	class GdiPaletteTexture;
 
-#if defined(_WIN32)
-    #if defined(LDL_RENDER_NATIVE_PALETTE)
-        typedef GdiPaletteRender Render;
-    #else
-        typedef GdiRender Render;
-    #endif
-#elif defined (__unix__)
-	typedef XLibRender Render;
-#endif
-
+	class GdiPaletteRender
+	{
+	public:
+		GdiPaletteRender(Result& result, MainWindow& window);
+		GdiPaletteRender(Result& result, MainWindow& window, const Palette& palette);
+		~GdiPaletteRender();
+		const Palette& GetPalette();
+		const Color& GetColor();
+		void SetColor(const Color& color);
+		void SetColor(uint8_t index);
+		void Begin();
+		void End();
+		void Clear();
+		void Line(const Vec2i& first, const Vec2i& last);
+		void Fill(const Vec2i& pos, const Vec2i& size);
+		void Draw(GdiPaletteTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
+		void Draw(GdiPaletteTexture* texture, const Vec2i& pos);
+		void Draw(GdiPaletteTexture* texture, const Vec2i& pos, const Vec2i& size);
+		const HDC Hdc();
+	private:
+		MainWindow& _window;
+		BaseRender  _baseRender;
+		HPALETTE    _activePalette;
+		Palette     _palette;
+		HDC         _hdcm;
+		Result&     _result;
+		WindowError _windowError;
+	};
 }
 
 #endif
