@@ -35,6 +35,10 @@ namespace LDL
 	class Surface
 	{
 	public:
+		Surface(const Vec2i& size, uint8_t bpp, uint8_t* pixels);
+		uint8_t Bpp();
+		const Vec2i& Size();
+		uint8_t* Pixels();
 	private:
 		uint8_t              _bpp;
 		Vec2i                _size;

@@ -27,12 +27,21 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Renders_BufTex_hpp
 #define LDL_Renders_BufTex_hpp
 
+#include <LDL/Result.hpp>
+#include <LDL/Surface.hpp>
+
 namespace LDL
 {
+	class BufferRender;
+
 	class BufferTexture
 	{
 	public:
+		BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
 	private:
+		Result&       _result;
+		BufferRender& _render;
+		Surface       _surface;
 	};
 }
 

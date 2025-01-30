@@ -24,13 +24,34 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/Renders/BufTex.hpp>
+#include <string.h>
+#include <LDL/Surface.hpp>
 
 using namespace LDL;
 
-BufferTexture::BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels) :
-	_result(result),
-	_render(render),
-	_surface(size, bpp, pixels)
+Surface::Surface(const Vec2i& size, uint8_t bpp, uint8_t* pixels) :
+    _bpp(bpp),
+    _size(size)
 {
+    size_t bytes = _size.x * _size.y * _bpp;
+
+    _pixels.resize(bytes);
+
+    memcpy(&_pixels[0], pixels, bytes);
+}
+
+uint8_t Surface::Bpp()
+{
+    return _bpp;
+}
+
+
+const Vec2i& Surface::Size()
+{
+    return _size;
+}
+
+uint8_t* Surface::Pixels()
+{
+    return &_pixels[0];
 }
