@@ -24,32 +24,34 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_GdiPTex_hpp
-#define LDL_Windows_GdiPTex_hpp
+#ifndef LDL_Win16_GdiTex_hpp
+#define LDL_Win16_GdiTex_hpp
 
-#include <LDL/Windows/GdiPRndr.hpp>
+#include <LDL/Win16/GdiRndr.hpp>
 #include <LDL/ColorKey.hpp>
 #include <LDL/Palette.hpp>
 
 namespace LDL
 {
-	class GdiPaletteRender;
+	class GdiRender;
 
-	class GdiPaletteTexture
+	class GdiTexture
 	{
 	public:
-		GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels);
-		~GdiPaletteTexture();
+		GdiTexture(Result& result, GdiRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
+		GdiTexture(Result& result, GdiRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& color);
+		GdiTexture(Result& result, GdiRender& render, const Vec2i& size, uint8_t* pixels);
+		~GdiTexture();
 		const ColorKey& GetColorKey() const;
 		const Vec2i& Size();
 		const HBITMAP Bitmap();
 	private:
-		Vec2i             _size;
-		GdiPaletteRender& _render;
-		HBITMAP           _bitmap;
-		ColorKey          _colorKey;
-		Result&           _result;
-		WindowError       _windowError;
+		Vec2i       _size;
+		GdiRender&  _render;
+		HBITMAP     _bitmap;
+		ColorKey    _colorKey;
+		Result&     _result;
+		WindowError _windowError;
 	};
 }
 

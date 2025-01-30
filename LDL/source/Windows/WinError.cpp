@@ -24,9 +24,9 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/Windows/WinError.hpp>
-#include <Windows.h>
 #include <assert.h>
+#include <LDL/Windows/WinError.hpp>
+#include <LDL/Windows/Win32.hpp>
 
 using namespace LDL;
 

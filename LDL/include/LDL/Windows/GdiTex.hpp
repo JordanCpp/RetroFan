@@ -38,16 +38,16 @@ namespace LDL
 	class GdiTexture
 	{
 	public:
-		GdiTexture(Result& result, GdiRender* render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
-		GdiTexture(Result& result, GdiRender* render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& color);
-		GdiTexture(Result& result, GdiRender* render, const Vec2i& size, uint8_t* pixels);
+		GdiTexture(Result& result, GdiRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
+		GdiTexture(Result& result, GdiRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& color);
+		GdiTexture(Result& result, GdiRender& render, const Vec2i& size, uint8_t* pixels);
 		~GdiTexture();
 		const ColorKey& GetColorKey() const;
 		const Vec2i& Size();
 		const HBITMAP Bitmap();
 	private:
 		Vec2i       _size;
-		GdiRender*  _render;
+		GdiRender&  _render;
 		HBITMAP     _bitmap;
 		ColorKey    _colorKey;
 		Result&     _result;

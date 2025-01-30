@@ -26,7 +26,7 @@ DEALINGS IN THE SOFTWARE.
 
 #define LDL_RENDER_NATIVE_PALETTE
 #include <LDL/LDL.hpp>
-#include <vector>
+//#include <vector>
 
 int main()
 {
@@ -48,11 +48,16 @@ int main()
 
 	const size_t imgSize = 100 * 100;
 
-	std::vector<uint8_t> buffer1(imgSize, 5);
-	std::vector<uint8_t> buffer2(imgSize, 3);
+	uint8_t* buffer1 = new uint8_t[imgSize];
+	uint8_t* buffer2 = new uint8_t[imgSize];
 
-	LDL::Texture img1(result, &render, LDL::Vec2i(100, 100), &buffer1[0]);
-	LDL::Texture img2(result, &render, LDL::Vec2i(100, 100), &buffer2[0]);
+	memset(buffer1, 5, imgSize);
+	memset(buffer1, 3, imgSize);
+	//std::vector<uint8_t> buffer1(imgSize, 5);
+	//std::vector<uint8_t> buffer2(imgSize, 3);
+
+	LDL::Texture img1(result, render, LDL::Vec2i(100, 100), buffer1);
+	LDL::Texture img2(result, render, LDL::Vec2i(100, 100), buffer2);
 
 	while (window.Running())
 	{
@@ -65,9 +70,6 @@ int main()
 		}
 
 		render.Begin();
-
-		render.SetColor(4);
-		render.Fill(LDL::Vec2i(25, 25), LDL::Vec2i(100, 100));
 
 		render.Draw(&img1, LDL::Vec2i(0, 0));
 		render.Draw(&img2, LDL::Vec2i(150, 150));

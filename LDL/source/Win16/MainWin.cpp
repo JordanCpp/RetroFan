@@ -25,8 +25,11 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <string.h>
-#include <LDL/Windows/MainWin.hpp>
-#include <LDL/Windows/Win32.hpp>
+#include <LDL/Win16/MainWin.hpp>
+
+#if defined(_WIN16)
+    #define GWL_USERDATA (-21)
+#endif
 
 using namespace LDL;
 
@@ -37,7 +40,7 @@ MainWindow::MainWindow(Result& result, const Vec2i& pos, const Vec2i& size) :
 	_baseWindow(pos, size, "")
 {
     memset(&_message,     0, sizeof(MSG));
-    memset(&_windowClass, 0, sizeof(WNDCLASSA));
+    memset(&_windowClass, 0, sizeof(WNDCLASS));
 
 	_windowClass.style         = CS_HREDRAW | CS_VREDRAW;
 	_windowClass.cbClsExtra    = 0;
@@ -75,13 +78,8 @@ MainWindow::MainWindow(Result& result, const Vec2i& pos, const Vec2i& size) :
 			}
 			else
 			{
-#if defined(_WIN64)
-				SetWindowLongPtr(_hwnd, GWLP_WNDPROC, (LONG_PTR)WndProc);
-				SetWindowLongPtr(_hwnd, GWLP_USERDATA, (LONG_PTR)this);
-#elif defined(_WIN32)
 				SetWindowLong(_hwnd, GWL_WNDPROC, (LONG)WndProc);
 				SetWindowLong(_hwnd, GWL_USERDATA, (LONG)this);
-#endif  
 			}
 		}
 	}
@@ -140,10 +138,7 @@ void MainWindow::Update()
 	}
 	else
 	{
-		if (UpdateWindow(_hwnd) == FALSE)
-		{
-			_result.Message(_windowError.GetErrorMessage());
-		}
+		UpdateWindow(_hwnd);
 	}
 }
 
@@ -208,11 +203,7 @@ LRESULT CALLBACK MainWindow::WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPA
 {
 	LRESULT result;
 
-#if defined(_WIN64)
-	MainWindow* This = (MainWindow*)GetWindowLongPtr(Hwnd, GWLP_USERDATA);
-#elif defined(_WIN32)
 	MainWindow* This = (MainWindow*)GetWindowLong(Hwnd, GWL_USERDATA);
-#endif  
 
 	if (This != NULL)
 	{

@@ -24,33 +24,44 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_GdiPTex_hpp
-#define LDL_Windows_GdiPTex_hpp
+#ifndef LDL_Win16_GdiUtils_hpp
+#define LDL_Win16_GdiUtils_hpp
 
-#include <LDL/Windows/GdiPRndr.hpp>
-#include <LDL/ColorKey.hpp>
+#include <stdint.h>
+#include <LDL/Win16/Win16.hpp>
+#include <LDL/Win16/WinError.hpp>
+#include <LDL/Result.hpp>
+#include <LDL/Vec2.hpp>
 #include <LDL/Palette.hpp>
 
 namespace LDL
 {
-	class GdiPaletteRender;
+    struct GdiPalette
+    {
+        LOGPALETTE   logPalette;
+        PALETTEENTRY paletteEntry[Palette::Max];
+    };
 
-	class GdiPaletteTexture
-	{
-	public:
-		GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels);
-		~GdiPaletteTexture();
-		const ColorKey& GetColorKey() const;
-		const Vec2i& Size();
-		const HBITMAP Bitmap();
-	private:
-		Vec2i             _size;
-		GdiPaletteRender& _render;
-		HBITMAP           _bitmap;
-		ColorKey          _colorKey;
-		Result&           _result;
-		WindowError       _windowError;
-	};
+    struct GdiBitmapPalette
+    {
+        BITMAPINFOHEADER header;
+        RGBQUAD color[Palette::Max];
+    };
+
+    HBITMAP CreateDib(HDC hdc, const Vec2i& size, uint8_t bpp, void** pixels);
+    HBITMAP CreateDib(HDC hdc, const Vec2i& size, const Palette& palette, void** pixels);
+
+    void DestroyDib(HBITMAP bitmap);
+   
+    void GdiFill(GdiPalette& dst, const Palette& src);
+
+    void GdiFill(HDC hdc, const Vec2i& pos, const Vec2i& size, const Color& color);
+    void GdiFill(HDC hdc, const Vec2i& pos, const Vec2i& size, HPALETTE palette, uint8_t index);
+    
+    void GdiLine(HDC hdc, const Vec2i& first, const Vec2i& last, const Color& color);
+    void GdiLine(HDC hdc, const Vec2i& first, const Vec2i& last, uint8_t index);
+
+    void GdiLine(Result& result, WindowError& winError, HDC hdc, const Vec2i& first, const Vec2i& last, uint8_t index);
 }
 
 #endif

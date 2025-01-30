@@ -54,6 +54,7 @@ int main()
 
 		render.Begin();
 
+		
 		for (size_t i = 0; i < 50; i++)
 		{
 			render.SetColor(LDL::Color(random(0, 255), random(0, 255), random(0, 255)));

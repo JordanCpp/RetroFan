@@ -27,6 +27,7 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Palette_hpp
 #define LDL_Palette_hpp
 
+#include <stddef.h>
 #include <LDL/Color.hpp>
 
 namespace LDL

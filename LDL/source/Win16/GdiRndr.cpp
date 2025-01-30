@@ -26,8 +26,8 @@ DEALINGS IN THE SOFTWARE.
 
 #include <string.h>
 #include <assert.h>
-#include <LDL/Windows/GdiRndr.hpp>
-#include <LDL/Windows/GdiUtils.hpp>
+#include <LDL/Win16/GdiRndr.hpp>
+#include <LDL/Win16/GdiUtils.hpp>
 
 using namespace LDL;
 
@@ -69,10 +69,7 @@ void GdiRender::SetColor(const Color& color)
 
 void GdiRender::Begin()
 {
-	if (InvalidateRect(_window.Hwnd(), NULL, FALSE) == FALSE)
-	{
-		_result.Message(_windowError.GetErrorMessage());
-	}
+	InvalidateRect(_window.Hwnd(), NULL, FALSE);
 }
 
 void GdiRender::End()
@@ -119,10 +116,10 @@ void GdiRender::Draw(GdiTexture* texture, const Vec2i& dstPos, const Vec2i& dstS
 			{
 				Color color = texture->GetColorKey().GetColor();
 
-				if (TransparentBlt(_window.Hdc(), dstPos.x, dstPos.y, dstSize.x, dstSize.y, hdcm, srcPos.x, srcPos.y, srcSize.x, srcSize.y, RGB(color.r, color.g, color.b)) == FALSE)
-				{
-					_result.Message(_windowError.GetErrorMessage());
-				}
+				//if (TransparentBlt(_window.Hdc(), dstPos.x, dstPos.y, dstSize.x, dstSize.y, hdcm, srcPos.x, srcPos.y, srcSize.x, srcSize.y, RGB(color.r, color.g, color.b)) == FALSE)
+				//{
+				//	_result.Message(_windowError.GetErrorMessage());
+				//}
 			}
 			else
 			{

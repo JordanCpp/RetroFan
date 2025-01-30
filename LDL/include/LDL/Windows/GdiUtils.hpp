@@ -27,10 +27,10 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Windows_GdiUtils_hpp
 #define LDL_Windows_GdiUtils_hpp
 
-#include <Windows.h>
+#include <stdint.h>
+#include <LDL/Windows/Win32.hpp>
 #include <LDL/Windows/WinError.hpp>
 #include <LDL/Result.hpp>
-#include <stdint.h>
 #include <LDL/Vec2.hpp>
 #include <LDL/Palette.hpp>
 

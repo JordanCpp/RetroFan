@@ -24,32 +24,47 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_GdiPTex_hpp
-#define LDL_Windows_GdiPTex_hpp
+#ifndef LDL_Win16_MainWin_hpp
+#define LDL_Win16_MainWin_hpp
 
-#include <LDL/Windows/GdiPRndr.hpp>
-#include <LDL/ColorKey.hpp>
-#include <LDL/Palette.hpp>
+#include <LDL/Win16/Win16.hpp>
+#include <LDL/Win16/WinError.hpp>
+#include <LDL/BaseWin.hpp>
+#include <LDL/Eventer.hpp>
+#include <LDL/Result.hpp>
 
 namespace LDL
 {
-	class GdiPaletteRender;
-
-	class GdiPaletteTexture
+	class MainWindow
 	{
 	public:
-		GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels);
-		~GdiPaletteTexture();
-		const ColorKey& GetColorKey() const;
+		MainWindow(Result& result, const Vec2i& pos, const Vec2i& size);
+		~MainWindow();
+		const Vec2i& Pos();
+		void Pos(const Vec2i& pos);
 		const Vec2i& Size();
-		const HBITMAP Bitmap();
+		void Size(const Vec2i& size);
+		const std::string& Title();
+		void Title(const std::string& title);
+		void Update();
+		void StopEvent();
+		bool Running();
+		void PollEvents();
+		bool GetEvent(Event& event);
 	private:
-		Vec2i             _size;
-		GdiPaletteRender& _render;
-		HBITMAP           _bitmap;
-		ColorKey          _colorKey;
-		Result&           _result;
-		WindowError       _windowError;
+		LRESULT CALLBACK Handler(UINT Message, WPARAM WParam, LPARAM LParam);
+		static LRESULT CALLBACK WndProc(HWND Hwnd, UINT Message, WPARAM WParam, LPARAM LParam);
+		Result&       _result;
+		HWND          _hwnd;
+		HDC           _hdc;
+		MSG           _message;
+		WindowError   _windowError;
+		WNDCLASS      _windowClass;
+		BaseWindow    _baseWindow;
+		Eventer       _eventer;
+	public:
+		const HWND Hwnd();
+		const HDC  Hdc();
 	};
 }
 

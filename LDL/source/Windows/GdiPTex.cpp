@@ -24,27 +24,26 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
+#include <assert.h>
 #include <LDL/Windows/GdiPTex.hpp>
 #include <LDL/Windows/GdiUtils.hpp>
 #include <LDL/PixConv.hpp>
-#include <assert.h>
 
 using namespace LDL;
 
-GdiPaletteTexture::GdiPaletteTexture(Result& result, GdiPaletteRender* render, const Vec2i& size, uint8_t* pixels) :
+GdiPaletteTexture::GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels) :
     _size(size),
     _render(render),
     _bitmap(NULL),
     _result(result)
 {
-    assert(render != NULL);
     assert(size.x > 0);
     assert(size.y > 0);
     assert(pixels != NULL);
 
     uint8_t* dstPixels = NULL;
 
-    _bitmap = CreateDib(_render->Hdc(), _size, _render->GetPalette(), (void**)&dstPixels);
+    _bitmap = CreateDib(_render.Hdc(), _size, _render.GetPalette(), (void**)&dstPixels);
 
     if (_bitmap == NULL)
     {

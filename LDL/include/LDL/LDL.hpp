@@ -27,10 +27,6 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_hpp
 #define LDL_hpp
 
-//#define LDL_RENDER_NATIVE_RGB_TO_RGB
-//#define LDL_RENDER_NATIVE_PALETTE_TO_RGB
-//#define LDL_RENDER_NATIVE_PALETTE
-
 #include <LDL/Window.hpp>
 #include <LDL/Render.hpp>
 #include <LDL/Texture.hpp>

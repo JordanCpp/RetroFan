@@ -27,7 +27,13 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Render_hpp
 #define LDL_Render_hpp
 
-#if defined(_WIN32)
+#if defined(_WIN16)
+    #if defined(LDL_RENDER_NATIVE_PALETTE)
+        #include <LDL/Win16/GdiPRndr.hpp>
+    #else
+        #include <LDL/Win16/GdiRndr.hpp>
+    #endif
+#elif defined(_WIN32)
     #if defined(LDL_RENDER_NATIVE_PALETTE)
         #include <LDL/Windows/GdiPRndr.hpp>
     #else
@@ -40,7 +46,13 @@ DEALINGS IN THE SOFTWARE.
 namespace LDL
 {
 
-#if defined(_WIN32)
+#if defined(_WIN16)
+    #if defined(LDL_RENDER_NATIVE_PALETTE)
+        typedef GdiPaletteRender Render;
+    #else
+        typedef GdiRender Render;
+    #endif
+#elif defined(_WIN32)
     #if defined(LDL_RENDER_NATIVE_PALETTE)
         typedef GdiPaletteRender Render;
     #else

@@ -24,32 +24,45 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_GdiPTex_hpp
-#define LDL_Windows_GdiPTex_hpp
+#ifndef LDL_Win16_GdiPRndr_hpp
+#define LDL_Win16_GdiPRndr_hpp
 
-#include <LDL/Windows/GdiPRndr.hpp>
-#include <LDL/ColorKey.hpp>
+#include <LDL/Win16/MainWin.hpp>
+#include <LDL/Win16/GdiPTex.hpp>
 #include <LDL/Palette.hpp>
+#include <LDL/BaseRndr.hpp>
 
 namespace LDL
 {
-	class GdiPaletteRender;
+	class GdiPaletteTexture;
 
-	class GdiPaletteTexture
+	class GdiPaletteRender
 	{
 	public:
-		GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels);
-		~GdiPaletteTexture();
-		const ColorKey& GetColorKey() const;
-		const Vec2i& Size();
-		const HBITMAP Bitmap();
+		GdiPaletteRender(Result& result, MainWindow& window);
+		GdiPaletteRender(Result& result, MainWindow& window, const Palette& palette);
+		~GdiPaletteRender();
+		const Palette& GetPalette();
+		const Color& GetColor();
+		void SetColor(const Color& color);
+		void SetColor(uint8_t index);
+		void Begin();
+		void End();
+		void Clear();
+		void Line(const Vec2i& first, const Vec2i& last);
+		void Fill(const Vec2i& pos, const Vec2i& size);
+		void Draw(GdiPaletteTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
+		void Draw(GdiPaletteTexture* texture, const Vec2i& pos);
+		void Draw(GdiPaletteTexture* texture, const Vec2i& pos, const Vec2i& size);
+		const HDC Hdc();
 	private:
-		Vec2i             _size;
-		GdiPaletteRender& _render;
-		HBITMAP           _bitmap;
-		ColorKey          _colorKey;
-		Result&           _result;
-		WindowError       _windowError;
+		MainWindow& _window;
+		BaseRender  _baseRender;
+		HPALETTE    _activePalette;
+		Palette     _palette;
+		HDC         _hdcm;
+		Result&     _result;
+		WindowError _windowError;
 	};
 }
 

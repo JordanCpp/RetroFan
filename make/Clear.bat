@@ -1,2 +1,2 @@
 
-del *.obj *.exe *.txt
+del *.obj *.exe *.txt *.err

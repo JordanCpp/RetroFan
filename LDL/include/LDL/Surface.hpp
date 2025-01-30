@@ -27,12 +27,18 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Surface_hpp
 #define LDL_Surface_hpp
 
+#include <vector>
+#include <LDL/Vec2.hpp>
+
 namespace LDL
 {
 	class Surface
 	{
 	public:
 	private:
+		uint8_t              _bpp;
+		Vec2i                _size;
+		std::vector<uint8_t> _pixels;
 	};
 }
 

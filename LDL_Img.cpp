@@ -26,9 +26,14 @@ DEALINGS IN THE SOFTWARE.
 
 #include <LDL/LDL.hpp>
 
-#if (_MSC_VER <= 1200)
+#if (_MSC_VER <= 1200) || (_WIN16)
     #define STBI_NO_THREAD_LOCALS
     #define STBI_NO_SIMD
+#endif
+
+#if (_MSC_VER <= 1200) || (_WIN16)
+#define STBI_NO_THREAD_LOCALS
+#define STBI_NO_SIMD
 #endif
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -48,7 +53,7 @@ int main()
 
 	stbi_set_flip_vertically_on_load(true);
 	pixels = stbi_load("img24.bmp", &width, &height, &channels, STBI_default);
-	LDL::Texture texture(result, &render, LDL::Vec2i(width, height), channels, pixels);
+	LDL::Texture texture(result, render, LDL::Vec2i(width, height), channels, pixels);
 	stbi_image_free(pixels);
 
 	while (window.Running())

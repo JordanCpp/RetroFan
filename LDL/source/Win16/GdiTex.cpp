@@ -25,8 +25,8 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <assert.h>
-#include <LDL/Windows/GdiTex.hpp>
-#include <LDL/Windows/GdiUtils.hpp>
+#include <LDL/Win16/GdiTex.hpp>
+#include <LDL/Win16/GdiUtils.hpp>
 #include <LDL/PixConv.hpp>
 
 using namespace LDL;

@@ -24,32 +24,15 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_GdiPTex_hpp
-#define LDL_Windows_GdiPTex_hpp
+#ifndef Fallout_PalLoad_hpp
+#define Fallout_PalLoad_hpp
 
-#include <LDL/Windows/GdiPRndr.hpp>
-#include <LDL/ColorKey.hpp>
-#include <LDL/Palette.hpp>
-
-namespace LDL
+namespace Fallout
 {
-	class GdiPaletteRender;
-
-	class GdiPaletteTexture
+	class PaletteLoader
 	{
 	public:
-		GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels);
-		~GdiPaletteTexture();
-		const ColorKey& GetColorKey() const;
-		const Vec2i& Size();
-		const HBITMAP Bitmap();
 	private:
-		Vec2i             _size;
-		GdiPaletteRender& _render;
-		HBITMAP           _bitmap;
-		ColorKey          _colorKey;
-		Result&           _result;
-		WindowError       _windowError;
 	};
 }
 

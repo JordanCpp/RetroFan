@@ -27,7 +27,7 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Windows_MainWin_hpp
 #define LDL_Windows_MainWin_hpp
 
-#include <Windows.h>
+#include <LDL/Windows/Win32.hpp>
 #include <LDL/Windows/WinError.hpp>
 #include <LDL/BaseWin.hpp>
 #include <LDL/Eventer.hpp>

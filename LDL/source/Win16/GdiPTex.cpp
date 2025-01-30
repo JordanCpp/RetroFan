@@ -24,33 +24,57 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_GdiPTex_hpp
-#define LDL_Windows_GdiPTex_hpp
+#include <assert.h>
+#include <LDL/Win16/GdiPTex.hpp>
+#include <LDL/Win16/GdiUtils.hpp>
+#include <LDL/PixConv.hpp>
 
-#include <LDL/Windows/GdiPRndr.hpp>
-#include <LDL/ColorKey.hpp>
-#include <LDL/Palette.hpp>
+using namespace LDL;
 
-namespace LDL
+GdiPaletteTexture::GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels) :
+    _size(size),
+    _render(render),
+    _bitmap(NULL),
+    _result(result)
 {
-	class GdiPaletteRender;
+    assert(size.x > 0);
+    assert(size.y > 0);
+    assert(pixels != NULL);
 
-	class GdiPaletteTexture
-	{
-	public:
-		GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels);
-		~GdiPaletteTexture();
-		const ColorKey& GetColorKey() const;
-		const Vec2i& Size();
-		const HBITMAP Bitmap();
-	private:
-		Vec2i             _size;
-		GdiPaletteRender& _render;
-		HBITMAP           _bitmap;
-		ColorKey          _colorKey;
-		Result&           _result;
-		WindowError       _windowError;
-	};
+    uint8_t* dstPixels = NULL;
+
+    _bitmap = CreateDib(_render.Hdc(), _size, _render.GetPalette(), (void**)&dstPixels);
+
+    if (_bitmap == NULL)
+    {
+        _result.Message(_windowError.GetErrorMessage());
+    }
+    else
+    {
+        size_t bytes = _size.x * _size.y;
+        memcpy(dstPixels, pixels, bytes);
+    }
 }
 
-#endif
+GdiPaletteTexture::~GdiPaletteTexture()
+{
+    if (_bitmap != NULL)
+    {
+        DestroyDib(_bitmap);
+    }
+}
+
+const ColorKey& GdiPaletteTexture::GetColorKey() const
+{
+    return _colorKey;
+}
+
+const Vec2i& GdiPaletteTexture::Size()
+{
+    return _size;
+}
+
+const HBITMAP GdiPaletteTexture::Bitmap()
+{
+    return _bitmap;
+}

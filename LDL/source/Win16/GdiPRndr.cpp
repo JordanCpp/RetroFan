@@ -26,128 +26,132 @@ DEALINGS IN THE SOFTWARE.
 
 #include <string.h>
 #include <assert.h>
-#include <LDL/Windows/GdiRndr.hpp>
-#include <LDL/Windows/GdiUtils.hpp>
+#include <LDL/Win16/GdiPRndr.hpp>
+#include <LDL/Win16/GdiUtils.hpp>
 
 using namespace LDL;
 
-GdiRender::GdiRender(Result& result, MainWindow& window) :
+GdiPaletteRender::GdiPaletteRender(Result& result, MainWindow& window) :
 	_window(window),
+	_activePalette(NULL),
+	_hdcm(NULL),
 	_result(result)
 {
 }
 
-GdiRender::GdiRender(Result& result, MainWindow& window, const Palette& palette) :
+GdiPaletteRender::GdiPaletteRender(Result& result, MainWindow& window, const Palette& palette) :
 	_window(window),
 	_palette(palette),
+	_hdcm(NULL),
 	_result(result)
 {
-}
+	GdiPalette gdiPalette;
+	GdiFill(gdiPalette, _palette);
 
-GdiRender::~GdiRender()
-{
-}
+	_activePalette = CreatePalette(&gdiPalette.logPalette);
 
-const Palette& GdiRender::GetPalette()
-{
-	return _palette;
-}
-
-const Color& GdiRender::GetColor()
-{
-	return _baseRender.GetColor();
-}
-
-void GdiRender::SetColor(uint8_t index)
-{
-	return _baseRender.SetColor(index);
-}
-void GdiRender::SetColor(const Color& color)
-{
-	_baseRender.SetColor(color);
-}
-
-void GdiRender::Begin()
-{
-	if (InvalidateRect(_window.Hwnd(), NULL, FALSE) == FALSE)
+	if (_activePalette == NULL)
 	{
 		_result.Message(_windowError.GetErrorMessage());
 	}
 }
 
-void GdiRender::End()
+GdiPaletteRender::~GdiPaletteRender()
 {
 }
 
-void GdiRender::Clear()
+const Palette& GdiPaletteRender::GetPalette()
+{
+	return _palette;
+}
+
+const Color& GdiPaletteRender::GetColor()
+{
+	return _baseRender.GetColor();
+}
+
+void GdiPaletteRender::SetColor(uint8_t index)
+{
+	return _baseRender.SetColor(index);
+}
+void GdiPaletteRender::SetColor(const Color& color)
+{
+	_baseRender.SetColor(color);
+}
+
+void GdiPaletteRender::Begin()
+{
+	InvalidateRect(_window.Hwnd(), NULL, FALSE);
+	
+	_hdcm = CreateCompatibleDC(_window.Hdc());
+	
+	if (_hdcm == NULL)
+	{
+		_result.Message(_windowError.GetErrorMessage());
+	}
+}
+
+void GdiPaletteRender::End()
+{
+	if (DeleteDC(_hdcm) == FALSE)
+	{
+		_result.Message(_windowError.GetErrorMessage());
+	}
+}
+
+void GdiPaletteRender::Clear()
 {
 	Fill(Vec2i(0, 0), _window.Size());
 }
 
-void GdiRender::Line(const Vec2i& first, const Vec2i& last)
+void GdiPaletteRender::Line(const Vec2i& first, const Vec2i& last)
 {
-	MoveToEx(_window.Hdc(), first.x, first.y, NULL);
-	LineTo(_window.Hdc(), last.x, last.y);
+	GdiLine(_result, _windowError, _window.Hdc(), first, last, 0);
 }
 
-void GdiRender::Fill(const Vec2i& pos, const Vec2i& size)
+void GdiPaletteRender::Fill(const Vec2i& pos, const Vec2i& size)
 {
-	GdiFill(_window.Hdc(), pos, size, _baseRender.GetColor());
+	GdiFill(_window.Hdc(), pos, size, _activePalette, _baseRender.GetIndex());
 }
 
-void GdiRender::Draw(GdiTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize)
+void GdiPaletteRender::Draw(GdiPaletteTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize)
 {
 	assert(texture != NULL);
+	assert(dstPos.x >= 0);
+	assert(dstPos.y >= 0);
+	assert(dstSize.x > 0);
+	assert(dstSize.y > 0);
+	assert(srcPos.x >= 0);
+	assert(srcPos.y >= 0);
+	assert(srcSize.x > 0);
+	assert(srcSize.y > 0);
 
-	HDC hdcm = CreateCompatibleDC(_window.Hdc());
+	HGDIOBJ object = SelectObject(_hdcm, texture->Bitmap());
 
-	if (hdcm == NULL)
+	if (object == NULL)
 	{
 		_result.Message(_windowError.GetErrorMessage());
 	}
 	else
 	{
-		HGDIOBJ object = SelectObject(hdcm, texture->Bitmap());
-
-		if (object == NULL)
+		if (StretchBlt(_window.Hdc(), dstPos.x, dstPos.y, dstSize.x, dstSize.y, _hdcm, srcPos.x, srcPos.y, srcSize.x, srcSize.y, SRCCOPY) == FALSE)
 		{
 			_result.Message(_windowError.GetErrorMessage());
-		}
-		else
-		{
-			if (texture->GetColorKey().Used())
-			{
-				Color color = texture->GetColorKey().GetColor();
-
-				if (TransparentBlt(_window.Hdc(), dstPos.x, dstPos.y, dstSize.x, dstSize.y, hdcm, srcPos.x, srcPos.y, srcSize.x, srcSize.y, RGB(color.r, color.g, color.b)) == FALSE)
-				{
-					_result.Message(_windowError.GetErrorMessage());
-				}
-			}
-			else
-			{
-				if (StretchBlt(_window.Hdc(), dstPos.x, dstPos.y, dstSize.x, dstSize.y, hdcm, srcPos.x, srcPos.y, srcSize.x, srcSize.y, SRCCOPY) == FALSE)
-				{
-					_result.Message(_windowError.GetErrorMessage());
-				}
-			}
-
-			DeleteDC(hdcm);
 		}
 	}
 }
 
-void GdiRender::Draw(GdiTexture* texture, const Vec2i& pos)
+void GdiPaletteRender::Draw(GdiPaletteTexture* texture, const Vec2i& pos)
 {
 	Draw(texture, pos, texture->Size(), Vec2i(0, 0), texture->Size());
 }
 
-void GdiRender::Draw(GdiTexture* texture, const Vec2i& pos, const Vec2i& size)
+void GdiPaletteRender::Draw(GdiPaletteTexture* texture, const Vec2i& pos, const Vec2i& size)
 {
 	Draw(texture, pos, size, Vec2i(0, 0), texture->Size());
 }
 
-const HDC GdiRender::Hdc()
+const HDC GdiPaletteRender::Hdc()
 {
 	return _window.Hdc();
 }

@@ -27,7 +27,13 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Texture_hpp
 #define LDL_Texture_hpp
 
-#if defined(_WIN32)
+#if defined(_WIN16)
+    #if defined(LDL_RENDER_NATIVE_PALETTE)
+        #include <LDL/Win16/GdiPTex.hpp>
+    #else
+        #include <LDL/Win16/GdiTex.hpp>
+    #endif
+#elif defined(_WIN32)
     #if defined(LDL_RENDER_NATIVE_PALETTE)
         #include <LDL/Windows/GdiPTex.hpp>
     #else
@@ -40,7 +46,13 @@ DEALINGS IN THE SOFTWARE.
 namespace LDL
 {
 
-#if defined(_WIN32)
+#if defined(_WIN16)
+    #if defined(LDL_RENDER_NATIVE_PALETTE)
+        typedef GdiPaletteTexture Texture;
+    #else
+        typedef GdiTexture Texture;
+    #endif
+#elif defined(_WIN32)
     #if defined(LDL_RENDER_NATIVE_PALETTE)
         typedef GdiPaletteTexture Texture;
     #else

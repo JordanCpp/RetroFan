@@ -24,10 +24,10 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_GdiPTex_hpp
-#define LDL_Windows_GdiPTex_hpp
+#ifndef LDL_Win16_GdiPTex_hpp
+#define LDL_Win16_GdiPTex_hpp
 
-#include <LDL/Windows/GdiPRndr.hpp>
+#include <LDL/Win16/GdiPRndr.hpp>
 #include <LDL/ColorKey.hpp>
 #include <LDL/Palette.hpp>
 

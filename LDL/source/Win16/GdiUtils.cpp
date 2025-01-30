@@ -25,68 +25,48 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <assert.h>
-#include <LDL/Windows/GdiUtils.hpp>
+#include <string.h>
+#include <LDL/Win16/GdiUtils.hpp>
+#include <LDL/Vec2.hpp>
 
 HBITMAP LDL::CreateDib(HDC hdc, const Vec2i& size, uint8_t bpp, void** pixels)
 {
-    assert(hdc != NULL);
-    assert(size.x > 0);
-    assert(size.y > 0);
-    assert(bpp == 3 || bpp == 4);
-    assert(pixels != NULL);
-
-    size_t bytes = size.x * size.y * bpp;
-
     BITMAPINFO bitmapInfo;
     memset(&bitmapInfo, 0, sizeof(BITMAPINFO));
 
-    bitmapInfo.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-    bitmapInfo.bmiHeader.biWidth       = size.x;
-    bitmapInfo.bmiHeader.biHeight      = size.y;
-    bitmapInfo.bmiHeader.biPlanes      = 1;
-    bitmapInfo.bmiHeader.biBitCount    = bpp * 8;
-    bitmapInfo.bmiHeader.biCompression = BI_RGB;
-    
-    HBITMAP bitmap = CreateDIBSection(hdc, (BITMAPINFO*)&bitmapInfo, DIB_RGB_COLORS, pixels, NULL, 0);
+    bitmapInfo.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
+    bitmapInfo.bmiHeader.biWidth         = size.x;
+    bitmapInfo.bmiHeader.biHeight        = size.y;
+    bitmapInfo.bmiHeader.biPlanes        = 1;
+    bitmapInfo.bmiHeader.biBitCount      = bpp * 8;
+    bitmapInfo.bmiHeader.biCompression   = BI_RGB;
+    bitmapInfo.bmiHeader.biSizeImage     = size.x * size.x * bpp;
+    bitmapInfo.bmiHeader.biXPelsPerMeter = 96;
+    bitmapInfo.bmiHeader.biYPelsPerMeter = 96;
+    bitmapInfo.bmiHeader.biClrUsed       = 0;
+    bitmapInfo.bmiHeader.biClrImportant  = 0;
 
-    return bitmap;
+    return CreateDIBitmap(hdc, &bitmapInfo.bmiHeader, CBM_INIT, pixels, &bitmapInfo, DIB_RGB_COLORS);
 }
 
 HBITMAP LDL::CreateDib(HDC hdc, const Vec2i& size, const Palette& palette, void** pixels)
 {
-    assert(hdc != NULL);
-    assert(size.x > 0);
-    assert(size.y > 0);
+    BITMAPINFO bitmapInfo;
+    memset(&bitmapInfo, 0, sizeof(BITMAPINFO));
 
-    const size_t bufferSize = sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * 256;
-    uint8_t buffer[bufferSize];
-    memset(&buffer, 0, bufferSize);
-    BITMAPINFO* bitmapInfo = (BITMAPINFO*)buffer;
+    bitmapInfo.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
+    bitmapInfo.bmiHeader.biWidth         = size.x;
+    bitmapInfo.bmiHeader.biHeight        = size.y;
+    bitmapInfo.bmiHeader.biPlanes        = 1;
+    bitmapInfo.bmiHeader.biBitCount      = 8;
+    bitmapInfo.bmiHeader.biCompression   = BI_RGB;
+    bitmapInfo.bmiHeader.biSizeImage     = size.x * size.x;
+    bitmapInfo.bmiHeader.biXPelsPerMeter = 96;
+    bitmapInfo.bmiHeader.biYPelsPerMeter = 96;
+    bitmapInfo.bmiHeader.biClrUsed       = 0;
+    bitmapInfo.bmiHeader.biClrImportant  = 0;
 
-    BITMAPINFOHEADER& bih(bitmapInfo->bmiHeader);
-    bih.biSize          = sizeof(BITMAPINFOHEADER);
-    bih.biWidth         = size.x;
-    bih.biHeight        = size.y;
-    bih.biPlanes        = 1;
-    bih.biBitCount      = 8;
-    bih.biCompression   = BI_RGB;
-    bih.biSizeImage     = 0;
-    bih.biXPelsPerMeter = 14173;
-    bih.biYPelsPerMeter = 14173;
-    bih.biClrUsed       = 0;
-    bih.biClrImportant  = 0;
-
-    for (size_t i = 0; i < palette.Max; i++)
-    {
-        bitmapInfo->bmiColors[i].rgbBlue     = palette.Get(i).b;
-        bitmapInfo->bmiColors[i].rgbGreen    = palette.Get(i).g;
-        bitmapInfo->bmiColors[i].rgbRed      = palette.Get(i).r;
-        bitmapInfo->bmiColors[i].rgbReserved = 0;
-    }
-
-    HBITMAP bitmap = CreateDIBSection(hdc, bitmapInfo, DIB_RGB_COLORS, pixels, NULL, 0);
-
-    return bitmap;
+    return CreateDIBitmap(hdc, &bitmapInfo.bmiHeader, 0, pixels, &bitmapInfo, DIB_RGB_COLORS);
 }
 
 void LDL::DestroyDib(HBITMAP bitmap)

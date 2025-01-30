@@ -24,33 +24,32 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Windows_GdiPTex_hpp
-#define LDL_Windows_GdiPTex_hpp
+#include <LDL/LDL.hpp>
 
-#include <LDL/Windows/GdiPRndr.hpp>
-#include <LDL/ColorKey.hpp>
-#include <LDL/Palette.hpp>
-
-namespace LDL
+int main()
 {
-	class GdiPaletteRender;
+	LDL::Result result;
+	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
+	LDL::Render render(result, window);
+    LDL::Event  report;
 
-	class GdiPaletteTexture
+	while (window.Running())
 	{
-	public:
-		GdiPaletteTexture(Result& result, GdiPaletteRender& render, const Vec2i& size, uint8_t* pixels);
-		~GdiPaletteTexture();
-		const ColorKey& GetColorKey() const;
-		const Vec2i& Size();
-		const HBITMAP Bitmap();
-	private:
-		Vec2i             _size;
-		GdiPaletteRender& _render;
-		HBITMAP           _bitmap;
-		ColorKey          _colorKey;
-		Result&           _result;
-		WindowError       _windowError;
-	};
-}
+		while (window.GetEvent(report))
+		{
+			if (report.Type == LDL::Event::IsQuit)
+			{
+				window.StopEvent();
+			}
+		}
 
-#endif
+		render.Begin();
+
+		render.End();
+
+		window.Update();
+		window.PollEvents();
+	}
+
+    return 0;
+}

@@ -59,7 +59,7 @@ int main()
 
 	int width, height, channels;
 	unsigned char* pixels = stbi_load("SeasonsTiles.png", &width, &height, &channels, STBI_default);
-	LDL::Texture tiles(result, &render, LDL::Vec2i(width, height), channels, pixels, LDL::Color(0, 0, 0));
+	LDL::Texture tiles(result, render, LDL::Vec2i(width, height), channels, pixels, LDL::Color(0, 0, 0));
 	stbi_image_free(pixels);
 
 	Isometric isometric;

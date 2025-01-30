@@ -23,21 +23,22 @@ else()
 endif()
 
 add_library(LDL ${SHARED_SOURCES} ${PLATFORM_SOURCES})
+target_link_libraries(LDL ${libs})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/make/img24.bmp        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/make/SeasonsTiles.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 
 add_executable(LDL_Pal "LDL_Pal.cpp")
-target_link_libraries(LDL_Pal LDL ${libs})
+target_link_libraries(LDL_Pal LDL)
 
 add_executable(LDL_Img "LDL_Img.cpp")
-target_link_libraries(LDL_Img LDL ${libs})
+target_link_libraries(LDL_Img LDL)
 
 add_executable(LDL_Win "LDL_Win.cpp")
-target_link_libraries(LDL_Win LDL ${libs})
+target_link_libraries(LDL_Win LDL)
 
 add_executable(LDL_Iso "LDL_Iso.cpp" "Isometrc.cpp")
-target_link_libraries(LDL_Iso LDL ${libs})
+target_link_libraries(LDL_Iso LDL)
 
 if (WIN32)
     add_executable(wWin "wWin.cpp")
@@ -46,3 +47,7 @@ else()
     add_executable(xWin "xWin.cpp")
     target_link_libraries(xWin ${libs})
 endif()
+
+FILE(GLOB FALLOUT_SOURCES "Fallout/*.cpp")
+add_executable(Fallout  ${FALLOUT_SOURCES})
+target_link_libraries(Fallout LDL)

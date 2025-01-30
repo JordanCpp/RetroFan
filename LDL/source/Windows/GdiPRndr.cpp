@@ -24,10 +24,10 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/Windows/GdiPRndr.hpp>
-#include <LDL/Windows/GdiUtils.hpp>
 #include <string.h>
 #include <assert.h>
+#include <LDL/Windows/GdiPRndr.hpp>
+#include <LDL/Windows/GdiUtils.hpp>
 
 using namespace LDL;
 
@@ -81,18 +81,13 @@ void GdiPaletteRender::SetColor(const Color& color)
 
 void GdiPaletteRender::Begin()
 {
-	if (InvalidateRect(_window.Hwnd(), NULL, FALSE) == FALSE)
+	InvalidateRect(_window.Hwnd(), NULL, FALSE);
+	
+	_hdcm = CreateCompatibleDC(_window.Hdc());
+	
+	if (_hdcm == NULL)
 	{
 		_result.Message(_windowError.GetErrorMessage());
-	}
-	else
-	{
-		_hdcm = CreateCompatibleDC(_window.Hdc());
-
-		if (_hdcm == NULL)
-		{
-			_result.Message(_windowError.GetErrorMessage());
-		}
 	}
 }
 
