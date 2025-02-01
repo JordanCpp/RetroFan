@@ -49,7 +49,7 @@ namespace LDL
         #elif defined(LDL_RENDER_WAYLAND)
     	    typedef WaylandWindow Window;
         #endif
-    #elif
+    #elif defined(_WIN16) || defined(_WIN32)
         typedef MainWindow Window;
     #endif
 }
