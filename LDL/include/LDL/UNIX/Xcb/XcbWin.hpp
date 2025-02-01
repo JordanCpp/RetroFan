@@ -24,34 +24,46 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#ifndef LDL_UNIX_Xcb_XcbWin_hpp
+#define LDL_UNIX_Xcb_XcbWin_hpp
 
-#if defined(_WIN16)
-    #include <LDL/Win16/MainWin.hpp>
-#elif defined(_WIN32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined(__unix__)
-    #if defined(LDL_RENDER_XLIB)
-        #include <LDL/UNIX/XLib/XLibWin.hpp>
-    #elif defined(LDL_RENDER_XCB)
-        #include <LDL/UNIX/Xcb/XcbWin.hpp>
-    #endif
-#endif
+#include <xcb/xcb.h>
+#include <LDL/Vec2.hpp>
+#include <LDL/BaseWin.hpp>
+#include <LDL/Eventer.hpp>
+#include <LDL/Result.hpp>
 
 namespace LDL
 {
-    #if defined(__unix__)
-        #if defined(LDL_RENDER_XLIB)
-         	typedef XLibWindow Window;
-        #elif defined(LDL_RENDER_XCB)
-    	    typedef XcbWindow Window;
-        #elif defined(LDL_RENDER_WAYLAND)
-    	    typedef WaylandWindow Window;
-        #endif
-    #elif
-        typedef MainWindow Window;
-    #endif
+	class XcbWindow
+	{
+	public:
+		XcbWindow(Result& result, const Vec2i& pos, const Vec2i& size);
+		~XcbWindow();
+		const Vec2i& Pos();
+		void Pos(const Vec2i& pos);
+		const Vec2i& Size();
+		void Size(const Vec2i& size);
+		const std::string& Title();
+		void Title(const std::string& title);
+		void Update();
+		void StopEvent();
+		bool Running();
+		void PollEvents();
+		bool GetEvent(Event& event);
+		xcb_connection_t* GetXConnection();
+		xcb_screen_t* GetXScreen();
+        xcb_window_t GetWindow();
+	private:
+	    BaseWindow        _baseWindow;
+		Eventer           _eventer;
+		Result&           _result;
+		xcb_connection_t* _connection;
+		xcb_screen_t*     _screen;
+        xcb_window_t      _window;
+	public:
+	    size_t     _eventMask;
+	};
 }
 
 #endif

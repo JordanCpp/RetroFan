@@ -24,37 +24,49 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_UNIX_MainWin_hpp
-#define LDL_UNIX_MainWin_hpp
+#ifndef LDL_UNIX_XLib_XLibWin_hpp
+#define LDL_UNIX_XLib_XLibWin_hpp
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
 #include <LDL/Vec2.hpp>
+#include <LDL/BaseWin.hpp>
 #include <LDL/Eventer.hpp>
+#include <LDL/Result.hpp>
 
 namespace LDL
 {
-	class MainWindow
+	class XLibWindow
 	{
 	public:
-		MainWindow(const Vec2i& pos, const Vec2i& size);
-		~MainWindow();
+		XLibWindow(Result& result, const Vec2i& pos, const Vec2i& size);
+		~XLibWindow();
+		const Vec2i& Pos();
+		void Pos(const Vec2i& pos);
+		const Vec2i& Size();
+		void Size(const Vec2i& size);
+		const std::string& Title();
+		void Title(const std::string& title);
 		void Update();
 		void StopEvent();
 		bool Running();
 		void PollEvents();
 		bool GetEvent(Event& event);
+		Display* GetXDisplay();
+		int GetXScreen();
+		Window GetXRoot();
+		Window GetXWindow();
 	private:
-		Vec2i    _pos;
-		Vec2i    _size;
-		Eventer  _eventer;
+	    BaseWindow _baseWindow;
+		Eventer    _eventer;
+		Result&    _result;
+		Display*   _display;
+		int        _screen;
+		Window     _root;
+	    Window     _window;
 	public:
-		Display* _display;
-	    int      _screen;
- 	    Window   _root;
-	    Window   _window;
-	    size_t   _eventMask;
+	    size_t     _eventMask;
 	};
 }
 

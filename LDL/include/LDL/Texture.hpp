@@ -40,7 +40,11 @@ DEALINGS IN THE SOFTWARE.
         #include <LDL/Windows/GdiTex.hpp>
     #endif
 #elif defined (__unix__)
-    #include <LDL/UNIX/XLibTex.hpp>
+    #if defined(LDL_RENDER_XLIB)
+        #include <LDL/UNIX/XLib/XLibTex.hpp>
+    #elif defined(LDL_RENDER_XCB)
+        #include <LDL/UNIX/Xcb/XcbTex.hpp>
+    #endif
 #endif
 
 namespace LDL
@@ -59,7 +63,11 @@ namespace LDL
         typedef GdiTexture Texture;
     #endif
 #elif defined (__unix__)
-	typedef XLibTexture Texture;
+    #if defined(LDL_RENDER_XLIB)
+        typedef XLibTexture Texture;
+    #elif defined(LDL_RENDER_XCB)
+     	typedef XcbTexture Texture;
+    #endif
 #endif
 
 }

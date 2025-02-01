@@ -24,34 +24,31 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#ifndef LDL_UNIX_XLib_XLibTex_hpp
+#define LDL_UNIX_XLib_XLibTex_hpp
 
-#if defined(_WIN16)
-    #include <LDL/Win16/MainWin.hpp>
-#elif defined(_WIN32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined(__unix__)
-    #if defined(LDL_RENDER_XLIB)
-        #include <LDL/UNIX/XLib/XLibWin.hpp>
-    #elif defined(LDL_RENDER_XCB)
-        #include <LDL/UNIX/Xcb/XcbWin.hpp>
-    #endif
-#endif
+#include <LDL/UNIX/XLib/XLibRndr.hpp>
+#include <LDL/Color.hpp>
 
 namespace LDL
 {
-    #if defined(__unix__)
-        #if defined(LDL_RENDER_XLIB)
-         	typedef XLibWindow Window;
-        #elif defined(LDL_RENDER_XCB)
-    	    typedef XcbWindow Window;
-        #elif defined(LDL_RENDER_WAYLAND)
-    	    typedef WaylandWindow Window;
-        #endif
-    #elif
-        typedef MainWindow Window;
-    #endif
+	class XLibRender;
+
+	class XLibTexture
+	{
+	public:
+		XLibTexture(Result& result, XLibRender& render, const Vec2i& size, uint8_t* pixels);
+		XLibTexture(Result& result, XLibRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& colorKey);
+		XLibTexture(Result& result, XLibRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
+		~XLibTexture();
+		const Vec2i& Size();
+		XImage* GetImage();
+	private:
+		Vec2i       _size;
+		XLibRender& _render;
+		Result&     _result;
+		XImage*     _image;
+	};
 }
 
 #endif

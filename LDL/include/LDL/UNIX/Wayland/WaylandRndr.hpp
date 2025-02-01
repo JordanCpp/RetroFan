@@ -24,72 +24,40 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/UNIX/MainWin.hpp>
-#include <string.h>
+#ifndef LDL_UNIX_Wayland_WaylandRndr_hpp
+#define LDL_UNIX_Wayland_WaylandRndr_hpp
 
-using namespace LDL;
+#include <LDL/UNIX/Wayland/MainWin.hpp>
+#include <LDL/UNIX/Wayland/WaylandTex.hpp>
+#include <LDL/BaseRndr.hpp>
+#include <LDL/Palette.hpp>
 
-const size_t eventMask =
-    PointerMotionMask
-  | ButtonMotionMask
-  | ButtonPressMask
-  | ButtonReleaseMask
-  | KeyPressMask
-  | KeyReleaseMask;
-
-MainWindow::MainWindow(const Vec2i& pos, const Vec2i& size) :
-    _pos(pos),
-    _size(size),
-	_eventMask(eventMask)
-{	
-	_display = XOpenDisplay(NULL);
-	_screen  = DefaultScreen(_display);
-	_root    = RootWindow(_display, _screen);
-    _window  = XCreateSimpleWindow(_display, RootWindow(_display, _screen), pos.x, pos.y, size.x, size.y, 1, BlackPixel(_display, _screen), WhitePixel(_display, _screen));
-
-    XMapWindow(_display, _window);
-}
-
-MainWindow::~MainWindow()
+namespace LDL
 {
-    XCloseDisplay(_display);
-}
+	class WaylandTexture;
 
-void MainWindow::Update()
-{
-	//XClearWindow(_display, _window);
-	//XMapRaised(_display, _window);
-}
-
-void MainWindow::StopEvent()
-{
-	_eventer.Stop();
-}
-
-bool MainWindow::Running()
-{
-	return _eventer.Running();
-}
-
-void MainWindow::PollEvents()
-{
-	XEvent event;
-	size_t key = 0;
-
-	while (XPending(_display))
+	class WaylandRender
 	{
-		XNextEvent(_display, &event);
-	}
+	public:
+		WaylandRender(Result& result, MainWindow& window);
+		WaylandRender(Result& result, MainWindow& window, const Palette& palette);
+		~WaylandRender();
+		const Color& GetColor();
+		void SetColor(const Color& color);
+		void Begin();
+		void End();
+		void Clear();
+		void Line(const Vec2i& first, const Vec2i& last);
+		void Fill(const Vec2i& pos, const Vec2i& size);
+		void Draw(WaylandTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
+		void Draw(WaylandTexture* texture, const Vec2i& pos);
+		void Draw(WaylandTexture* texture, const Vec2i& pos, const Vec2i& size);
+	private:
+		MainWindow&    _window;
+		BaseRender     _baseRender;
+		Result&        _result;
+		Palette        _palette;
+	};
 }
 
-bool MainWindow::GetEvent(Event& event)
-{
-	if (!_eventer.Empty())
-	{
-		_eventer.Pop(event);
-
-		return true;
-	}
-
-	return false;
-}
+#endif

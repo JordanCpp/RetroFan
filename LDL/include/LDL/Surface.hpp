@@ -27,6 +27,7 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Surface_hpp
 #define LDL_Surface_hpp
 
+#include <stdint.h>
 #include <vector>
 #include <LDL/Vec2.hpp>
 

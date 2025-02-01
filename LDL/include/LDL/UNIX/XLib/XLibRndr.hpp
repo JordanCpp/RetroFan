@@ -24,34 +24,48 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#ifndef LDL_UNIX_XLib_XLibRndr_hpp
+#define LDL_UNIX_XLib_XLibRndr_hpp
 
-#if defined(_WIN16)
-    #include <LDL/Win16/MainWin.hpp>
-#elif defined(_WIN32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined(__unix__)
-    #if defined(LDL_RENDER_XLIB)
-        #include <LDL/UNIX/XLib/XLibWin.hpp>
-    #elif defined(LDL_RENDER_XCB)
-        #include <LDL/UNIX/Xcb/XcbWin.hpp>
-    #endif
-#endif
+#include <LDL/UNIX/XLib/XLibWin.hpp>
+#include <LDL/UNIX/XLib/XLibTex.hpp>
+#include <LDL/BaseRndr.hpp>
+#include <LDL/Palette.hpp>
 
 namespace LDL
 {
-    #if defined(__unix__)
-        #if defined(LDL_RENDER_XLIB)
-         	typedef XLibWindow Window;
-        #elif defined(LDL_RENDER_XCB)
-    	    typedef XcbWindow Window;
-        #elif defined(LDL_RENDER_WAYLAND)
-    	    typedef WaylandWindow Window;
-        #endif
-    #elif
-        typedef MainWindow Window;
-    #endif
+	class XLibTexture;
+
+	class XLibRender
+	{
+	public:
+	
+		XLibRender(Result& result, XLibWindow& window);
+		XLibRender(Result& result, XLibWindow& window, const Palette& palette);
+		~XLibRender();
+		const Color& GetColor();
+		void SetColor(const Color& color);
+		void Begin();
+		void End();
+		void Clear();
+		void Line(const Vec2i& first, const Vec2i& last);
+		void Fill(const Vec2i& pos, const Vec2i& size);
+		void Draw(XLibTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
+		void Draw(XLibTexture* texture, const Vec2i& pos);
+		void Draw(XLibTexture* texture, const Vec2i& pos, const Vec2i& size);
+		Display* GetXDisplay();
+		Visual* GetXVisual();
+		int GetXDepth();
+	private:
+		XLibWindow& _window;
+		GC          _graphics;
+		BaseRender  _baseRender;
+		Result&     _result;
+		Palette     _palette;
+		int         _depth;
+		Visual*     _visual;
+		XGCValues   _values;
+	};
 }
 
 #endif

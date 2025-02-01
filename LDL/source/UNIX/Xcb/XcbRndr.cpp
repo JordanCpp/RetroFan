@@ -24,7 +24,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/UNIX/XLibRndr.hpp>
+#include <LDL/UNIX/Xcb/XcbRndr.hpp>
 
 using namespace LDL;
 
@@ -33,49 +33,61 @@ inline uint32_t MakeRgb(uint8_t r, uint8_t g, uint8_t b)
     return b + (g <<8 ) + (r << 16);
 }
 
-XLibRender::XLibRender(MainWindow& window) :
-	_window(window)
+XcbRender::XcbRender(Result& result, XcbWindow& window) :
+	_window(window),
+	_result(result)
 {
-	_graphics = XCreateGC(_window._display, _window._window, 0, NULL);
-
 }
 
-const Color& XLibRender::GetColor()
+XcbRender::XcbRender(Result& result, XcbWindow& window, const Palette& palette) :
+	_window(window),
+	_result(result),
+	_palette(palette)
+{
+}
+
+XcbRender::~XcbRender()
+{
+}
+
+const Color& XcbRender::GetColor()
 {
 	return _baseRender.GetColor();
 }
 
-void XLibRender::SetColor(const Color& color)
+void XcbRender::SetColor(const Color& color)
 {
 	_baseRender.SetColor(color);
 }
 
-void XLibRender::Begin()
+void XcbRender::Begin()
 {
 }
 
-void XLibRender::End()
-{
-	XSync(_window._display, True);
-	XFlush(_window._display);
-}
-
-void XLibRender::Clear()
+void XcbRender::End()
 {
 }
 
-void XLibRender::Line(const Vec2i& first, const Vec2i& last)
+void XcbRender::Clear()
 {
-	uint32_t rgb = MakeRgb(_baseRender.GetColor().r, _baseRender.GetColor().g, _baseRender.GetColor().b);
-
-	XSetForeground(_window._display, _graphics, rgb);
-	XDrawLine(_window._display, _window._window, _graphics, first.x, first.y, last.x, last.y);
 }
 
-void XLibRender::Fill(const Vec2i& pos, const Vec2i& size)
+void XcbRender::Line(const Vec2i& first, const Vec2i& last)
 {
-	uint32_t rgb = MakeRgb(_baseRender.GetColor().r, _baseRender.GetColor().g, _baseRender.GetColor().b);
+}
 
-	XSetForeground(_window._display, _graphics, rgb);
-	XFillRectangle(_window._display, _window._window, _graphics, pos.x, pos.y, size.x, size.y);
+void XcbRender::Fill(const Vec2i& pos, const Vec2i& size)
+{
+}
+
+void XcbRender::Draw(XcbTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize)
+{
+}
+
+void XcbRender::Draw(XcbTexture* texture, const Vec2i& pos)
+{
+}
+
+void XcbRender::Draw(XcbTexture* texture, const Vec2i& pos, const Vec2i& size)
+{
 }

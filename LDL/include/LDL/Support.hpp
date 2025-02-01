@@ -27,15 +27,17 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Support_hpp
 #define LDL_Support_hpp
 
-#if (_MSC_VER <= 1100)
-    #define __forceinline
-#endif
+#if defined(_WIN32)
+    #if (_MSC_VER <= 1100)
+        #define __forceinline
+    #endif
 
-#if (_MSC_VER <= 1020)
-    #include <Windows.h>
-    #define bool  BOOL
-    #define true  TRUE
-    #define false FALSE
+    #if (_MSC_VER <= 1020)
+        #include <Windows.h>
+        #define bool  BOOL
+        #define true  TRUE
+        #define false FALSE
+    #endif
 #endif
 
 #endif

@@ -40,7 +40,11 @@ DEALINGS IN THE SOFTWARE.
         #include <LDL/Windows/GdiRndr.hpp>
     #endif
 #elif defined (__unix__)
-    #include <LDL/UNIX/XLibRndr.hpp>
+    #if defined(LDL_RENDER_XLIB)
+        #include <LDL/UNIX/XLib/XLibRndr.hpp>
+    #elif defined(LDL_RENDER_XCB)
+        #include <LDL/UNIX/Xcb/XcbRndr.hpp>
+    #endif
 #endif
 
 namespace LDL
@@ -59,7 +63,11 @@ namespace LDL
         typedef GdiRender Render;
     #endif
 #elif defined (__unix__)
-	typedef XLibRender Render;
+    #if defined(LDL_RENDER_XLIB)
+        typedef XLibRender Render;
+    #elif defined(LDL_RENDER_XCB)
+        typedef XcbRender Render;
+    #endif
 #endif
 
 }

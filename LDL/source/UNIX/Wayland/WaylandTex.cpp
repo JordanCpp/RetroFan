@@ -24,34 +24,36 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#include <LDL/UNIX/Wayland/WaylandTex.hpp>
 
-#if defined(_WIN16)
-    #include <LDL/Win16/MainWin.hpp>
-#elif defined(_WIN32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined(__unix__)
-    #if defined(LDL_RENDER_XLIB)
-        #include <LDL/UNIX/XLib/XLibWin.hpp>
-    #elif defined(LDL_RENDER_XCB)
-        #include <LDL/UNIX/Xcb/XcbWin.hpp>
-    #endif
-#endif
+using namespace LDL;
 
-namespace LDL
+WaylandTexture::WaylandTexture(Result& result, WaylandRender& render, const Vec2i& size, uint8_t* pixels) :
+	_size(size),
+	_render(render),
+	_result(result)
 {
-    #if defined(__unix__)
-        #if defined(LDL_RENDER_XLIB)
-         	typedef XLibWindow Window;
-        #elif defined(LDL_RENDER_XCB)
-    	    typedef XcbWindow Window;
-        #elif defined(LDL_RENDER_WAYLAND)
-    	    typedef WaylandWindow Window;
-        #endif
-    #elif
-        typedef MainWindow Window;
-    #endif
 }
 
-#endif
+WaylandTexture::WaylandTexture(Result& result, WaylandRender& render, const Vec2i& size, uint8_t bpp, uint8_t * pixels, const Color& colorKey) :
+	_size(size),
+	_render(render),
+	_result(result)
+{
+}
+
+WaylandTexture::WaylandTexture(Result& result, WaylandRender& render, const Vec2i& size, uint8_t bpp, uint8_t * pixels) :
+	_size(size),
+	_render(render),
+	_result(result)
+{
+}
+
+WaylandTexture::~WaylandTexture()
+{
+}
+
+const Vec2i& WaylandTexture::Size()
+{
+	return _size;
+}

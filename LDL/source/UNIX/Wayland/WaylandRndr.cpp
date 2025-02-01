@@ -24,34 +24,65 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#include <LDL/UNIX/Wayland/WaylandRndr.hpp>
 
-#if defined(_WIN16)
-    #include <LDL/Win16/MainWin.hpp>
-#elif defined(_WIN32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined(__unix__)
-    #if defined(LDL_RENDER_XLIB)
-        #include <LDL/UNIX/XLib/XLibWin.hpp>
-    #elif defined(LDL_RENDER_XCB)
-        #include <LDL/UNIX/Xcb/XcbWin.hpp>
-    #endif
-#endif
+using namespace LDL;
 
-namespace LDL
+WaylandRender::WaylandRender(Result& result, MainWindow& window) :
+	_window(window),
+	_result(result)
 {
-    #if defined(__unix__)
-        #if defined(LDL_RENDER_XLIB)
-         	typedef XLibWindow Window;
-        #elif defined(LDL_RENDER_XCB)
-    	    typedef XcbWindow Window;
-        #elif defined(LDL_RENDER_WAYLAND)
-    	    typedef WaylandWindow Window;
-        #endif
-    #elif
-        typedef MainWindow Window;
-    #endif
 }
 
-#endif
+WaylandRender::WaylandRender(Result& result, MainWindow& window, const Palette& palette) :
+	_window(window),
+	_result(result),
+	_palette(palette)
+{
+}
+
+WaylandRender::~WaylandRender()
+{
+}
+
+const Color& WaylandRender::GetColor()
+{
+	return _baseRender.GetColor();
+}
+
+void WaylandRender::SetColor(const Color& color)
+{
+	_baseRender.SetColor(color);
+}
+
+void WaylandRender::Begin()
+{
+}
+
+void WaylandRender::End()
+{
+}
+
+void WaylandRender::Clear()
+{
+}
+
+void WaylandRender::Line(const Vec2i& first, const Vec2i& last)
+{
+}
+
+void WaylandRender::Fill(const Vec2i& pos, const Vec2i& size)
+{
+}
+
+void WaylandRender::Draw(WaylandTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize)
+{
+}
+
+void WaylandRender::Draw(WaylandTexture* texture, const Vec2i& pos)
+{
+}
+
+void WaylandRender::Draw(WaylandTexture* texture, const Vec2i& pos, const Vec2i& size)
+{
+}

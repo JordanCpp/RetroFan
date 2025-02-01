@@ -24,34 +24,50 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#include <LDL/UNIX/XLib/XLibTex.hpp>
 
-#if defined(_WIN16)
-    #include <LDL/Win16/MainWin.hpp>
-#elif defined(_WIN32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined(__unix__)
-    #if defined(LDL_RENDER_XLIB)
-        #include <LDL/UNIX/XLib/XLibWin.hpp>
-    #elif defined(LDL_RENDER_XCB)
-        #include <LDL/UNIX/Xcb/XcbWin.hpp>
-    #endif
-#endif
 
-namespace LDL
+using namespace LDL;
+
+XLibTexture::XLibTexture(Result& result, XLibRender& render, const Vec2i& size, uint8_t* pixels) :
+	_size(size),
+	_render(render),
+	_result(result),
+	_image(NULL)
 {
-    #if defined(__unix__)
-        #if defined(LDL_RENDER_XLIB)
-         	typedef XLibWindow Window;
-        #elif defined(LDL_RENDER_XCB)
-    	    typedef XcbWindow Window;
-        #elif defined(LDL_RENDER_WAYLAND)
-    	    typedef WaylandWindow Window;
-        #endif
-    #elif
-        typedef MainWindow Window;
-    #endif
 }
 
-#endif
+XLibTexture::XLibTexture(Result& result, XLibRender& render, const Vec2i& size, uint8_t bpp, uint8_t * pixels, const Color& colorKey) :
+	_size(size),
+	_render(render),
+	_result(result),
+	_image(NULL)
+{
+}
+
+XLibTexture::XLibTexture(Result& result, XLibRender& render, const Vec2i& size, uint8_t bpp, uint8_t * pixels) :
+	_size(size),
+	_render(render),
+	_result(result),
+	_image(NULL)
+{
+	_image = XCreateImage(
+	render.GetXDisplay(), 
+	render.GetXVisual(), 
+	render.GetXDepth(), ZPixmap, 0, (char*)pixels, _size.x, _size.y, 32, 0);
+}
+
+XLibTexture::~XLibTexture()
+{
+	XDestroyImage(_image);
+}
+
+const Vec2i& XLibTexture::Size()
+{
+	return _size;
+}
+
+XImage* XLibTexture::GetImage()
+{
+	return _image;
+}

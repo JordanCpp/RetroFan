@@ -24,24 +24,28 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_UNIX_XLibTex_hpp
-#define LDL_UNIX_XLibTex_hpp
+#ifndef LDL_UNIX_Wayland_WaylandTex_hpp
+#define LDL_UNIX_Wayland_WaylandTex_hpp
 
-#include <LDL/UNIX/XLibRndr.hpp>
+#include <LDL/UNIX/Wayland/WaylandRndr.hpp>
+#include <LDL/Color.hpp>
 
 namespace LDL
 {
-	class XLibRender;
+	class WaylandRender;
 
-	class XLibTexture
+	class WaylandTexture
 	{
 	public:
-		XLibTexture(XLibRender* render, const Vec2i& size, uint8_t bpp, uint8_t * pixels);
-		~XLibTexture();
+		WaylandTexture(Result& result, WaylandRender& render, const Vec2i& size, uint8_t* pixels);
+		WaylandTexture(Result& result, WaylandRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& colorKey);
+		WaylandTexture(Result& result, WaylandRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
+		~WaylandTexture();
 		const Vec2i& Size();
 	private:
-		Vec2i        _size;
-		XLibTexture* _render;
+		Vec2i          _size;
+		WaylandRender& _render;
+		Result&        _result;
 	};
 }
 

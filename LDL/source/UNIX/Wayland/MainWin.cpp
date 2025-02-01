@@ -24,34 +24,77 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_Window_hpp
-#define LDL_Window_hpp
+#include <LDL/UNIX/Wayland/MainWin.hpp>
+#include <string.h>
 
-#if defined(_WIN16)
-    #include <LDL/Win16/MainWin.hpp>
-#elif defined(_WIN32)
-    #include <LDL/Windows/MainWin.hpp>
-#elif defined(__unix__)
-    #if defined(LDL_RENDER_XLIB)
-        #include <LDL/UNIX/XLib/XLibWin.hpp>
-    #elif defined(LDL_RENDER_XCB)
-        #include <LDL/UNIX/Xcb/XcbWin.hpp>
-    #endif
-#endif
+using namespace LDL;
 
-namespace LDL
+MainWindow::MainWindow(Result& result, const Vec2i& pos, const Vec2i& size) :
+    _baseWindow(pos, size, ""),
+	_result(result)
 {
-    #if defined(__unix__)
-        #if defined(LDL_RENDER_XLIB)
-         	typedef XLibWindow Window;
-        #elif defined(LDL_RENDER_XCB)
-    	    typedef XcbWindow Window;
-        #elif defined(LDL_RENDER_WAYLAND)
-    	    typedef WaylandWindow Window;
-        #endif
-    #elif
-        typedef MainWindow Window;
-    #endif
 }
 
-#endif
+MainWindow::~MainWindow()
+{
+}
+
+const Vec2i& MainWindow::Pos()
+{
+	return _baseWindow.Pos();
+}
+
+void MainWindow::Pos(const Vec2i& pos)
+{
+	_baseWindow.Pos(pos);
+}
+
+const Vec2i& MainWindow::Size()
+{
+	return _baseWindow.Size();
+}
+
+void MainWindow::Size(const Vec2i& size)
+{
+	_baseWindow.Size(size);
+}
+
+const std::string& MainWindow::Title()
+{
+	return _baseWindow.Title();
+}
+
+void MainWindow::Title(const std::string& title)
+{
+	_baseWindow.Title(title);
+}
+
+void MainWindow::Update()
+{
+}
+
+void MainWindow::StopEvent()
+{
+	_eventer.Stop();
+}
+
+bool MainWindow::Running()
+{
+	return _eventer.Running();
+}
+
+void MainWindow::PollEvents()
+{
+}
+
+bool MainWindow::GetEvent(Event& event)
+{
+	if (!_eventer.Empty())
+	{
+		_eventer.Pop(event);
+
+		return true;
+	}
+
+	return false;
+}

@@ -24,36 +24,28 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef LDL_UNIX_XLibRndr_hpp
-#define LDL_UNIX_XLibRndr_hpp
+#ifndef LDL_UNIX_Xcb_XcbTex_hpp
+#define LDL_UNIX_Xcb_XcbTex_hpp
 
-#include <LDL/UNIX/MainWin.hpp>
-#include <LDL/UNIX/XLibTex.hpp>
-#include <LDL/BaseRndr.hpp>
-#include <LDL/Pal256.hpp>
+#include <LDL/UNIX/Xcb/XcbRndr.hpp>
+#include <LDL/Color.hpp>
 
 namespace LDL
 {
-	class XLibTexture;
+	class XcbRender;
 
-	class XLibRender
+	class XcbTexture
 	{
 	public:
-		XLibRender(MainWindow& window);
-		const Color& GetColor();
-		void SetColor(const Color& color);
-		void Begin();
-		void End();
-		void Clear();
-		void Line(const Vec2i& first, const Vec2i& last);
-		void Fill(const Vec2i& pos, const Vec2i& size);
-		void Draw(XLibTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
-		void Draw(XLibTexture* texture, const Vec2i& pos);
-		void Draw(XLibTexture* texture, const Vec2i& pos, const Vec2i& size);
+		XcbTexture(Result& result, XcbRender& render, const Vec2i& size, uint8_t* pixels);
+		XcbTexture(Result& result, XcbRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& colorKey);
+		XcbTexture(Result& result, XcbRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
+		~XcbTexture();
+		const Vec2i& Size();
 	private:
-		MainWindow& _window;
-		GC          _graphics;
-		BaseRender  _baseRender;
+		Vec2i      _size;
+		XcbRender& _render;
+		Result&    _result;
 	};
 }
 

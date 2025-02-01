@@ -25,15 +25,52 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/keysym.h>
 
-int main()
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+ 
+int main(int argc, char** argv)
 {
-    Display *display = XOpenDisplay(NULL);
-	int screen_num = DefaultScreen(display);
-	Window root = RootWindow(display,screen_num);
-	Visual *visual = DefaultVisual(display,screen_num);
+    Display* display = XOpenDisplay(NULL);
+ 
+    int image_width, image_height;
+    char* data = (char*)stbi_load("img24.bmp", &image_width, &image_height, 0, 4);
     
+    int default_screen = XDefaultScreen(display);
+    Window root_window = XRootWindow(display, default_screen);
+ 
+    Window window = XCreateSimpleWindow(display, root_window, 0, 0, 640, 480, 1,
+                                        XBlackPixel(display, default_screen), XWhitePixel(display, default_screen));
+    XSelectInput(display, window, ExposureMask | KeyPressMask | ButtonPress);
+    XMapWindow(display, window);
+ 
+    XGCValues gr_values;
+    int default_depth = XDefaultDepth(display, default_screen);
+    GC gr_context = XCreateGC(display, window, GCForeground | GCBackground, &gr_values);
+    Visual* visual = XDefaultVisual(display, default_screen);
+ 
+    XImage* ximage = XCreateImage(display, visual, default_depth, ZPixmap, 0,
+                                  data, image_width, image_height, 32, 0);
+ 
+    bool exit = false;
+    XEvent event;
+    while(!exit)
+    {
+        XNextEvent(display, &event);
+ 
+        if(event.type == KeyPress)
+        {
+            exit = true;
+        }
+        else
+        {
+            XClearArea(display, window, 0, 0, image_width, image_height, 0);
+            XFlush(display);
+            XPutImage(display, window, gr_context, ximage, 0, 0, 0, 0, image_width, image_height);
+        }
+    }
+ 
+    XCloseDisplay(display);
+ 
     return 0;
 }

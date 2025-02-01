@@ -4,12 +4,18 @@ if (UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
     link_libraries(${X11_LIBRARIES})
     include_directories(${X11_INCLUDE_DIR})
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s -O2 -fno-exceptions -fno-rtti -fno-builtin")
+
+    add_definitions(-DLDL_RENDER_XLIB)
+    #add_definitions(-DLDL_RENDER_XCB)
+    #add_definitions(-DLDL_RENDER_WAYLAND)
 endif()
 
 if (WIN32)
     set(libs gdi32 user32 winmm msimg32)
 elseif (UNIX AND NOT APPLE)
-    set(libs X11 dl)
+    set(libs X11 dl xcb)
 endif()
 
 include_directories("LDL/include")
@@ -19,7 +25,10 @@ FILE(GLOB SHARED_SOURCES "LDL/source/*.cpp" "LDL/source/Renders/*.cpp")
 if (WIN32)
     FILE(GLOB PLATFORM_SOURCES "LDL/source/Windows/*.cpp")
 else()
-    FILE(GLOB PLATFORM_SOURCES "LDL/source/UNIX/*.cpp")
+    FILE(GLOB PLATFORM_SOURCES 
+    "LDL/source/UNIX/XLib/*.cpp" 
+    "LDL/source/UNIX/Xcb/*.cpp"
+    "LDL/source/UNIX/Wayland/*.cpp")
 endif()
 
 add_library(LDL ${SHARED_SOURCES} ${PLATFORM_SOURCES})
@@ -46,6 +55,9 @@ if (WIN32)
 else()
     add_executable(xWin "xWin.cpp")
     target_link_libraries(xWin ${libs})
+
+    add_executable(xcbWin "xcbWin.cpp")
+    target_link_libraries(xcbWin ${libs})
 endif()
 
 FILE(GLOB FALLOUT_SOURCES "Fallout/*.cpp")
