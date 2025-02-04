@@ -35,24 +35,42 @@ namespace LDL
 	{
 	public:
 		Color() :
+#if defined(_WIN16) || defined(_WIN32)
+			b(0),
+			g(0),
+			r(0),
+#else
 			r(0),
 			g(0),
 			b(0),
+#endif
 			a(255)
 		{
 		}
 
 		Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) :
+#if defined(_WIN16) || defined(_WIN32)
+			b(b),
+			g(g),
+			r(r),
+#else
 			r(r),
 			g(g),
 			b(b),
+#endif
 			a(a)
 		{
 		}
 
+#if defined(_WIN16) || defined(_WIN32)
+		uint8_t b;
+		uint8_t g;
+		uint8_t r;
+#else
 		uint8_t r;
 		uint8_t g;
 		uint8_t b;
+#endif
 		uint8_t a;
 	};
 }

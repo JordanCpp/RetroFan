@@ -24,60 +24,43 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/LDL.hpp>
-//#include <vector>
+#ifndef LDL_Renders_BufPRndr_hpp
+#define LDL_Renders_BufPRndr_hpp
 
-int main()
+#include <LDL/Windows/BufWin.hpp>
+#include <LDL/Renders/BufTex.hpp>
+#include <LDL/Palette.hpp>
+#include <LDL/BaseRndr.hpp>
+
+namespace LDL
 {
-	LDL::Palette palette;
+	class BufferTexture;
 
-	palette.Set(0, LDL::Color(0, 0, 0));
-	palette.Set(1, LDL::Color(255, 255, 255));
-	palette.Set(2, LDL::Color(255, 0, 0));
-	palette.Set(3, LDL::Color(0, 255, 0));
-	palette.Set(4, LDL::Color(0, 0, 255));
-	palette.Set(5, LDL::Color(255, 255, 0));
-	palette.Set(6, LDL::Color(0, 255, 255));
-
-	LDL::Result result;
-	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(result, window, palette);
-
-	LDL::Event report;
-
-	const size_t imgSize = 100 * 100;
-
-	uint8_t* buffer1 = new uint8_t[imgSize];
-	uint8_t* buffer2 = new uint8_t[imgSize];
-
-	memset(buffer1, 5, imgSize);
-	memset(buffer2, 3, imgSize);
-	//std::vector<uint8_t> buffer1(imgSize, 5);
-	//std::vector<uint8_t> buffer2(imgSize, 3);
-
-	LDL::Texture img1(result, render, LDL::Vec2i(100, 100), buffer1);
-	LDL::Texture img2(result, render, LDL::Vec2i(100, 100), buffer2);
-
-	while (window.Running())
+	class BufferRender
 	{
-		while (window.GetEvent(report))
-		{
-			if (report.Type == LDL::Event::IsQuit)
-			{
-				window.StopEvent();
-			}
-		}
-
-		render.Begin();
-
-		render.Draw(&img1, LDL::Vec2i(0, 0));
-		render.Draw(&img2, LDL::Vec2i(150, 150));
-
-		render.End();
-
-		window.Update();
-		window.PollEvents();
-	}
-
-	return 0;
+	public:
+		BufferRender(Result& result, BufferWindow& window);
+		BufferRender(Result& result, BufferWindow& window, const Palette& palette);
+		~BufferRender();
+		const Palette& GetPalette();
+		const Color& GetColor();
+		void SetColor(const Color& color);
+		void SetColor(uint8_t index);
+		void Begin();
+		void End();
+		void Clear();
+		void Line(const Vec2i& first, const Vec2i& last);
+		void Fill(const Vec2i& pos, const Vec2i& size);
+		void Draw(BufferTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
+		void Draw(BufferTexture* texture, const Vec2i& pos);
+		void Draw(BufferTexture* texture, const Vec2i& pos, const Vec2i& size);
+	private:
+		Result&       _result;
+		BaseRender    _baseRender;
+		Palette       _palette;
+		BufferWindow& _window;
+		Surface&      _surface;
+	};
 }
+
+#endif

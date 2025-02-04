@@ -18,6 +18,11 @@ elseif (UNIX AND NOT APPLE)
     set(libs X11 dl xcb)
 endif()
 
+#add_definitions(-DLDL_RENDER_BUFFER_RGB)
+#add_definitions(-DLDL_RENDER_BUFFER_PALETTE)
+add_definitions(-DLDL_RENDER_NATIVE_RGB)
+#add_definitions(-DLDL_RENDER_NATIVE_PALETTE)
+
 include_directories("LDL/include")
 
 FILE(GLOB SHARED_SOURCES "LDL/source/*.cpp" "LDL/source/Renders/*.cpp")

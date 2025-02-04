@@ -30,14 +30,16 @@ DEALINGS IN THE SOFTWARE.
 #if defined(_WIN16)
     #if defined(LDL_RENDER_NATIVE_PALETTE)
         #include <LDL/Win16/GdiPTex.hpp>
-    #else
+    #elif defined(LDL_RENDER_NATIVE_RGB)
         #include <LDL/Win16/GdiTex.hpp>
     #endif
 #elif defined(_WIN32)
     #if defined(LDL_RENDER_NATIVE_PALETTE)
         #include <LDL/Windows/GdiPTex.hpp>
-    #else
+    #elif defined(LDL_RENDER_NATIVE_RGB)
         #include <LDL/Windows/GdiTex.hpp>
+    #elif defined(LDL_RENDER_BUFFER_RGB)
+        #include <LDL/Renders/BufTex.hpp>
     #endif
 #elif defined (__unix__)
     #if defined(LDL_RENDER_XLIB)
@@ -53,14 +55,16 @@ namespace LDL
 #if defined(_WIN16)
     #if defined(LDL_RENDER_NATIVE_PALETTE)
         typedef GdiPaletteTexture Texture;
-    #else
+    #elif defined(LDL_RENDER_NATIVE_RGB)
         typedef GdiTexture Texture;
     #endif
 #elif defined(_WIN32)
     #if defined(LDL_RENDER_NATIVE_PALETTE)
         typedef GdiPaletteTexture Texture;
-    #else
+    #elif defined(LDL_RENDER_NATIVE_RGB)
         typedef GdiTexture Texture;
+    #elif defined(LDL_RENDER_BUFFER_RGB)
+        typedef BufferTexture Texture;
     #endif
 #elif defined (__unix__)
     #if defined(LDL_RENDER_XLIB)

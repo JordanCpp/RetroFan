@@ -28,9 +28,19 @@ DEALINGS IN THE SOFTWARE.
 #define LDL_Window_hpp
 
 #if defined(_WIN16)
-    #include <LDL/Win16/MainWin.hpp>
+    #if defined(LDL_RENDER_NATIVE_PALETTE)
+        #include <LDL/Win16/MainWin.hpp>
+    #elif defined(LDL_RENDER_NATIVE_RGB)
+        #include <LDL/Win16/MainWin.hpp>
+    #endif
 #elif defined(_WIN32)
-    #include <LDL/Windows/MainWin.hpp>
+    #if defined(LDL_RENDER_NATIVE_PALETTE)
+        #include <LDL/Windows/MainWin.hpp>
+    #elif defined(LDL_RENDER_NATIVE_RGB)
+        #include <LDL/Windows/MainWin.hpp>
+    #elif defined(LDL_RENDER_BUFFER_RGB)
+        #include <LDL/Windows/BufWin.hpp>
+    #endif
 #elif defined(__unix__)
     #if defined(LDL_RENDER_XLIB)
         #include <LDL/UNIX/XLib/XLibWin.hpp>
@@ -50,7 +60,13 @@ namespace LDL
     	    typedef WaylandWindow Window;
         #endif
     #elif defined(_WIN16) || defined(_WIN32)
-        typedef MainWindow Window;
+        #if defined(LDL_RENDER_NATIVE_PALETTE)
+            typedef MainWindow Window;
+        #elif defined(LDL_RENDER_NATIVE_RGB)
+            typedef MainWindow Window;
+        #elif defined(LDL_RENDER_BUFFER_RGB)
+            typedef BufferWindow Window;
+        #endif
     #endif
 }
 

@@ -27,3 +27,120 @@ DEALINGS IN THE SOFTWARE.
 #include <LDL/Renders/BufRndr.hpp>
 
 using namespace LDL;
+
+BufferRender::BufferRender(Result& result, BufferWindow& window) :
+	_window(window),
+	_result(result),
+	_surface(_window.GetSurface())
+{
+}
+
+BufferRender::BufferRender(Result& result, BufferWindow& window, const Palette& palette) :
+	_window(window),
+	_palette(palette),
+	_result(result),
+	_surface(_window.GetSurface())
+{
+}
+
+BufferRender::~BufferRender()
+{
+}
+
+const Palette& BufferRender::GetPalette()
+{
+	return _palette;
+}
+
+const Color& BufferRender::GetColor()
+{
+	return _baseRender.GetColor();
+}
+
+void BufferRender::SetColor(uint8_t index)
+{
+	return _baseRender.SetColor(index);
+}
+void BufferRender::SetColor(const Color& color)
+{
+	_baseRender.SetColor(color);
+}
+
+void BufferRender::Begin()
+{
+}
+
+void BufferRender::End()
+{
+}
+
+void BufferRender::Clear()
+{
+	uint8_t bpp     = _surface.Bpp();
+	size_t count    = _surface.Size().x * _surface.Size().y * bpp;
+	uint8_t* pixels = _surface.Pixels();
+	Color colorRgb  = _baseRender.GetColor();
+
+	for (size_t i = 0; i < count; i += bpp)
+	{
+#if defined(_WIN16) || defined(_WIN32)
+		pixels[i]     = colorRgb.b;
+		pixels[i + 2] = colorRgb.r;
+#else
+		pixels[i]     = colorRgb.r;
+		pixels[i + 2] = colorRgb.b;
+#endif
+		pixels[i + 1] = colorRgb.g;
+	}
+}
+
+void BufferRender::Line(const Vec2i& first, const Vec2i& last)
+{
+}
+
+void BufferRender::Fill(const Vec2i& pos, const Vec2i& size)
+{
+	int x = pos.x;
+	int y = pos.y;
+
+	int sx  = _surface.Size().x;
+	int bpp = _surface.Bpp();
+
+	uint8_t* pixels = _surface.Pixels();
+	Color colorRgb  = _baseRender.GetColor();
+	size_t idxMax = _surface.Size().x * _surface.Size().y * _surface.Bpp();
+
+	for (int i = 0; i < size.x; i++)
+	{
+		for (int j = 0; j < size.y; j++)
+		{
+			int idx = (sx * (y + j) + (x + i)) * bpp;
+
+			if (idx <= idxMax)
+			{
+#if defined(_WIN16) || defined(_WIN32)
+				pixels[idx]     = colorRgb.b;
+				pixels[idx + 2] = colorRgb.r;
+#else
+				pixels[idx]     = colorRgb.r;
+				pixels[idx + 2] = colorRgb.b;
+#endif
+				pixels[idx + 1] = colorRgb.g;
+			}
+		}
+	}
+}
+
+void BufferRender::Draw(BufferTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize)
+{
+}
+
+void BufferRender::Draw(BufferTexture* texture, const Vec2i& pos)
+{
+	Draw(texture, pos, texture->Size(), Vec2i(0, 0), texture->Size());
+}
+
+void BufferRender::Draw(BufferTexture* texture, const Vec2i& pos, const Vec2i& size)
+{
+	Draw(texture, pos, size, Vec2i(0, 0), texture->Size());
+}

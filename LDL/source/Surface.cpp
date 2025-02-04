@@ -29,6 +29,26 @@ DEALINGS IN THE SOFTWARE.
 
 using namespace LDL;
 
+Surface::Surface(const Vec2i& size, uint8_t bpp) :
+    _bpp(bpp),
+    _size(size)
+{
+    size_t bytes = _size.x * _size.y * _bpp;
+
+    _pixels.resize(bytes);
+}
+
+Surface::Surface(const Vec2i& size, uint8_t* pixels) :
+    _bpp(8),
+    _size(size)
+{
+    size_t bytes = _size.x * _size.y * _bpp;
+
+    _pixels.resize(bytes);
+
+    memcpy(&_pixels[0], pixels, bytes);
+}
+
 Surface::Surface(const Vec2i& size, uint8_t bpp, uint8_t* pixels) :
     _bpp(bpp),
     _size(size)
@@ -38,6 +58,10 @@ Surface::Surface(const Vec2i& size, uint8_t bpp, uint8_t* pixels) :
     _pixels.resize(bytes);
 
     memcpy(&_pixels[0], pixels, bytes);
+}
+
+Surface::~Surface()
+{
 }
 
 uint8_t Surface::Bpp()

@@ -29,8 +29,40 @@ DEALINGS IN THE SOFTWARE.
 using namespace LDL;
 
 BufferTexture::BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels) :
-	_result(result),
-	_render(render),
-	_surface(size, bpp, pixels)
+    _size(size),
+    _render(render),
+    _result(result),
+    _surface(_size, bpp, pixels)
 {
+}
+
+BufferTexture::BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& color) :
+    _size(size),
+    _render(render),
+    _colorKey(color),
+    _result(result),
+    _surface(_size, bpp, pixels)
+{
+}
+
+BufferTexture::BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t* pixels) :
+    _size(size),
+    _render(render),
+    _result(result),
+    _surface(_size, pixels)
+{
+}
+
+BufferTexture::~BufferTexture()
+{
+}
+
+const ColorKey& BufferTexture::GetColorKey() const
+{
+    return _colorKey;
+}
+
+const Vec2i& BufferTexture::Size()
+{
+	return _size;
 }

@@ -29,6 +29,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include <LDL/Result.hpp>
 #include <LDL/Surface.hpp>
+#include <LDL/ColorKey.hpp>
 
 namespace LDL
 {
@@ -38,10 +39,17 @@ namespace LDL
 	{
 	public:
 		BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
+		BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& color);
+		BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t* pixels);
+		~BufferTexture();
+		const ColorKey& GetColorKey() const;
+		const Vec2i& Size();
 	private:
 		Result&       _result;
 		BufferRender& _render;
+		Vec2i         _size;
 		Surface       _surface;
+		ColorKey      _colorKey;
 	};
 }
 

@@ -24,60 +24,33 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/LDL.hpp>
-//#include <vector>
+#ifndef LDL_Renders_BufPTex_hpp
+#define LDL_Renders_BufPTex_hpp
 
-int main()
+#include <LDL/Result.hpp>
+#include <LDL/Surface.hpp>
+#include <LDL/ColorKey.hpp>
+
+namespace LDL
 {
-	LDL::Palette palette;
+	class BufferRender;
 
-	palette.Set(0, LDL::Color(0, 0, 0));
-	palette.Set(1, LDL::Color(255, 255, 255));
-	palette.Set(2, LDL::Color(255, 0, 0));
-	palette.Set(3, LDL::Color(0, 255, 0));
-	palette.Set(4, LDL::Color(0, 0, 255));
-	palette.Set(5, LDL::Color(255, 255, 0));
-	palette.Set(6, LDL::Color(0, 255, 255));
-
-	LDL::Result result;
-	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(result, window, palette);
-
-	LDL::Event report;
-
-	const size_t imgSize = 100 * 100;
-
-	uint8_t* buffer1 = new uint8_t[imgSize];
-	uint8_t* buffer2 = new uint8_t[imgSize];
-
-	memset(buffer1, 5, imgSize);
-	memset(buffer2, 3, imgSize);
-	//std::vector<uint8_t> buffer1(imgSize, 5);
-	//std::vector<uint8_t> buffer2(imgSize, 3);
-
-	LDL::Texture img1(result, render, LDL::Vec2i(100, 100), buffer1);
-	LDL::Texture img2(result, render, LDL::Vec2i(100, 100), buffer2);
-
-	while (window.Running())
+	class BufferTexture
 	{
-		while (window.GetEvent(report))
-		{
-			if (report.Type == LDL::Event::IsQuit)
-			{
-				window.StopEvent();
-			}
-		}
-
-		render.Begin();
-
-		render.Draw(&img1, LDL::Vec2i(0, 0));
-		render.Draw(&img2, LDL::Vec2i(150, 150));
-
-		render.End();
-
-		window.Update();
-		window.PollEvents();
-	}
-
-	return 0;
+	public:
+		BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels);
+		BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t bpp, uint8_t* pixels, const Color& color);
+		BufferTexture(Result& result, BufferRender& render, const Vec2i& size, uint8_t* pixels);
+		~BufferTexture();
+		const ColorKey& GetColorKey() const;
+		const Vec2i& Size();
+	private:
+		Result&       _result;
+		BufferRender& _render;
+		Vec2i         _size;
+		Surface       _surface;
+		ColorKey      _colorKey;
+	};
 }
+
+#endif

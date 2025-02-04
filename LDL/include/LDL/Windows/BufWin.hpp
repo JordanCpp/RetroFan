@@ -24,60 +24,38 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include <LDL/LDL.hpp>
-//#include <vector>
+#ifndef LDL_Windows_BufWin_hpp
+#define LDL_Windows_BufWin_hpp
 
-int main()
+#include <LDL/Windows/MainWin.hpp>
+#include <LDL/Surface.hpp>
+
+namespace LDL
 {
-	LDL::Palette palette;
-
-	palette.Set(0, LDL::Color(0, 0, 0));
-	palette.Set(1, LDL::Color(255, 255, 255));
-	palette.Set(2, LDL::Color(255, 0, 0));
-	palette.Set(3, LDL::Color(0, 255, 0));
-	palette.Set(4, LDL::Color(0, 0, 255));
-	palette.Set(5, LDL::Color(255, 255, 0));
-	palette.Set(6, LDL::Color(0, 255, 255));
-
-	LDL::Result result;
-	LDL::Window window(result, LDL::Vec2i(0, 0), LDL::Vec2i(800, 600));
-	LDL::Render render(result, window, palette);
-
-	LDL::Event report;
-
-	const size_t imgSize = 100 * 100;
-
-	uint8_t* buffer1 = new uint8_t[imgSize];
-	uint8_t* buffer2 = new uint8_t[imgSize];
-
-	memset(buffer1, 5, imgSize);
-	memset(buffer2, 3, imgSize);
-	//std::vector<uint8_t> buffer1(imgSize, 5);
-	//std::vector<uint8_t> buffer2(imgSize, 3);
-
-	LDL::Texture img1(result, render, LDL::Vec2i(100, 100), buffer1);
-	LDL::Texture img2(result, render, LDL::Vec2i(100, 100), buffer2);
-
-	while (window.Running())
+	class BufferWindow
 	{
-		while (window.GetEvent(report))
-		{
-			if (report.Type == LDL::Event::IsQuit)
-			{
-				window.StopEvent();
-			}
-		}
-
-		render.Begin();
-
-		render.Draw(&img1, LDL::Vec2i(0, 0));
-		render.Draw(&img2, LDL::Vec2i(150, 150));
-
-		render.End();
-
-		window.Update();
-		window.PollEvents();
-	}
-
-	return 0;
+	public:
+		BufferWindow(Result& result, const Vec2i& pos, const Vec2i& size);
+		~BufferWindow();
+		const Vec2i& Pos();
+		void Pos(const Vec2i& pos);
+		const Vec2i& Size();
+		void Size(const Vec2i& size);
+		const std::string& Title();
+		void Title(const std::string& title);
+		void Update();
+		void StopEvent();
+		bool Running();
+		void PollEvents();
+		bool GetEvent(Event& event);
+		Surface& GetSurface();
+	private:
+		Result&     _result;
+		WindowError _windowError;
+		MainWindow  _mainWindow;
+		BITMAPINFO  _bitmapInfo;
+		Surface     _surface;
+	};
 }
+
+#endif

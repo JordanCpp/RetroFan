@@ -27,12 +27,39 @@ DEALINGS IN THE SOFTWARE.
 #ifndef LDL_Renders_BufRndr_hpp
 #define LDL_Renders_BufRndr_hpp
 
+#include <LDL/Windows/BufWin.hpp>
+#include <LDL/Renders/BufTex.hpp>
+#include <LDL/Palette.hpp>
+#include <LDL/BaseRndr.hpp>
+
 namespace LDL
 {
+	class BufferTexture;
+
 	class BufferRender
 	{
 	public:
+		BufferRender(Result& result, BufferWindow& window);
+		BufferRender(Result& result, BufferWindow& window, const Palette& palette);
+		~BufferRender();
+		const Palette& GetPalette();
+		const Color& GetColor();
+		void SetColor(const Color& color);
+		void SetColor(uint8_t index);
+		void Begin();
+		void End();
+		void Clear();
+		void Line(const Vec2i& first, const Vec2i& last);
+		void Fill(const Vec2i& pos, const Vec2i& size);
+		void Draw(BufferTexture* texture, const Vec2i& dstPos, const Vec2i& dstSize, const Vec2i& srcPos, const Vec2i& srcSize);
+		void Draw(BufferTexture* texture, const Vec2i& pos);
+		void Draw(BufferTexture* texture, const Vec2i& pos, const Vec2i& size);
 	private:
+		Result&       _result;
+		BaseRender    _baseRender;
+		Palette       _palette;
+		BufferWindow& _window;
+		Surface&      _surface;
 	};
 }
 
